@@ -1,4 +1,4 @@
-// data.js - نسخة كاملة مع الأسئلة من 2025-09-15 إلى 2025-09-30
+// data.js - نسخة كاملة مع الأسئلة + id لكل مهمة وامتحان
 window.getInitialData = function () {
   const DATA = {
     "2025-09-15": {
@@ -230,6 +230,17 @@ window.getInitialData = function () {
       "exams": []
     }
   };
+
+  // إضافة id لكل مهمة وامتحان + done لكل مهمة
+  Object.keys(DATA).forEach(date=>{
+    DATA[date].tasks.forEach((t,i)=>{
+      t.id = "t-"+date+"-"+i;
+      if(t.done === undefined) t.done = false;
+    });
+    DATA[date].exams.forEach((e,i)=>{
+      e.id = "e-"+date+"-"+i;
+    });
+  });
 
   return DATA;
 };
