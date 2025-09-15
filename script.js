@@ -1,5 +1,3 @@
-// script.js - النسخة المعدلة
-
 let DATA = {};
 if(localStorage.getItem("study-data")){
   DATA = JSON.parse(localStorage.getItem("study-data"));
@@ -14,29 +12,31 @@ function saveData(){
 
 // ========== واجهة ==========
 
-// تحميل اليوم الحالي
+// تحميل اليوم الحالي بالتوقيت المحلي
 function getTodayISO(){
   const d = new Date();
-  return d.toISOString().split("T")[0];
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth()+1).padStart(2,'0');
+  const dd = String(d.getDate()).padStart(2,'0');
+  return `${yyyy}-${mm}-${dd}`;
 }
 
-// رسم الصفحة الرئيسية (dashboard)
+// رسم الصفحة الرئيسية
 function renderDashboard(dateIso){
   const day = DATA[dateIso];
   const todayList = document.getElementById("todayList");
   const examsArea = document.getElementById("examsArea");
   const todayDate = document.getElementById("todayDate");
 
+  todayDate.textContent = dateIso;
+
   if(!day){
     todayList.innerHTML = `<li>لا توجد بيانات لهذا اليوم</li>`;
     examsArea.innerHTML = "";
-    todayDate.textContent = dateIso;
     return;
   }
 
-  todayDate.textContent = dateIso;
-
-  // عرض المهام (فقط غير المكتملة)
+  // عرض المهام غير المكتملة
   todayList.innerHTML = day.tasks.filter(t => !t.done).map(t => `
     <li>
       <div>
@@ -45,7 +45,7 @@ function renderDashboard(dateIso){
       </div>
       <button class="btn small" onclick="markTaskDone('${dateIso}','${t.id}')">✅</button>
     </li>
-  `).join("");
+  `).join("") || "<li>لا توجد مهام غير مكتملة اليوم</li>";
 
   // عرض الامتحانات
   examsArea.innerHTML = day.exams.map(ex => `
@@ -58,17 +58,18 @@ function renderDashboard(dateIso){
 
 // وضع علامة صح على الواجب
 function markTaskDone(dateIso, taskId){
+  if(!DATA[dateIso]) return;
   const task = DATA[dateIso].tasks.find(t => t.id === taskId);
   if(task){
     task.done = true;
     saveData();
-    renderDashboard(dateIso); // إعادة التحديث حتى يختفي
+    renderDashboard(dateIso);
   }
 }
 
 // فتح الامتحان
 function openExam(dateIso, examId){
-  const exam = DATA[dateIso].exams.find(e => e.id === examId);
+  const exam = DATA[dateIso]?.exams.find(e => e.id === examId);
   if(!exam) return;
   document.getElementById("examTitleShow").textContent = exam.title;
   document.getElementById("examQuestions").innerHTML = exam.questions.map((q,i)=>`
@@ -88,7 +89,7 @@ document.getElementById("closeExam").addEventListener("click", ()=>{
 
 // تسليم الامتحان
 function submitExam(dateIso, examId){
-  const exam = DATA[dateIso].exams.find(e => e.id === examId);
+  const exam = DATA[dateIso]?.exams.find(e => e.id === examId);
   if(!exam) return;
   let correct = 0;
   exam.questions.forEach((q,i)=>{
@@ -125,8 +126,7 @@ document.querySelectorAll(".navlink").forEach(btn=>{
 
 // زر اليوم
 document.getElementById("todayBtn").addEventListener("click", ()=>{
-  const todayIso = getTodayISO();
-  renderDashboard(todayIso);
+  renderDashboard(getTodayISO());
 });
 
 // زر عرض حسب التاريخ
@@ -139,13 +139,19 @@ document.getElementById("goDate").addEventListener("click", ()=>{
 document.getElementById("saveTask").addEventListener("click", ()=>{
   const subj = document.getElementById("new_subject").value.trim();
   const cont = document.getElementById("new_content").value.trim();
-  const hrs = parseInt(document.getElementById("new_hours").value);
+  const hrs = parseFloat(document.getElementById("new_hours").value);
   const date = document.getElementById("new_date").value;
   if(subj && cont && hrs && date){
+    if(!DATA[date]) DATA[date] = { tasks: [], exams: [] };
     const id = "t-"+date+"-"+Math.random().toString(36).slice(2,8);
     DATA[date].tasks.push({id, subject:subj, content:cont, hours:hrs, done:false, createdAt:getTodayISO()});
     saveData();
+    renderDashboard(date);
     alert("تمت الإضافة بنجاح ✅");
+    document.getElementById("new_subject").value = "";
+    document.getElementById("new_content").value = "";
+    document.getElementById("new_hours").value = 1;
+    document.getElementById("new_date").value = "";
   }
 });
 
