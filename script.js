@@ -3,6 +3,7 @@ if(localStorage.getItem("study-data")){
   DATA = JSON.parse(localStorage.getItem("study-data"));
 } else {
   DATA = window.getInitialData();
+  if(!DATA.archive) DATA.archive = [];
   saveData();
 }
 
@@ -56,21 +57,29 @@ function renderDashboard(dateIso){
   `).join("");
 }
 
-// وضع علامة صح على الواجب
+// وضع علامة صح على الواجب ونقله للأرشيف
 function markTaskDone(dateIso, taskId){
-  if(!DATA[dateIso]) return;
-  const task = DATA[dateIso].tasks.find(t => t.id === taskId);
-  if(task){
-    task.done = true;
-    saveData();
-    renderDashboard(dateIso);
-  }
+  const day = DATA[dateIso];
+  if(!day) return;
+
+  const taskIndex = day.tasks.findIndex(t => t.id === taskId);
+  if(taskIndex === -1) return;
+
+  const task = day.tasks[taskIndex];
+  task.done = true;
+
+  if(!DATA.archive) DATA.archive = [];
+  DATA.archive.push({ ...task, date: dateIso });
+
+  saveData();
+  renderDashboard(dateIso);
 }
 
 // فتح الامتحان
 function openExam(dateIso, examId){
   const exam = DATA[dateIso]?.exams.find(e => e.id === examId);
   if(!exam) return;
+
   document.getElementById("examTitleShow").textContent = exam.title;
   document.getElementById("examQuestions").innerHTML = exam.questions.map((q,i)=>`
     <div class="exam-question">
@@ -78,6 +87,7 @@ function openExam(dateIso, examId){
       <input type="text" id="answer-${i}">
     </div>
   `).join("");
+
   document.getElementById("examModal").classList.remove("section-hidden");
   document.getElementById("submitExamBtn").onclick = ()=>submitExam(dateIso,examId);
 }
@@ -87,16 +97,22 @@ document.getElementById("closeExam").addEventListener("click", ()=>{
   document.getElementById("examModal").classList.add("section-hidden");
 });
 
-// تسليم الامتحان
+// تسليم الامتحان ونقله للأرشيف
 function submitExam(dateIso, examId){
   const exam = DATA[dateIso]?.exams.find(e => e.id === examId);
   if(!exam) return;
+
   let correct = 0;
   exam.questions.forEach((q,i)=>{
     const val = document.getElementById("answer-"+i).value.trim();
     if(val === q.answer) correct++;
   });
+
   document.getElementById("examResult").textContent = `النتيجة: ${correct} / ${exam.questions.length}`;
+
+  if(!DATA.archive) DATA.archive = [];
+  DATA.archive.push({ ...exam, date: dateIso, score: correct });
+
   saveData();
 }
 
@@ -119,6 +135,12 @@ document.querySelectorAll(".navlink").forEach(btn=>{
   btn.addEventListener("click", ()=>{
     document.querySelectorAll("main > section").forEach(s=>s.classList.add("section-hidden"));
     document.getElementById(btn.dataset.tab).classList.remove("section-hidden");
+
+    // تحديث المحتوى حسب الصفحة
+    if(btn.dataset.tab === "archive") renderArchive();
+    if(btn.dataset.tab === "reports") renderReports();
+    if(btn.dataset.tab === "grades") renderGrades();
+
     sidebar.classList.remove("open");
     overlay.classList.remove("show");
   });
@@ -176,3 +198,58 @@ document.getElementById("resetBtn").addEventListener("click", ()=>{
 
 // تحميل الصفحة أول مرة
 renderDashboard(getTodayISO());
+
+
+// ================== أرشيف ==================
+function renderArchive(){
+  const archiveContent = document.getElementById("archiveContent");
+  if(!DATA.archive || DATA.archive.length === 0){
+    archiveContent.innerHTML = "<p>لا يوجد مهام أو امتحانات مكتملة حتى الآن.</p>";
+    return;
+  }
+
+  archiveContent.innerHTML = DATA.archive.map(item=>`
+    <div class="card">
+      <b>${item.subject}</b> — ${item.content || item.title} 
+      <span class="muted">(تاريخ: ${item.date || 'غير محدد'})</span>
+      ${item.score !== undefined ? ` — النتيجة: ${item.score} / ${item.questions.length}` : ''}
+    </div>
+  `).join("");
+}
+
+// ================== التقارير ==================
+function renderReports(){
+  const reportsContent = document.getElementById("reportsContent");
+  const report = {};
+
+  (DATA.archive || []).forEach(item=>{
+    if(!item.subject) return;
+    if(!report[item.subject]) report[item.subject] = { tasks:0, hours:0 };
+    if(item.content){
+      report[item.subject].tasks++;
+      report[item.subject].hours += parseFloat(item.hours || 0);
+    }
+  });
+
+  reportsContent.innerHTML = Object.keys(report).map(subj=>`
+    <div class="card">
+      <b>${subj}</b> — عدد المهام المكتملة: ${report[subj].tasks}, مجموع الساعات: ${report[subj].hours}
+    </div>
+  `).join("") || "<p>لا توجد بيانات حتى الآن.</p>";
+}
+
+// ================== الدرجات ==================
+function renderGrades(){
+  const gradesContent = document.getElementById("gradesContent");
+  const exams = (DATA.archive || []).filter(a=>a.questions);
+  if(exams.length === 0){
+    gradesContent.innerHTML = "<p>لا توجد درجات بعد.</p>";
+    return;
+  }
+  gradesContent.innerHTML = exams.map(ex=>`
+    <div class="card">
+      <b>${ex.subject}</b> — ${ex.title} : ${ex.score} / ${ex.questions.length}
+      <span class="muted">(تاريخ: ${ex.date})</span>
+    </div>
+  `).join("");
+}
