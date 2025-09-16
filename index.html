@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>منصة الدراسة — النسخة النهائية التجريبية</title>
+<title>منصة الدراسة — النسخة النهائية</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -54,24 +54,24 @@
     <h2>إضافة واجب جديد</h2>
     <div class="form-row"><label>المادة</label><input id="new_subject" placeholder="مثال: كيمياء"></div>
     <div class="form-row"><label>الوصف</label><input id="new_content" placeholder="مثال: مراجعة الفصل 1"></div>
-    <div class="form-row"><label>عدد الساعات</label><input id="new_hours" type="number" value="1" min="1"></div>
+    <div class="form-row"><label>عدد الساعات</label><input id="new_hours" type="number" value="1" min="0.5" step="0.5"></div>
     <div class="form-row"><label>التاريخ</label><input id="new_date" type="date"></div>
     <div style="margin-top:8px"><button id="saveTask" class="btn">حفظ وإضافة</button></div>
   </section>
 
   <section id="reports" class="card section-hidden">
     <h2>التقارير</h2>
-    <div id="reportsContent"></div>
+    <div id="reportsContent"><canvas id="reportChart" width="300" height="300"></canvas></div>
   </section>
 
   <section id="grades" class="card section-hidden">
     <h2>الدرجات</h2>
-    <div id="gradesContent"></div>
+    <div id="gradesContent">لا توجد بيانات درجات حالياً.</div>
   </section>
 
   <section id="stats" class="card section-hidden">
     <h2>الإحصائيات</h2>
-    <div id="statsContent"></div>
+    <div id="statsContent"><canvas id="statsChart" width="400" height="200"></canvas></div>
   </section>
 
   <section id="archive" class="card section-hidden">
@@ -92,8 +92,10 @@
   </div>
 </div>
 
-<footer class="footer muted small" style="text-align:center;padding:10px">نسخة تجريبية — البيانات تحفظ محليًا فقط</footer>
+<footer class="footer muted small">نسخة تجريبية — البيانات تحفظ محليًا فقط</footer>
 
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="data.js"></script>
 <script src="script.js"></script>
 </body>
