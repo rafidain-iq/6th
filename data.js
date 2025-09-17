@@ -1,7 +1,8 @@
 // data.js - نسخة كاملة مع الأسئلة + id لكل مهمة وامتحان
 window.getInitialData = function () {
   const DATA = {
-    "2025-09-15": {
+    
+   "2025-09-15": {
       "tasks": [
         { "subject": "أحياء", "content": "قراءة محاضرة 3-4-5", "hours": 2 },
         { "subject": "كيمياء", "content": "قراءة محاضرة 2-3", "hours": 2 },
@@ -57,8 +58,8 @@ window.getInitialData = function () {
     },
     "2025-09-18": {
       "tasks": [
-        { "subject": "أحياء", "content": "قراءة محاضرة 8-9", "hours": 2 },
-        { "subject": "فيزياء", "content": "مراجعة قوانين الحركة", "hours": 1 },
+        { "subject": "أحياء", "content": "مراجعة", "hours": 2 },
+        { "subject": "فيزياء", "content": "مراجعة", "hours": 1 },
         { "subject": "عربي", "content": "قراءة محاضرة 1", "hours": 1 }
       ],
       "exams": [
@@ -118,7 +119,7 @@ window.getInitialData = function () {
     },
     "2025-09-20": {
       "tasks": [
-        { "subject": "إنكليزي", "content": "مراجعة المحاضرتين 5 و 6", "hours": 2 },
+        { "subject": "إنكليزي", "content": "قطع كتاب ", "hours": 2 },
         { "subject": "كيمياء", "content": "مراجعة المحاضرتين 6 و 7", "hours": 2 },
         { "subject": "رياضيات", "content": "حل مسائل مراجعة", "hours": 1 }
       ],
@@ -126,37 +127,38 @@ window.getInitialData = function () {
     },
     "2025-09-21": {
       "tasks": [
-        { "subject": "عربي", "content": "مراجعة المحاضرتين 2 و 3", "hours": 2 },
+        { "subject": "انكليزي", "content": " 5-6 محاضرة ", "hours": 2 },
         { "subject": "كيمياء", "content": "مراجعة المحاضرتين 8 و 9", "hours": 2 }
       ],
       "exams": []
     },
     "2025-09-22": {
       "tasks": [
-        { "subject": "عربي", "content": "مراجعة المحاضرتين 4 و 5", "hours": 2 },
-        { "subject": "إنكليزي", "content": "مراجعة المحاضرتين 7 و 8", "hours": 2 }
+        { "subject": "انكليزي", "content": "قراءة المحاضرة 7-8", "hours": 2 },
+        { "subject": "كيمياء", "content": "قراءة 10-11", "hours": 2 }
       ],
       "exams": []
     },
     "2025-09-23": {
       "tasks": [
-        { "subject": "إنكليزي", "content": "مراجعة المحاضرتين 9 و 10", "hours": 2 },
-        { "subject": "أدب عربي", "content": "موضوع الجواهري", "hours": 1 },
-        { "subject": "فيزياء", "content": "مراجعة قوانين الكهرباء", "hours": 1 }
+        { "subject": "احياء", "content": "مراجعة المحاضرتين 8-9", "hours": 2 },
+        { "subject": "عربي", "content": "محاضرة 2-3", "hours": 2 },
+        { "subject": "فيزياء", "content": "مراجعة", "hours": 1 }
       ],
       "exams": []
     },
     "2025-09-24": {
       "tasks": [
-        { "subject": "أحياء", "content": "مراجعة المحاضرتين 8 و 9", "hours": 2 },
-        { "subject": "كيمياء", "content": "مراجعة المحاضرتين 10 و 11", "hours": 2 }
+        { "subject": "أحياء", "content": "مراجعة المحاضرتين 10-11", "hours": 2 },
+        { "subject": "ادب عربي", "content": "قراءة الجواهري", "hours": 0.5 },
+        { "subject": "عربي", "content": "محاضرة 4-5", "hours": 2 }
       ],
       "exams": []
     },
     "2025-09-25": {
       "tasks": [
-        { "subject": "أحياء", "content": "مراجعة المحاضرتين 10 و 11", "hours": 2 },
-        { "subject": "عربي", "content": "مراجعة المحاضرتين 6 و 7", "hours": 2 }
+        { "subject": "أحياء", "content": "مراجعة المحاضرتين 12-13", "hours": 2 },
+        { "subject": "عربي", "content": "قراءة محاضرة 6-7", "hours": 2 }
       ],
       "exams": []
     },
@@ -201,7 +203,7 @@ window.getInitialData = function () {
     },
     "2025-09-27": {
       "tasks": [
-        { "subject": "إنكليزي", "content": "مراجعة المحاضرتين 11 و 12", "hours": 2 },
+        { "subject": "إنكليزي", "content": "مراجعة المحاضرتين 9-10", "hours": 2 },
         { "subject": "كيمياء", "content": "مراجعة المحاضرتين 12 و 13", "hours": 2 },
         { "subject": "رياضيات", "content": "حل مسائل مراجعة", "hours": 1 }
       ],
@@ -209,23 +211,23 @@ window.getInitialData = function () {
     },
     "2025-09-28": {
       "tasks": [
-        { "subject": "عربي", "content": "مراجعة محاضرتين (التوكيد)", "hours": 2 },
+        { "subject": "انكليزي", "content": "قراءة محاضرة 11-12", "hours": 2 },
         { "subject": "كيمياء", "content": "مراجعة المحاضرتين 14 و 15", "hours": 2 }
       ],
       "exams": []
     },
     "2025-09-29": {
       "tasks": [
-        { "subject": "عربي", "content": "مراجعة المحاضرتين 3 و 4", "hours": 2 },
-        { "subject": "إنكليزي", "content": "مراجعة المحاضرتين 12 و 13", "hours": 2 }
+        { "subject": "كيمياء", "content": "قراءة محاضرة 16-17", "hours": 2 },
+        { "subject": "إنكليزي", "content": "قراءة محاضرة 13-14", "hours": 2 }
       ],
       "exams": []
     },
     "2025-09-30": {
       "tasks": [
-        { "subject": "إنكليزي", "content": "مراجعة المحاضرتين 14 و 15", "hours": 2 },
-        { "subject": "أدب عربي", "content": "مدرسة المهجر + مراجعة", "hours": 2 },
-        { "subject": "فيزياء", "content": "مراجعة قوانين الكهرباء", "hours": 1 }
+        { "subject": "احياء", "content": "قراءة محاضرة 14-15", "hours": 2 },
+        { "subject": "عربي", "content": "مراجعة التوكيد", "hours": 2 },
+        { "subject": "فيزياء", "content": "مراجعة", "hours": 1 }
       ],
       "exams": []
     }
