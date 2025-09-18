@@ -1,4 +1,4 @@
-// script.js - النسخة النهائية المكملة
+// script.js - النسخة النهائية المكملة + درجات يومية/تراكمية + تصحيح ذكي
 
 let DATA = {};
 if(localStorage.getItem("study-data")){
@@ -12,15 +12,13 @@ function saveData(){
   localStorage.setItem("study-data", JSON.stringify(DATA));
 }
 
-// ========== واجهة ==========
+// ======================= واجهة =======================
 
-// تحميل اليوم الحالي
 function getTodayISO(){
   const d = new Date();
   return d.toISOString().split("T")[0];
 }
 
-// رسم الصفحة الرئيسية (dashboard)
 function renderDashboard(dateIso){
   const day = DATA[dateIso];
   const todayList = document.getElementById("todayList");
@@ -36,7 +34,7 @@ function renderDashboard(dateIso){
 
   todayDate.textContent = dateIso;
 
-  // عرض المهام (فقط غير المكتملة)
+  // عرض المهام غير المكتملة
   todayList.innerHTML = day.tasks.map(t => `
     <li>
       <div>
@@ -56,17 +54,17 @@ function renderDashboard(dateIso){
   `).join("");
 }
 
-// وضع علامة صح على الواجب
 function markTaskDone(dateIso, taskId){
   const task = DATA[dateIso].tasks.find(t => t.id === taskId);
   if(task){
     task.done = true;
     saveData();
-    renderDashboard(dateIso); // إعادة التحديث
+    renderDashboard(dateIso);
   }
 }
 
-// فتح الامتحان
+// ======================= الامتحانات =======================
+
 function openExam(dateIso, examId){
   const exam = DATA[dateIso].exams.find(e => e.id === examId);
   if(!exam) return;
@@ -82,48 +80,66 @@ function openExam(dateIso, examId){
   document.getElementById("submitExamBtn").onclick = ()=>submitExam(dateIso,examId);
 }
 
-// إغلاق الامتحان
 document.getElementById("closeExam").addEventListener("click", ()=>{
   document.getElementById("examModal").classList.add("section-hidden");
 });
 
-// تسليم الامتحان مع تصحيح من 100 وعرض الإجابة النموذجية
+// ======================= التصحيح =======================
+
 function submitExam(dateIso, examId){
   const exam = DATA[dateIso].exams.find(e => e.id === examId);
   if(!exam) return;
 
-  let correct = 0;
-  const totalQuestions = exam.questions.length;
+  // تحديد نوع الامتحان: يومي (30) أو تراكمية (100)
+  const examDate = new Date(dateIso);
+  const dayOfWeek = examDate.getDay(); // 0=Sun, 4=Thu, 5=Fri
+  let totalScore = 30;
+  let perQuestion = 10;
+  if(exam.takrami || dayOfWeek===4 || dayOfWeek===5){ // تراكمية
+    totalScore = 100;
+    perQuestion = Math.round(100/exam.questions.length);
+  }
+
+  let scoreObtained = 0;
 
   exam.questions.forEach((q,i)=>{
-    const val = document.getElementById("answer-"+i).value.trim().toLowerCase();
-    const answer = q.answer.trim().toLowerCase();
+    const userAns = document.getElementById("answer-"+i).value.trim().toLowerCase();
+    const correctAns = q.answer.trim().toLowerCase();
 
-    // التصحيح الأساسي: تطابق جزئي أو كامل
-    if(val === answer) correct += 1;
-    else if(val && answer.includes(val)) correct += 0.7;  // جزء من الإجابة
-    else if(val) correct += 0.3; // كتابة خاطئة أو ناقصة
-    // عرض الإجابة النموذجية
+    let qScore = 0;
+    if(userAns === correctAns) qScore = perQuestion;
+    else {
+      // تحليل ذكي
+      const userWords = userAns.split(/\s+/);
+      const correctWords = correctAns.split(/\s+/);
+      let matched = 0;
+      correctWords.forEach(word=>{
+        if(userWords.includes(word)) matched++;
+      });
+      if(matched === correctWords.length) qScore = perQuestion;
+      else if(matched > 0) qScore = Math.round(perQuestion*0.7);
+      else if(userAns) qScore = Math.round(perQuestion*0.3);
+    }
+
+    scoreObtained += qScore;
     document.getElementById("correct-"+i).style.display = "block";
   });
 
-  const score = Math.round((correct/totalQuestions)*100);
-  document.getElementById("examResult").textContent = `النتيجة: ${score} / 100`;
-  
-  // حفظ الدرجة
   if(!DATA.grades) DATA.grades = [];
   DATA.grades.push({
     date: dateIso,
     subject: exam.subject,
     title: exam.title,
-    score: score
+    score: scoreObtained
   });
 
   saveData();
   renderGrades();
+  document.getElementById("examResult").textContent = `النتيجة: ${scoreObtained} / ${totalScore}`;
 }
 
-// ========== القائمة الجانبية ==========
+// ======================= القائمة الجانبية =======================
+
 const menuBtn = document.getElementById("menuBtn");
 const sidebar = document.getElementById("sidebar");
 const overlay = document.getElementById("overlay");
@@ -137,7 +153,6 @@ overlay.addEventListener("click", ()=>{
   overlay.classList.remove("show");
 });
 
-// التبديل بين الصفحات
 document.querySelectorAll(".navlink").forEach(btn=>{
   btn.addEventListener("click", ()=>{
     document.querySelectorAll("main > section").forEach(s=>s.classList.add("section-hidden"));
@@ -152,18 +167,19 @@ document.querySelectorAll(".navlink").forEach(btn=>{
   });
 });
 
-// زر اليوم
+// ======================= أزرار التاريخ =======================
+
 document.getElementById("todayBtn").addEventListener("click", ()=>{
   renderDashboard(getTodayISO());
 });
 
-// زر عرض حسب التاريخ
 document.getElementById("goDate").addEventListener("click", ()=>{
   const val = document.getElementById("viewDate").value;
   if(val) renderDashboard(val);
 });
 
-// إضافة واجب جديد
+// ======================= إضافة واجب =======================
+
 document.getElementById("saveTask").addEventListener("click", ()=>{
   const subj = document.getElementById("new_subject").value.trim();
   const cont = document.getElementById("new_content").value.trim();
@@ -179,7 +195,8 @@ document.getElementById("saveTask").addEventListener("click", ()=>{
   }
 });
 
-// تصدير data.js
+// ======================= تصدير + إعادة ضبط =======================
+
 document.getElementById("exportBtn").addEventListener("click", ()=>{
   const blob = new Blob([ "window.getInitialData = ()=>" + JSON.stringify(DATA,null,2) ], {type:"application/javascript"});
   const url = URL.createObjectURL(blob);
@@ -190,7 +207,6 @@ document.getElementById("exportBtn").addEventListener("click", ()=>{
   URL.revokeObjectURL(url);
 });
 
-// إعادة الضبط
 document.getElementById("resetBtn").addEventListener("click", ()=>{
   if(confirm("هل أنت متأكد من إعادة الضبط؟")){
     localStorage.removeItem("study-data");
@@ -198,7 +214,8 @@ document.getElementById("resetBtn").addEventListener("click", ()=>{
   }
 });
 
-// =================== التقارير ===================
+// ======================= التقارير =======================
+
 function renderReports(){
   const ctx = document.getElementById("reportChart").getContext("2d");
   const subjectHours = {};
@@ -222,7 +239,8 @@ function renderReports(){
   });
 }
 
-// =================== الإحصائيات ===================
+// ======================= الإحصائيات =======================
+
 function renderStats(){
   const ctx = document.getElementById("statsChart").getContext("2d");
   const subjectCompleted = {};
@@ -247,7 +265,8 @@ function renderStats(){
   });
 }
 
-// =================== الأرشيف ===================
+// ======================= الأرشيف =======================
+
 function renderArchive(){
   const archiveEl = document.getElementById("archiveContent");
   let html = '';
@@ -266,7 +285,8 @@ function renderArchive(){
   archiveEl.innerHTML = html || 'لا توجد مهام مكتملة حتى الآن';
 }
 
-// =================== الدرجات ===================
+// ======================= الدرجات =======================
+
 function renderGrades(){
   const gradesEl = document.getElementById("gradesContent");
   if(!DATA.grades || DATA.grades.length===0){
@@ -274,7 +294,7 @@ function renderGrades(){
     return;
   }
   gradesEl.innerHTML = `<table border="1" cellspacing="0" cellpadding="4" style="width:100%;border-collapse:collapse;">
-    <tr><th>التاريخ</th><th>المادة</th><th>الامتحان</th><th>الدرجة /100</th></tr>
+    <tr><th>التاريخ</th><th>المادة</th><th>الامتحان</th><th>الدرجة</th></tr>
     ${DATA.grades.map(g=>`<tr>
       <td>${g.date}</td>
       <td>${g.subject}</td>
