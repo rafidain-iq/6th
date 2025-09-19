@@ -1,18 +1,28 @@
-// script.js - النسخة النهائية المكملة + درجات يومية/تراكمية + تصحيح ذكي
+// ======================= تحميل البيانات =======================
 
+const DATA_VERSION = "2025-09-17"; // عدّل هذا الرقم عند تحديث data.js
 let DATA = {};
-if(localStorage.getItem("study-data")){
-  DATA = JSON.parse(localStorage.getItem("study-data"));
+
+if(localStorage.getItem("study-data_version") !== DATA_VERSION){
+    // إذا كانت النسخة قديمة أو غير موجودة
+    DATA = window.getInitialData();
+    localStorage.setItem("study-data_version", DATA_VERSION);
+    saveData();
+} else if(localStorage.getItem("study-data")){
+    // استخدام البيانات المخزنة إذا حديثة
+    DATA = JSON.parse(localStorage.getItem("study-data"));
 } else {
-  DATA = window.getInitialData();
-  saveData();
+    // لأول مرة تحميل الموقع
+    DATA = window.getInitialData();
+    localStorage.setItem("study-data_version", DATA_VERSION);
+    saveData();
 }
 
 function saveData(){
   localStorage.setItem("study-data", JSON.stringify(DATA));
 }
 
-// ======================= واجهة =======================
+// ======================= واجهة المستخدم =======================
 
 function getTodayISO(){
   const d = new Date();
@@ -90,12 +100,12 @@ function submitExam(dateIso, examId){
   const exam = DATA[dateIso].exams.find(e => e.id === examId);
   if(!exam) return;
 
-  // تحديد نوع الامتحان: يومي (30) أو تراكمية (100)
   const examDate = new Date(dateIso);
-  const dayOfWeek = examDate.getDay(); // 0=Sun, 4=Thu, 5=Fri
+  const dayOfWeek = examDate.getDay();
   let totalScore = 30;
   let perQuestion = 10;
-  if(exam.takrami || dayOfWeek===4 || dayOfWeek===5){ // تراكمية
+
+  if(exam.takrami || dayOfWeek===4 || dayOfWeek===5){
     totalScore = 100;
     perQuestion = Math.round(100/exam.questions.length);
   }
@@ -210,6 +220,7 @@ document.getElementById("exportBtn").addEventListener("click", ()=>{
 document.getElementById("resetBtn").addEventListener("click", ()=>{
   if(confirm("هل أنت متأكد من إعادة الضبط؟")){
     localStorage.removeItem("study-data");
+    localStorage.removeItem("study-data_version");
     location.reload();
   }
 });
