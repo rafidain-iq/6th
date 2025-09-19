@@ -1,4 +1,4 @@
-// data.js - النسخة الكاملة من 2025-09-17 إلى 2025-09-30 مع الامتحانات اليومية والتراكمية
+// data.js - النسخة المصححة من 2025-09-17 إلى 2025-09-30
 window.getInitialData = function () {
   const DATA = {};
 
@@ -20,19 +20,18 @@ window.getInitialData = function () {
       { subject: "عربي", content: "قراءة محاضرة 1", hours: 1 }
     ],
     exams: [
-{
-          "subject": "أدب عربي",
-          "title": "امتحان الأدب الحديث",
-          "questions": [
-            { "text": "هل تفاعل العرب مع المعطيات الحضارية الجديدة؟ وكيف؟", "answer": "نعم، تأثروا بالحضارة الغربية خاصة بعد دخول نابليون." },
-            { "text": "ما الذي يوحي به عام 1798 في الأدب العربي؟", "answer": "هو عام دخول نابليون مصر، ويعد بداية الأدب الحديث." },
-            { "text": "ما الذي ساعد على ظهور الأجيال الأدبية الجديدة؟", "answer": "الاحتكاك بالغرب، وظهور المطابع، والبعثات التعليمية." }
-          ]
-        }
-     ]
+      {
+        subject: "أدب عربي",
+        title: "امتحان الأدب الحديث",
+        questions: [
+          { text: "هل تفاعل العرب مع المعطيات الحضارية الجديدة؟ وكيف؟", answer: "نعم، تأثروا بالحضارة الغربية خاصة بعد دخول نابليون." },
+          { text: "ما الذي يوحي به عام 1798 في الأدب العربي؟", answer: "هو عام دخول نابليون مصر، ويعد بداية الأدب الحديث." },
+          { text: "ما الذي ساعد على ظهور الأجيال الأدبية الجديدة؟", answer: "الاحتكاك بالغرب، وظهور المطابع، والبعثات التعليمية." }
+        ]
+      }
+    ]
   };
 
-  
   // ======== 19/09/2025 ========
   DATA["2025-09-19"] = {
     tasks: [
@@ -67,10 +66,7 @@ window.getInitialData = function () {
         questions: [
           { text: `Definein an engineer`, answer: `An engineer is someone who designs and builds machines, engines or roads.` },
           { text: `you bought some shoes last week. you've decided you didn't like them.`, answer: `If only I hadn't bought these shoes last week.` },
-          { text: `اكتب سطرين من الانشاء`, answer: `There is no better place to learn English than Britain itself, Britain is the best choice for
-many Students who are looking to learn English for many reasons, First you can hear People
-Speaking English all day in many different Situations. Will allow you to have a lot of practice
-speaking English.` },
+          { text: `اكتب سطرين من الانشاء`, answer: `There is no better place to learn English than Britain itself, Britain is the best choice for many Students who are looking to learn English for many reasons, First you can hear People Speaking English all day in many different Situations. Will allow you to have a lot of practice speaking English.` },
           { text: `who designed that amazing building? "My uncle. He's a famous ……… , you know"`, answer: `architect` },
           { text: `make > p.p`, answer: `made` }
         ]
@@ -91,13 +87,13 @@ speaking English.` },
           { text: `عرف الالكتروليتات الضعيفة`, answer: `وهي المواد التي ينتج عند ذوبانها في الماء محاليل ضعيفة التوصيل للكهرباء لكونها تتأين بشكل جزئي في محاليلها المائية مثل الحوامض والقواعد الضعيفة وأملاح شحيحة الذوبان (CH3COOH - HCN - NH3)` },
           { text: `علل تزداد درجة تأين الالكتروليات الضعيفة عند التخفيف`, answer: `عند إضافة الماء يقل تركيز المتفكك من الإلكتروليت الضعيف لذا يتجه نحو التفاعل الأمامي لتعويض هذا النقص الحاصل وحسب قاعدة لوشاتليه وبذلك تزداد درجة تأين الالكتروليت الضعيف` },
           { text: `أحسب درجة التأين للمحلول المائي للانلين kb=3.8x10(-10) C6H7N للانلين C6H7N تركيزه 0.1M (جذر 38= 6.2)`, answer: `62x10(-6)` },
-          { text: ` 1. احسب قيمة pH إذا كان تركيز [\mathrm{H^+}] = 1.0\times10^{-4}\ \mathrm{M}.
-2. احسب قيمة pK_b للمادة \mathrm{SP} إذا كان K_b(\mathrm{SP}) = 1.2\times10^{-9} (معطى أن \log 1.2 = 0.08).
-3. احسب قيمة تركيز [\mathrm{OH^-}] إذا كان \mathrm{pOH} = 7.3 (معطى أن \log 5 = 0.7).
-4. احسب قيمة K_a إذا كان \mathrm{p}K_a = 4.74 (معطى أن \log 1.8 = 0.26)`, answer: `1- pH=4
+          { text: ` 1. احسب قيمة pH إذا كان تركيز [H+] = 1.0×10^-4 M.
+2. احسب قيمة pK_b للمادة SP إذا كان K_b(SP) = 1.2×10^-9 (معطى أن log 1.2 = 0.08).
+3. احسب قيمة تركيز [OH^-] إذا كان pOH = 7.3 (معطى أن log 5 = 0.7).
+4. احسب قيمة K_a إذا كان pKa = 4.74 (معطى أن log 1.8 = 0.26)`, answer: `1- pH=4
 2- pk(sp) =8.92
-3- [OH-] = 5x10(-8) M
-4- Ka =1.8x10(-5)` }
+3- [OH-] = 5x10^-8 M
+4- Ka =1.8x10^-5` }
         ]
       },
       {
