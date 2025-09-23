@@ -140,18 +140,18 @@ window.getInitialData = function () {
   // 23/09/2025
   DATA["2025-09-23"] = {
     tasks:[
-      { subject: "إنكليزي", content: "مراجعة المحاضرتين 9 و 10", hours: 2 },
+      { subject: "إنكليزي", content: "مراجعة المحاضرتين 5 و 6", hours: 2 },
       { subject: "أدب عربي", content: "موضوع الجواهري", hours: 1 },
-      { subject: "فيزياء", content: "مراجعة قوانين الكهرباء", hours: 1 }
+      { subject: "فيزياء", content: "مراجعة", hours: 1 }
     ],
     exams:[
       {
-        subject:"انكليزي",
-        title:"محاضرة 7-8-9-10",
+        subject:"ادب عربي",
+        title:"علي الشرقي+ حافظ ابراهيم",
         questions:[
-          { text: "Can I borrow some money? she asked me.", answer: "She asked me if she could borrow some money." },
-          { text: "What are you doing on Friday afternoon? Adam asked me", answer: "Adam asked me what I was doing on Friday afternoon." },
-          { text: "If I were you, I (study) hard. (Put verb in the correct form)", answer: "would study / could study / might study" }
+          { text: "تحدث عن مسيرة (علي الشرقي) الجهادية؟", answer: "‏يعد على الشرقي إحدى الشخصيات المهمة في ثورة العشرين فقد كان مرافقاً للحبوبي في مسيرته الجهادية ضد الانكليز عام 1915 وكان مبعوثه إلى عشائر الغراف." },
+          { text: "ما هي الفنون أو الأساليب البلاغية التي ضمنها على الشرقي في قصيدته", answer: "استعمل طباق السلب والطباق الإيجاب والجناس غير التام وبعض فنون البديع." },
+          { text: "هل للماضي دلالة في شعر حافظ ابراهيم أثبت او علل ذلك ؟", answer: "يعمد الى توظيف الفعل الماضي لتقديم مقدار تعلقه بالماضي وقيمه القومية وتغنيه بالماضي المجيد." }
         ]
       }
     ]
@@ -184,14 +184,14 @@ window.getInitialData = function () {
     exams:[
       {
         subject:"عربي",
-        title:"امتحان تراكمية عربي",
+        title:"امتحان محاضرة + علي الشرقي ومحمد سعيد الحبوبي",
         type:"cumulative",
         questions:[
-          { text: "سؤال 1 عربي", answer: "الحل 1" },
-          { text: "سؤال 2 عربي", answer: "الحل 2" },
-          { text: "سؤال 3 عربي", answer: "الحل 3" },
-          { text: "سؤال 4 عربي", answer: "الحل 4" },
-          { text: "سؤال 5 عربي", answer: "الحل 5" }
+          { text: `(للعامل اجره)\nمالذي اوجب تقديم الخبر على المبتدأ`, answer: `تقدم الخبر (للعامل) لان في المبتدأ ضمير يعود على بعض الخبر` },
+          { text: `وَكَيفَ اِنتِفاعي بِالرُقادِ وَإِنَّما\nبِعِلَّتِهِ يَعتَلُّ في الأَعيُنِ الغُمضُ\ndl دل على المتقدم وبين نوعه وحكم تقديمه معللاً`, answer: `المتقدم : كيف\nنوعه : خبر مقدم \nحكمه : وجوباً\nسبب التقديم : لانه من الالفاظ التي لها الصداره بالكلام` },
+          { text: `أَهابُكِ إِجلالاً وَما بِكِ قُدرَةٌ\nعَلَيَّ وَلَكِن مِلءُ عَينٍ حَبيبُها\nعين الخبر المقدم وجوباً مبيناً سبب تقديمه`, answer: `المتقدم : ملىء عين\nسبب التقديم : لان في المبتدأ ضميراً يعود على بعض الخبر` },
+          { text: `كان للغناء علاقة في ظهور الموشحات`, answer: `كان لدعة الحياة في القصور العباسية والأندلسية وترفها وما تتطلبه هذه الحياة من وسائل الترفيه كالغناء والموسيقى أثر في نشأة الموشحات التي تناسب بنيتها طبيعة الغناء والألحان وترديدها` },
+          { text: `ما هي الفنون أو الأساليب البلاغة التي ضمنها علي الشرقي في قصيدته`, answer: `لم ينسى شاعرنا الإفادة من فنون البديع فقد استعمل طباق السلب في لفظتي يثلم وغير منثلم وكذلك في قوله الوغى والسلم طباق إيجاب وقد استعمل أيضا الجناس غير التام في الأحكام والحكم` }
         ]
       },
       {
@@ -199,35 +199,35 @@ window.getInitialData = function () {
         title:"امتحان تراكمية إنكليزي",
         type:"cumulative",
         questions:[
-          { text: "سؤال 1 إنكليزي", answer: "الحل 1" },
-          { text: "سؤال 2 إنكليزي", answer: "الحل 2" },
-          { text: "سؤال 3 إنكليزي", answer: "الحل 3" },
-          { text: "سؤال 4 إنكليزي", answer: "الحل 4" },
-          { text: "سؤال 5 إنكليزي", answer: "الحل 5" }
+          { text: `Definein an engineer`, answer: `An engineer is someone who designs and builds machines, engines or roads.` },
+          { text: `you bought some shoes last week. you've decided you didn't like them.`, answer: `If only I hadn't bought these shoes last week.` },
+          { text: `اكتب سطرين من الانشاء`, answer: `There is no better place to learn English than Britain itself, Britain is the best choice for many Students who are looking to learn English for many reasons, First you can hear People Speaking English all day in many different Situations. Will allow you to have a lot of practice speaking English.` },
+          { text: `who designed that amazing building? "My uncle. He's a famous ……… , you know"`, answer: `architect` },
+          { text: `make > p.p`, answer: `made` }
         ]
       },
       {
         subject:"كيمياء",
-        title:"امتحان تراكمية كيمياء",
+        title:"امتحان تراكمية  5-1كيمياء",
         type:"cumulative",
         questions:[
-          { text: "سؤال 1 كيمياء", answer: "الحل 1" },
-          { text: "سؤال 2 كيمياء", answer: "الحل 2" },
-          { text: "سؤال 3 كيمياء", answer: "الحل 3" },
-          { text: "سؤال 4 كيمياء", answer: "الحل 4" },
-          { text: "سؤال 5 كيمياء", answer: "الحل 5" }
+          { text: `ماهي رموز الحوامض الاتيه\n1- حامض الهيدرويوديك\n2- حامض النتريك\n3- حامض الكروميك\n4- حامض البرمنغنيك`, answer: `1- HI\n2- HNO3\n3- H2CrO4\n4-HMnO4` },
+          { text: `عرف الالكتروليتات الضعيفة`, answer: `وهي المواد التي ينتج عند ذوبانها في الماء محاليل ضعيفة التوصيل للكهرباء لكونها تتأين بشكل جزئي في محاليلها المائية مثل الحوامض والقواعد الضعيفة وأملاح شحيحة الذوبان (CH3COOH - HCN - NH3)` },
+          { text: `علل تزداد درجة تأين الالكتروليات الضعيفة عند التخفيف`, answer: `عند إضافة الماء يقل تركيز المتفكك من الإلكتروليت الضعيف لذا يتجه نحو التفاعل الأمامي لتعويض هذا النقص الحاصل وبذلك تزداد درجة تأين الالكتروليت الضعيف` },
+          { text: `أحسب درجة التأين للمحلول المائي للانلين kb=3.8x10(-10) C6H7N تركيزه 0.1M (جذر 38= 6.2)`, answer: `62x10(-6)` },
+          { text: `1) احسب قيمة pH إذا كان تركيز [H+] = 1.0×10^-4 M.\n2) احسب قيمة pK_b للمادة SP إذا كان K_b(SP) = 1.2×10^-9.\n3) احسب قيمة تركيز [OH^-] إذا كان pOH = 7.3.\n4) احسب قيمة K_a إذا كان pKa = 4.74.`, answer: `1- pH=4\n2- pk(sp) =8.92\n3- [OH-] = 5x10(-8) M\n4- Ka =1.8x10(-5)` }
         ]
       },
       {
         subject:"أحياء",
-        title:"امتحان تراكمية أحياء",
+        title:"امتحان تراكمية 1-7",
         type:"cumulative",
         questions:[
-          { text: "سؤال 1 أحياء", answer: "الحل 1" },
-          { text: "سؤال 2 أحياء", answer: "الحل 2" },
-          { text: "سؤال 3 أحياء", answer: "الحل 3" },
-          { text: "سؤال 4 أحياء", answer: "الحل 4" },
-          { text: "سؤال 5 أحياء", answer: "الحل 5" }
+          { text: `علل/ الانقسام الاختزالي الاول للخلية البيضية الاولية غير المتساويه بالحجم ؟`, answer: `بسبب الانقسام السايتوبلازمي الغير متساوي بالحجم ينتج عنه تكوين خليتين احدهما كبير مستلمة لمعظم الغذاء والسايتوبلازم تدعى بالخلية البيضية الثانوية والثانية صغيرة تدعى بالجسم القطبي الاول` },
+          { text: `ما اهمية ذنب الفايروس ؟`, answer: `1- يقوم الذنب بالتصاق بمواقع خاصة على جدار الخلية البكتيرية\n2- يقوم ذنب الفايروس بافراز انزيم يعمل على اضعاف الروابط الكيميائية في جدار الخلية البكتيرية` },
+          { text: `عرف اعادة الخلط`, answer: `وهي عملية اتحاد جيني بين خليتين بكتيرتين لسلالتين مختلفتين من بكتريا القولون في وسط زراعي واحد ينتج عنه ظهور سلالة جديدة تختلف وظيفياً عن السلالتين اللتين تم مزجهما` },
+          { text: `ما موقع واهمية عامل الخصوبة`, answer: `الموقع : سايتوبلازم الخلية البكتيرية المعطية\nالاهمية : يعمل على بناء انزيم او بروتين لا تستطيع الخلية المستلمة من بنائه` },
+          { text: `عرف البوغ الزيجي`, answer: `هو البلوغ الناتج من اتحاد الأمشاج المتشابهة من سلالات مختلفة مكون الزيجة 2س رباعية الاسواط والتي تفقد اسواطها وتحاط بجدار سليلوزي لمقاومة الظروف البيئية الغير ملائمة` }
         ]
       }
     ]
@@ -236,9 +236,28 @@ window.getInitialData = function () {
   // 26/09/2025
   DATA["2025-09-26"] = {
     tasks:[
-      { subject: "إسلامية", content: "مراجعة ورقتين", hours: 1 }
+      { subject: "احياء", content: "مراجعة المحاضرتين 10-11", hours: 2 },
+      { subject: "عربي", content: "مراجعة المحاضرتين 1-2", hours: 2 },
+      { subject: "اسلامية", content: "حل مسائل مراجعة", hours: 1 }
     ],
-    exams:[]
+    exams: [
+        {
+          "subject": "انكليزي",
+          "title": " قطع كتاب + انشاء + تصاريف محاضرة ",
+          "questions": [
+            { "text": "اكتب 4 نقاط من الانشاء ", "answer": "There is no better place to learn English than Britain itself, Britain is the best choice for
+many Students who are looking to learn English for many reasons, First you can hear People
+Speaking English all day in many different Situations. Will allow you to have a lot of practice
+speaking English. Secondly, if you stay with a British family, that will help you more to
+observe British way of life and learn how People Communicate with each others. Thirdly
+watching TV, English film and listening to radio will help you more to have a good Sound
+knowledge of English." },
+            { "text": "Have you read article the this in dhows about magazine? It's by my aunt
+who is a ……..", "answer": "journalist" },
+            { "text": "drink >p.p", "answer": "drunk" }
+          ]
+       }
+     ]
   };
 
   // 27/09/2025
