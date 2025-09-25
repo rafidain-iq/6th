@@ -234,31 +234,37 @@ window.getInitialData = function () {
   };
 
   // 26/09/2025
-  DATA["2025-09-26"] = {
-    tasks:[
-      { subject: "احياء", content: "مراجعة المحاضرتين 10-11", hours: 2 },
-      { subject: "عربي", content: "مراجعة المحاضرتين 1-2", hours: 2 },
-      { subject: "اسلامية", content: "حل مسائل مراجعة", hours: 1 }
-    ],
-    exams: [
+DATA["2025-09-26"] = {
+  tasks:[
+    { subject: "احياء", content: "مراجعة المحاضرتين 10-11", hours: 2 },
+    { subject: "عربي", content: "مراجعة المحاضرتين 1-2", hours: 2 },
+    { subject: "اسلامية", content: "حل مسائل مراجعة", hours: 1 }
+  ],
+  exams: [
+    {
+      subject: "انكليزي",
+      title: "قطع كتاب + انشاء + تصاريف محاضرة",
+      questions: [
         {
-          "subject": "انكليزي",
-          "title": " قطع كتاب + انشاء + تصاريف محاضرة ",
-          "questions": [
-            { "text": "اكتب 4 نقاط من الانشاء ", "answer": "There is no better place to learn English than Britain itself, Britain is the best choice for
-many Students who are looking to learn English for many reasons, First you can hear People
-Speaking English all day in many different Situations. Will allow you to have a lot of practice
-speaking English. Secondly, if you stay with a British family, that will help you more to
-observe British way of life and learn how People Communicate with each others. Thirdly
-watching TV, English film and listening to radio will help you more to have a good Sound
-knowledge of English." },
-            { "text": "Have you read article the this in dhows about magazine? It's by my aunt
-who is a ……..", "answer": "journalist" },
-            { "text": "drink >p.p", "answer": "drunk" }
-          ]
-       }
-     ]
-  };
+          text: "اكتب 4 نقاط من الانشاء",
+          answer: `There is no better place to learn English than Britain itself, Britain is the best choice for many Students who are looking to learn English for many reasons.
+First, you can hear People Speaking English all day in many different Situations. This will allow you to have a lot of practice speaking English.
+Secondly, if you stay with a British family, that will help you more to observe the British way of life and learn how People communicate with each other.
+Thirdly, watching TV, English films and listening to radio will help you more to have a good knowledge of English.
+Fourthly, try to participate in conversations and write short essays to improve your writing and speaking skills.`
+        },
+        {
+          text: "Have you read article the this in dhows about magazine? It's by my aunt who is a ……..",
+          answer: "journalist"
+        },
+        {
+          text: "drink >p.p",
+          answer: "drunk"
+        }
+      ]
+    }
+  ]
+};
 
   // 27/09/2025
   DATA["2025-09-27"] = {
