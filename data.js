@@ -181,13 +181,13 @@ observe British way of life and learn how People Communicate with each others.` 
       exams: []
     },
     "2025-10-14": { // الثلاثاء
-      tasks: [
-        { subject: "عربي", content: "مراجعة أسلوب التوكيد", hours: 2, done: false },
-        { subject: "أحياء", content: "Chapter 4 - Lecture 3 & 4", hours: 2, done: false },
-        { subject: "فيزياء", content: "مراجعة الفصل 3 - Lesson 3 & 4", hours: 1, done: false }
-		],
-      exams: []
-    },
+  tasks: [
+    { subject: "عربي", content: "مراجعة أسلوب التوكيد", hours: 2, done: false },
+    { subject: "أحياء", content: "Chapter 4 - Lecture 3 & 4", hours: 2, done: false },
+    { subject: "فيزياء", content: "مراجعة الفصل 3 - Lesson 3 & 4", hours: 1, done: false }
+  ],
+  exams: []
+},
     "2025-10-15": { // الأربعاء
       tasks: [
         { subject: "عربي", content: "مراجعة أسلوب التوكيد", hours: 2, done: false },
