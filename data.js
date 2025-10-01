@@ -1,324 +1,304 @@
-// data.js - الأيام من 2025-10-01 إلى 2025-10-10 (مصَحح بالكامل)
+// data.js - من 2025-09-18 إلى 2025-09-30 (مصحح ومُهيأ للاستخدام)
 window.getInitialData = function () {
-  const DATA = {
-    "2025-10-01": {
-      tasks: [
-        { subject: "عربي", content: "أسلوب التقديم والتأخير - Lecture 1 & 2", hours: 2, done: false },
-        { subject: "أدب عربي", content: "جواهري - مراجعة", hours: 2, done: false },
-        { subject: "أحياء", content: "Chapter 3 - Lecture 11 & 12", hours: 2, done: false }
-      ],
-      exams: [
-        {
-          subject: "كيمياء",
-          title: "محاضرة 12-13",
-          questions: [
-            { text: "محلول امونيا NH3 PH=11 وبتركيز 0.05M احسب مقدار التغير في قيمة PH بعد إضافة 0.5M من ملحها كلوريد الامونيوم NH4Cl الى لتر منها ؟ log2=0.3", answer: `pH=8.3
-PH=-2.7` },
-            { text: "احسب قيمة B\nPH\n1- لمحلول بفر مكون من حامض الخليك وخلات الصوديوم بتركيز 0.1M لكل منهما علماً ان Pka=4.7\n2- بعد اضافه 0.01M من HCl الى لتر من محلول log0.81=-0.09\n3- احسب قيمة DLTAPH", answer: `1- PH=4.7
-2- PH=4.61
-3- PH=-0.09` },
-            { text: "احسب قيمة الاس الهيدروجيني PH\n1- لتر من محلول بفر مكون من حامض الخليك وخلات الصوديوم بتركيز 0.2M لكل منهما pka=4.7\n2- بعد اضافة 0.1M من HCl الى لتر من المحلول\n3- جد قيمة التغير في قيمة الأسّ الهيدروجيني pH", answer: `1-pH=4.7
-2- 4.22
-3- PH=-0.477` }
-          ]
-        }
-      ]
-    },
-    "2025-10-02": {
-      tasks: [],
-      exams: [
-        { subject: "شامل", title: "امتحانات شاملة + إسلامية", questions: [], done: false }
-      ]
-    },
-    "2025-10-03": {
-      tasks: [
-        { subject: "أحياء", content: "Chapter 3 - Lecture 13 & 14", hours: 2, done: false },
-        { subject: "عربي", content: "أسلوب التقديم والتأخير - Lecture 3 & 4", hours: 2, done: false }
-      ],
-      exams: [
-        {
-          subject: "انكليزي",
-          title: "قطع انكليزي+ انشاء + تصاريف محاضرة (4-5)",
-          questions: [
-            { text: "اكتب نقطة 2ونصف الثالثه انشاء", answer: ` First you can hear People
-Speaking English all day in many different Situations. Will allow you to have a lot of practice
-speaking English. Secondly, if you stay with a British family, that will help you more to
-observe British way of life and learn how People Communicate with each others.` },
-            { text: "I'm hungry. Let's have lunch in the College…….", answer: "Canteen" },
-            { text: "tell >p.l", answer: "told" }
-          ]
-        }
-      ]
-    },
-    "2025-10-04": {
-      tasks: [
-        { subject: "إنكليزي", content: "Unit 3 - Lecture 6 & 7", hours: 2, done: false },
-        { subject: "كيمياء", content: "Chapter 3 - Lecture 13 & 14", hours: 2, done: false },
-        { subject: "رياضيات", content: "مراجعة مسائل", hours: 1, done: false }
-      ],
-      exams:[
-        {
-          subject:"أحياء",
-          title:"محاضرة 11-12-13–14",
-          questions:[
-            { text: "ما موقع الطور البوغي", answer: "الزيجة" },
-            { text: "عرف الثالوس الاولي", answer: "هي عبارة عن تركيب قلبي الشكل اخضر اللون مسطح ينشأ من نمو البوغ يمثل الطور المشيجي الجنسي يحتوي على اشباه الجذور ويحمل حوافظ مشيجيه انثويه وحوامض مشيجيه ذكريه" },
-            { text: "عرف الزهرة غير التامة", answer: "هي الزهرة التي تحتوي اما على الاسديه او المدقات ويطلق عليها ايضاً زهرة احادية الجنس" }
-          ]
-        }
-      ]
-    },
-    "2025-10-05": {
-      tasks: [
-        { subject: "إنكليزي", content: "Unit 3 - Lecture 8 & 9", hours: 2, done: false },
-        { subject: "كيمياء", content: "Chapter 3 - Lecture 15 & 16", hours: 2, done: false }
-      ],
-      exams:[
-        {
-          subject:"عربي",
-          title:"محاضرة 2-3",
-          questions:[
-            { text: `(لَهُم مَّغْفِرَةٌ وَأَجْرٌ عَظِيمٌ) ، (فَمِنْهُمْ شَقِيٌّ وَسَعِيدٌ)
-دل على المتقدم ، وبين نوعه وحكمه وسبب تقديمه`, answer: `المتقدم : لهم - منهم
-نوعه - خبر متقدم
-حكمه : وجوباً
-سبب التقديم : لان المبتدأ نكرة غير مضافة ولا موصوفة والخبر شبه جملة` },
-            { text: `1- قَلبٌ يُصادِقُني الطِلابَ جَراءَةً
-وَمِنَ القُلوبِ مُصادِقٌ وَمُوارِبُ
+  const DATA = {};
 
-2- وَلِكُلِّ حالٍ مُعقِبٌ وَلَرُبَّما
-أَجلى لَكَ المَكروهُ عَمّا يُحمَدُ
-دل على المتقدم ، وبين نوعه وحكمه وسبب تقديمه`, answer: `المتقدم : من القلوب - لكل حال
-نوعه : خبر متقدم
-حكمه : وجوباً
-سبب التقديم : لان المبتدأ نكرة غير مضافة ولا موصوفة والخبر شبه جملة` },
-            { text: `بين الخطأ في الجمل الاتيه ، ثم صححه ؟
-1- ثوابها للفضيلة
-2- تقدم الخبر (وجوباً ) في : (مالي نصيب) (هل لي نصيب )`, answer: `الجملة : ثوابها - هل لي نصيب - مالي نصيب
-الخطأ : 1- تقدم المبتدأ المتصل به الضمير (ها) العائد على متأخر لفظاً ورتبة
-2- سبقت جملة تقديم الخبر على المبتدأ ب (نفي) و (استفهام)
-التصحيح :1- للفضيلة ثوابها
-2- لي نصيب` }
-          ]
-        }
-      ]
-    },
-    "2025-10-06": { 
-      tasks:[
-        {subject:"إنكليزي",content:"Unit 3 - Lecture 10 & 11",hours:2,done:false},
-        {subject:"كيمياء",content:"Chapter 3 - Lecture 17 & 18",hours:2,done:false}
-      ], 
-      exams:[
-        {
-          subject:"ادب عربي",
-          title:"علي الشرقي+ حافظ ابراهيم",
-          questions:[
-            {text:"تحدث عن مسيرة (علي الشرقي) الجهادية؟",answer:"‏يعد على الشرقي إحدى الشخصيات المهمة في ثورة العشرين فقد كان مرافقاً للحبوبي في مسيرته الجهادية ضد الانكليز عام 1915 وكان مبعوثه إلى عشائر الغراف."},
-            {text:"ما هي الفنون أو الأساليب البلاغية التي ضمنها على الشرقي في قصيدته",answer:"استعمل طباق السلب والطباق الإيجاب والجناس غير التام وبعض فنون البديع."},
-            {text:"هل للماضي دلالة في شعر حافظ ابراهيم أثبت او علل ذلك ؟",answer:"يعمد الى توظيف الفعل الماضي لتقديم مقدار تعلقه بالماضي وقيمه القومية وتغنيه بالماضي المجيد."}
-          ]
-        }
-      ]
-    },
-    "2025-10-07": {
-      tasks:[
-        {subject:"عربي", content:"أسلوب التوكيد - Lecture 1 & 2", hours:2, done:false},
-        {subject:"أحياء", content:"Chapter 3 - Lecture 19 & 20", hours:2, done:false},
-        {subject:"فيزياء", content:"مراجعة الفصل 3 - Lesson 1 & 2", hours:1, done:false}
-      ],
-      exams:[
-        {
-          subject:"انكليزي",
-          title:"محاضرة 6-7-8-9",
-          questions:[
-            {text:"will you be free to play in the match on Saturday? The football coach asked me.", answer:"The football coach asked me if I would be free to play in the match on Saturday."},
-            {text:"When did you lose your bag? I asked her.", answer:"I asked her when she had lost her bag"},
-            {text:"if she (not apply) for a scholarship, of course she won't get one.", answer:"doesn't apply"}
-          ]
-        }
-      ]
-    },
-    "2025-10-08": {
-      tasks:[
-        {subject:"عربي", content:"أسلوب التوكيد - Lecture 3 & 4", hours:2, done:false},
-        {subject:"أدب عربي", content:"ميخائيل نعيمة - ورقتين", hours:2, done:false},
-        {subject:"أحياء", content:"Chapter 3 - Lecture 21 & 22", hours:2, done:false}
-      ],
-      exams:[]
-    },
-    "2025-10-09": {
-      tasks:[],
-      exams:[{subject:"شامل", title:"امتحانات شاملة + إسلامية", questions:[], done:false}]
-    },
-    "2025-10-10": {
-      tasks:[
-        {subject:"أحياء", content:"Chapter 4 - Lecture 1 & 2", hours:2, done:false},
-        {subject:"عربي", content:"مراجعة أسلوب التوكيد", hours:2, done:false}
-      ],
-      exams:[]
-    },
-	
-    "2025-10-11": { // السبت
-      tasks: [
-        { subject: "إنكليزي", content: "Unit 4 - Lecture 1 & 2", hours: 2, done: false },
-        { subject: "كيمياء", content: "Chapter 4 - Lecture 1 & 2", hours: 2, done: false },
-        { subject: "رياضيات", content: "مراجعة مسائل", hours: 1, done: false }
-      ],
-      exams: []
-    },
-    "2025-10-12": { // الأحد
-      tasks: [
-        { subject: "إنكليزي", content: "Unit 4 - Lecture 3 & 4", hours: 2, done: false },
-        { subject: "كيمياء", content: "Chapter 4 - Lecture 3 & 4", hours: 2, done: false }
-      ],
-      exams: []
-    },
-    "2025-10-13": { // الاثنين
-      tasks: [
-        { subject: "إنكليزي", content: "Unit 4 - Lecture 5 & 6", hours: 2, done: false },
-        { subject: "كيمياء", content: "Chapter 4 - Lecture 5 & 6", hours: 2, done: false }
-      ],
-      exams: []
-    },
-    "2025-10-14": { // الثلاثاء
-  tasks: [
-    { subject: "عربي", content: "مراجعة أسلوب التوكيد", hours: 2, done: false },
-    { subject: "أحياء", content: "Chapter 4 - Lecture 3 & 4", hours: 2, done: false },
-    { subject: "فيزياء", content: "مراجعة الفصل 3 - Lesson 3 & 4", hours: 1, done: false }
-  ],
-  exams: []
-},
-    "2025-10-15": { // الأربعاء
-      tasks: [
-        { subject: "عربي", content: "مراجعة أسلوب التوكيد", hours: 2, done: false },
-        { subject: "أدب عربي", content: "مراجعة ميخائيل نعيمة", hours: 2, done: false },
-        { subject: "أحياء", content: "Chapter 4 - Lecture 5 & 6", hours: 2, done: false }
-      ],
-      exams: []
-    },"2025-10-16": { // الخميس
-  tasks: [],
-  exams: [
-    { subject: "شامل", title: "امتحانات شاملة + إسلامية", questions: [], done: false }
-  ]
-},
-"2025-10-17": { // الجمعة
-  tasks: [
-    { subject: "أحياء", content: "Chapter 4 - Lecture 7 & 8", hours: 2, done: false },
-    { subject: "عربي", content: "مراجعة أسلوب التوكيد", hours: 2, done: false }
-  ],
-  exams: []
-},
-"2025-10-18": { // السبت
-  tasks: [
-    { subject: "إنكليزي", content: "Unit 4 - Lecture 7 & 8", hours: 2, done: false },
-    { subject: "كيمياء", content: "Chapter 4 - Lecture 7 & 8", hours: 2, done: false },
-    { subject: "رياضيات", content: "مراجعة مسائل", hours: 1, done: false }
-  ],
-  exams: []
-},
-"2025-10-19": { // الأحد
-  tasks: [
-    { subject: "إنكليزي", content: "Unit 4 - Lecture 9 & 10", hours: 2, done: false },
-    { subject: "كيمياء", content: "Chapter 4 - Lecture 9 & 10", hours: 2, done: false }
-  ],
-  exams: []
-},
-"2025-10-20": { // الاثنين
-  tasks: [
-    { subject: "إنكليزي", content: "Unit 4 - Lecture 11 & 12", hours: 2, done: false },
-    { subject: "كيمياء", content: "Chapter 4 - Lecture 11 & 12", hours: 2, done: false }
-  ],
-  exams: []
-},
-"2025-10-21": { // الثلاثاء
-  tasks: [
-    { subject: "عربي", content: "مراجعة أسلوب التوكيد", hours: 2, done: false },
-    { subject: "أحياء", content: "Chapter 4 - Lecture 9 & 10", hours: 2, done: false },
-    { subject: "فيزياء", content: "مراجعة الفصل 3 - Lesson 5 & 6", hours: 1, done: false }
-  ],
-  exams: []
-},
-"2025-10-22": { // الأربعاء
-  tasks: [
-    { subject: "عربي", content: "مراجعة أسلوب التوكيد", hours: 2, done: false },
-    { subject: "أدب عربي", content: "مراجعة ميخائيل نعيمة", hours: 2, done: false },
-    { subject: "أحياء", content: "Chapter 4 - Lecture 11 & 12", hours: 2, done: false }
-  ],
-  exams: []
-},
-"2025-10-23": { // الخميس
-  tasks: [],
-  exams: [
-    { subject: "شامل", title: "امتحانات شاملة + إسلامية", questions: [], done: false }
-  ]
-},
-"2025-10-24": { // الجمعة
-  tasks: [
-    { subject: "أحياء", content: "Chapter 4 - Lecture 13 & 14", hours: 2, done: false },
-    { subject: "عربي", content: "مراجعة أسلوب التوكيد", hours: 2, done: false }
-  ],
-  exams: []
-},
-"2025-10-25": { // السبت
-  tasks: [
-    { subject: "إنكليزي", content: "Unit 4 - Lecture 13 & 14", hours: 2, done: false },
-    { subject: "كيمياء", content: "Chapter 4 - Lecture 13 & 14", hours: 2, done: false },
-    { subject: "رياضيات", content: "مراجعة مسائل", hours: 1, done: false }
-  ],
-  exams: []
-},
-"2025-10-26": { // الأحد
-  tasks: [
-    { subject: "إسلامية", content: "مراجعة ورقة واحدة", hours: 1, done: false },
-    { subject: "أحياء", content: "Chapter 4 - Lecture 15 & 16", hours: 2, done: false }
-  ],
-  exams: []
-},
-"2025-10-27": { // الاثنين
-  tasks: [
-    { subject: "إنكليزي", content: "Unit 4 - Lecture 15 & 16", hours: 2, done: false },
-    { subject: "كيمياء", content: "Chapter 4 - Lecture 15 & 16", hours: 2, done: false }
-  ],
-  exams: []
-},
-"2025-10-28": { // الثلاثاء
-  tasks: [
-    { subject: "أحياء", content: "Chapter 4 - Lecture 17 & 18", hours: 2, done: false },
-    { subject: "عربي", content: "مراجعة أسلوب التوكيد", hours: 2, done: false },
-    { subject: "فيزياء", content: "مراجعة الفصل 3 - Lesson 11 & 12", hours: 1, done: false }
-  ],
-  exams: []
-},
-"2025-10-29": { // الأربعاء
-  tasks: [
-    { subject: "رياضيات", content: "مراجعة مسائل", hours: 1, done: false },
-    { subject: "كيمياء", content: "Chapter 4 - Lecture 17 & 18", hours: 2, done: false }
-  ],
-  exams: []
-},
-"2025-10-30": { // الخميس
-  tasks: [],
-  exams: [
-    { subject: "شامل", title: "امتحانات شاملة + إسلامية", questions: [], done: false }
-  ]
-  }
+  // 18/09/2025
+  DATA["2025-09-18"] = {
+    tasks:[
+      { subject: "أحياء", content: "مراجعة", hours: 2 },
+      { subject: "فيزياء", content: "مراجعة قوانين الحركة", hours: 1 },
+      { subject: "عربي", content: "قراءة محاضرة 1", hours: 1 }
+    ],
+    exams:[
+      {
+        subject:"أدب عربي",
+        title:"امتحان الأدب الحديث",
+        questions:[
+          { text: "هل تفاعل العرب مع المعطيات الحضارية الجديدة؟ وكيف؟", answer: "نعم، تأثروا بالحضارة الغربية خاصة بعد دخول نابليون." },
+          { text: "ما الذي يوحي به عام 1798 في الأدب العربي؟", answer: "هو عام دخول نابليون مصر، ويعد بداية الأدب الحديث." },
+          { text: "ما الذي ساعد على ظهور الأجيال الأدبية الجديدة؟", answer: "الاحتكاك بالغرب، وظهور المطابع، والبعثات التعليمية." }
+        ]
+      }
+    ]
   };
 
-  // --- إضافة ID تلقائي لكل مهمة وامتحان ---
-  Object.keys(DATA).forEach(date => {
+  // 19/09/2025 (تراكمي - تم وضع type cumulative)
+  DATA["2025-09-19"] = {
+    tasks:[
+      { subject: "راحة", content: "لا توجد واجبات اليوم", hours: 0 }
+    ],
+    exams:[
+      {
+        subject:"عربي",
+        title:"امتحان محاضرة + علي الشرقي ومحمد سعيد الحبوبي",
+        type:"cumulative",
+        questions:[
+          { text: `(للعامل اجره)\nمالذي اوجب تقديم الخبر على المبتدأ`, answer: `تقدم الخبر (للعامل) لان في المبتدأ ضمير يعود على بعض الخبر` },
+          { text: `وَكَيفَ اِنتِفاعي بِالرُقادِ وَإِنَّما\nبِعِلَّتِهِ يَعتَلُّ في الأَعيُنِ الغُمضُ\ndl دل على المتقدم وبين نوعه وحكم تقديمه معللاً`, answer: `المتقدم : كيف\nنوعه : خبر مقدم \nحكمه : وجوباً\nسبب التقديم : لانه من الالفاظ التي لها الصداره بالكلام` },
+          { text: `أَهابُكِ إِجلالاً وَما بِكِ قُدرَةٌ\nعَلَيَّ وَلَكِن مِلءُ عَينٍ حَبيبُها\nعين الخبر المقدم وجوباً مبيناً سبب تقديمه`, answer: `المتقدم : ملىء عين\nسبب التقديم : لان في المبتدأ ضميراً يعود على بعض الخبر` },
+          { text: `كان للغناء علاقة في ظهور الموشحات`, answer: `كان لدعة الحياة في القصور العباسية والأندلسية وترفها وما تتطلبه هذه الحياة من وسائل الترفيه كالغناء والموسيقى أثر في نشأة الموشحات التي تناسب بنيتها طبيعة الغناء والألحان وترديدها` },
+          { text: `ما هي الفنون أو الأساليب البلاغة التي ضمنها علي الشرقي في قصيدته`, answer: `لم ينسى شاعرنا الإفادة من فنون البديع فقد استعمل طباق السلب في لفظتي يثلم وغير منثلم وكذلك في قوله الوغى والسلم طباق إيجاب وقد استعمل أيضا الجناس غير التام في الأحكام والحكم` }
+        ]
+      },
+      {
+        subject:"إنكليزي",
+        title:"امتحان تراكمية إنكليزي",
+        type:"cumulative",
+        questions:[
+          { text: `Definein an engineer`, answer: `An engineer is someone who designs and builds machines, engines or roads.` },
+          { text: `you bought some shoes last week. you've decided you didn't like them.`, answer: `If only I hadn't bought these shoes last week.` },
+          { text: `اكتب سطرين من الانشاء`, answer: `There is no better place to learn English than Britain itself, Britain is the best choice for many Students who are looking to learn English for many reasons, First you can hear People Speaking English all day in many different Situations. Will allow you to have a lot of practice speaking English.` },
+          { text: `who designed that amazing building? "My uncle. He's a famous ……… , you know"`, answer: `architect` },
+          { text: `make > p.p`, answer: `made` }
+        ]
+      },
+      {
+        subject:"كيمياء",
+        title:"امتحان تراكمية  5-1كيمياء",
+        type:"cumulative",
+        questions:[
+          { text: `ماهي رموز الحوامض الاتيه\n1- حامض الهيدرويوديك\n2- حامض النتريك\n3- حامض الكروميك\n4- حامض البرمنغنيك`, answer: `1- HI\n2- HNO3\n3- H2CrO4\n4-HMnO4` },
+          { text: `عرف الالكتروليتات الضعيفة`, answer: `وهي المواد التي ينتج عند ذوبانها في الماء محاليل ضعيفة التوصيل للكهرباء لكونها تتأين بشكل جزئي في محاليلها المائية مثل الحوامض والقواعد الضعيفة وأملاح شحيحة الذوبان (CH3COOH - HCN - NH3)` },
+          { text: `علل تزداد درجة تأين الالكتروليات الضعيفة عند التخفيف`, answer: `عند إضافة الماء يقل تركيز المتفكك من الإلكتروليت الضعيف لذا يتجه نحو التفاعل الأمامي لتعويض هذا النقص الحاصل وبذلك تزداد درجة تأين الالكتروليت الضعيف` },
+          { text: `أحسب درجة التأين للمحلول المائي للانلين kb=3.8x10(-10) C6H7N تركيزه 0.1M (جذر 38= 6.2)`, answer: `62x10(-6)` },
+          { text: `1) احسب قيمة pH إذا كان تركيز [H+] = 1.0×10^-4 M.\n2) احسب قيمة pK_b للمادة SP إذا كان K_b(SP) = 1.2×10^-9.\n3) احسب قيمة تركيز [OH^-] إذا كان pOH = 7.3.\n4) احسب قيمة K_a إذا كان pKa = 4.74.`, answer: `1- pH=4\n2- pk(sp) =8.92\n3- [OH-] = 5x10(-8) M\n4- Ka =1.8x10(-5)` }
+        ]
+      },
+      {
+        subject:"أحياء",
+        title:"امتحان تراكمية 1-7",
+        type:"cumulative",
+        questions:[
+          { text: `علل/ الانقسام الاختزالي الاول للخلية البيضية الاولية غير المتساويه بالحجم ؟`, answer: `بسبب الانقسام السايتوبلازمي الغير متساوي بالحجم ينتج عنه تكوين خليتين احدهما كبير مستلمة لمعظم الغذاء والسايتوبلازم تدعى بالخلية البيضية الثانوية والثانية صغيرة تدعى بالجسم القطبي الاول` },
+          { text: `ما اهمية ذنب الفايروس ؟`, answer: `1- يقوم الذنب بالتصاق بمواقع خاصة على جدار الخلية البكتيرية\n2- يقوم ذنب الفايروس بافراز انزيم يعمل على اضعاف الروابط الكيميائية في جدار الخلية البكتيرية` },
+          { text: `عرف اعادة الخلط`, answer: `وهي عملية اتحاد جيني بين خليتين بكتيرتين لسلالتين مختلفتين من بكتريا القولون في وسط زراعي واحد ينتج عنه ظهور سلالة جديدة تختلف وظيفياً عن السلالتين اللتين تم مزجهما` },
+          { text: `ما موقع واهمية عامل الخصوبة`, answer: `الموقع : سايتوبلازم الخلية البكتيرية المعطية\nالاهمية : يعمل على بناء انزيم او بروتين لا تستطيع الخلية المستلمة من بنائه` },
+          { text: `عرف البوغ الزيجي`, answer: `هو البلوغ الناتج من اتحاد الأمشاج المتشابهة من سلالات مختلفة مكون الزيجة 2س رباعية الاسواط والتي تفقد اسواطها وتحاط بجدار سليلوزي لمقاومة الظروف البيئية الغير ملائمة` }
+        ]
+      }
+    ]
+  };
+
+  // 20/09/2025
+  DATA["2025-09-20"] = {
+    tasks:[
+      { subject: "إنكليزي", content: "مراجعة المحاضرتين 5 و 6", hours: 2 },
+      { subject: "كيمياء", content: "مراجعة المحاضرتين 6 و 7", hours: 2 },
+      { subject: "رياضيات", content: "حل مسائل مراجعة", hours: 1 }
+    ],
+    exams:[
+      {
+        subject:"أحياء",
+        title:"محاضرة 8-9",
+        questions:[
+          { text: `قارن بين عملية الاقتران والإخصاب الذاتي`, answer: `الاقتران : 1- يتطلب وجود خليتين براميسيوميتين من سلالتين مختلفتين 2- يحدث تبادل للنواة بين البراميسيومين المقترنين لتكوين النواة المدمجة 3- النواة المندمجة متباينة العوامل الوراثية 4- تكون نواتها 2س\nالاخصاب الذاتي : 1- تحدث عملية الاخصاب ضمن خلية براميسيوم واحدة 2- لا يحدث تبادل للنواة حيث ان النواتين الاوليتين تتحدان لتكوين نواة مندمجة متماثلة 4- تكون نواتها 2س` },
+          { text: `من هو المسؤول عن تكوين جسر الاقتران في البراميسيوم ؟`, answer: `البروتوبلازم هو المسؤول عن تكوين جسر الاقتران لتبادل او عبور مواد كروموسومية` },
+          { text: `ما منشأ خلية الامشاج في الفطريات ؟`, answer: `الاندماج السايتوبلازمي للخيوط الفطرية الموجبة والسالبة` }
+        ]
+      }
+    ]
+  };
+
+  // 21/09/2025
+  DATA["2025-09-21"] = {
+    tasks:[
+      { subject: "انكليزي", content: "مراجعة المحاضرتين 7-8", hours: 2 },
+      { subject: "كيمياء", content: "مراجعة المحاضرتين 8 و 9", hours: 2 }
+    ],
+    exams:[
+      {
+        subject:"عربي",
+        title:"محاضرة 2-3",
+        questions:[
+          { text: `(لَهُم مَّغْفِرَةٌ وَأَجْرٌ عَظِيمٌ) ، (فَمِنْهُمْ شَقِيٌّ وَسَعِيدٌ)\nدل على المتقدم ، وبين نوعه وحكمه وسبب تقديمه`, answer: `المتقدم : لهم - منهم\nنوعه - خبر متقدم\nحكمه : وجوباً\nسبب التقديم : لان المبتدأ نكرة غير مضافة ولا موصوفة والخبر شبه جملة` },
+          { text: `1- قَلبٌ يُصادِقُني الطِلابَ جَراءَةً\nوَمِنَ القُلوبِ مُصادِقٌ وَمُوارِبُ\n\n2- وَلِكُلِّ حالٍ مُعقِبٌ وَلَرُبَّما\nأَجلى لَكَ المَكروهُ عَمّا يُحمَدُ\n\nدل على المتقدم ، وبين نوعه وحكمه وسبب تقديمه`, answer: `المتقدم : من القلوب - لكل حال\nنوعه : خبر متقدم\nحكمه : وجوباً\nسبب التقديم : لان المبتدأ نكرة غير مضافة ولا موصوفة والخبر شبه جملة` },
+          { text: `بين الخطأ في الجمل الاتيه ، ثم صححه ؟\n1- ثوابها للفضيلة\n2- تقدم الخبر (وجوباً ) في : (مالي نصيب) (هل لي نصيب )`, answer: `الجملة : ثوابها - هل لي نصيب - مالي نصيب \nالخطأ : 1- تقدم المبتدأ المتصل به الضمير (ها) العائد على متأخر لفظاً ورتبة\n2- سبقت جملة تقديم الخبر على المبتدأ ب (نفي) و (استفهام)\n\nالتصحيح :1- للفضيلة ثوابها\n2- لي نصيب` }
+        ]
+      }
+    ]
+  };
+
+  // 22/09/2025
+  DATA["2025-09-22"] = {
+    tasks:[
+      { subject: "عربي", content: "مراجعة المحاضرتين 4 و 5", hours: 2 },
+      { subject: "إنكليزي", content: "مراجعة المحاضرتين 7 و 8", hours: 2 }
+    ],
+    exams:[
+      {
+        subject:"ادب عربي",
+        title:"علي الشرقي+ حافظ ابراهيم",
+        questions:[
+          { text: "تحدث عن مسيرة (علي الشرقي) الجهادية؟", answer: "‏يعد على الشرقي إحدى الشخصيات المهمة في ثورة العشرين فقد كان مرافقاً للحبوبي في مسيرته الجهادية ضد الانكليز عام 1915 وكان مبعوثه إلى عشائر الغراف." },
+          { text: "ما هي الفنون أو الأساليب البلاغية التي ضمنها على الشرقي في قصيدته", answer: "استعمل طباق السلب والطباق الإيجاب والجناس غير التام وبعض فنون البديع." },
+          { text: "هل للماضي دلالة في شعر حافظ ابراهيم أثبت او علل ذلك ؟", answer: "يعمد الى توظيف الفعل الماضي لتقديم مقدار تعلقه بالماضي وقيمه القومية وتغنيه بالماضي المجيد." }
+        ]
+      }
+    ]
+  };
+
+  // 23/09/2025
+  DATA["2025-09-23"] = {
+    tasks:[
+      { subject: "إنكليزي", content: "مراجعة المحاضرتين 9 و 10", hours: 2 },
+      { subject: "أدب عربي", content: "موضوع الجواهري", hours: 1 },
+      { subject: "فيزياء", content: "مراجعة قوانين الكهرباء", hours: 1 }
+    ],
+    exams:[
+      {
+        subject:"انكليزي",
+        title:"محاضرة 7-8-9-10",
+        questions:[
+          { text: "Can I borrow some money? she asked me.", answer: "She asked me if she could borrow some money." },
+          { text: "What are you doing on Friday afternoon? Adam asked me", answer: "Adam asked me what I was doing on Friday afternoon." },
+          { text: "If I were you, I (study) hard. (Put verb in the correct form)", answer: "would study / could study / might study" }
+        ]
+      }
+    ]
+  };
+
+  // 24/09/2025
+  DATA["2025-09-24"] = {
+    tasks:[
+      { subject: "أحياء", content: "مراجعة المحاضرتين 8 و 9", hours: 2 },
+      { subject: "كيمياء", content: "مراجعة المحاضرتين 10 و 11", hours: 2 }
+    ],
+    exams:[
+      {
+        subject:"كيمياء",
+        title:"محاضرة 6-7-8-9-10-11",
+        questions:[
+          { text: `احسب قيمة الأُس الهيدروجيني لمحلول نتج من تخفيف 1ml من 13.6M حامض الهيدروكلوريك الى لتر بالماء ؟ إذا علمت ان (log 1.36 = 0.133).`, answer: "PH =1.867." },
+          { text: `احسب كتلة ملح خلات الصوديوم (M = 82 g/mol) اللازم اضافتها الى لتر واحد من محلول 0.125M حامض الخليك للحصول على محلول بفر تكون قيمة PH له تساوي 4.74 علماً ان ثابت التفكك حامض الخليك 1.8x10(-5)؟`, answer: "m=10.25g" },
+          { text: `عرف محلول بفر`, answer: "وهو محلول مائي مكون من حامض ضعيف وملحه أو قاعدة ضعيفة وملحها حيث يكون له القابلية على مقاومة التغير في الاس الهيدروجيني PH عند اضافة كمية قليلة من حامض قوي او قاعدة قوية." }
+        ]
+      }
+    ]
+  };
+
+  // 25/09/2025 (خميس تراكمية - عربي، إنكليزي، كيمياء، أحياء)
+  DATA["2025-09-25"] = {
+    tasks:[
+      { subject: "إسلامية", content: "مراجعة ورقة واحدة", hours: 1 }
+    ],
+    exams:[
+      {
+        subject:"عربي",
+        title:"امتحان تراكمية عربي",
+        type:"cumulative",
+        questions:[
+          { text: "سؤال 1 عربي", answer: "الحل 1" },
+          { text: "سؤال 2 عربي", answer: "الحل 2" },
+          { text: "سؤال 3 عربي", answer: "الحل 3" },
+          { text: "سؤال 4 عربي", answer: "الحل 4" },
+          { text: "سؤال 5 عربي", answer: "الحل 5" }
+        ]
+      },
+      {
+        subject:"إنكليزي",
+        title:"امتحان تراكمية إنكليزي",
+        type:"cumulative",
+        questions:[
+          { text: "سؤال 1 إنكليزي", answer: "الحل 1" },
+          { text: "سؤال 2 إنكليزي", answer: "الحل 2" },
+          { text: "سؤال 3 إنكليزي", answer: "الحل 3" },
+          { text: "سؤال 4 إنكليزي", answer: "الحل 4" },
+          { text: "سؤال 5 إنكليزي", answer: "الحل 5" }
+        ]
+      },
+      {
+        subject:"كيمياء",
+        title:"امتحان تراكمية كيمياء",
+        type:"cumulative",
+        questions:[
+          { text: "سؤال 1 كيمياء", answer: "الحل 1" },
+          { text: "سؤال 2 كيمياء", answer: "الحل 2" },
+          { text: "سؤال 3 كيمياء", answer: "الحل 3" },
+          { text: "سؤال 4 كيمياء", answer: "الحل 4" },
+          { text: "سؤال 5 كيمياء", answer: "الحل 5" }
+        ]
+      },
+      {
+        subject:"أحياء",
+        title:"امتحان تراكمية أحياء",
+        type:"cumulative",
+        questions:[
+          { text: "سؤال 1 أحياء", answer: "الحل 1" },
+          { text: "سؤال 2 أحياء", answer: "الحل 2" },
+          { text: "سؤال 3 أحياء", answer: "الحل 3" },
+          { text: "سؤال 4 أحياء", answer: "الحل 4" },
+          { text: "سؤال 5 أحياء", answer: "الحل 5" }
+        ]
+      }
+    ]
+  };
+
+  // 26/09/2025
+  DATA["2025-09-26"] = {
+    tasks:[
+      { subject: "إسلامية", content: "مراجعة ورقتين", hours: 1 }
+    ],
+    exams:[]
+  };
+
+  // 27/09/2025
+  DATA["2025-09-27"] = {
+    tasks:[
+      { subject: "إنكليزي", content: "مراجعة المحاضرتين 11 و 12", hours: 2 },
+      { subject: "كيمياء", content: "مراجعة المحاضرتين 12 و 13", hours: 2 },
+      { subject: "رياضيات", content: "حل مسائل مراجعة", hours: 1 }
+    ],
+    exams:[]
+  };
+
+  // 28/09/2025
+  DATA["2025-09-28"] = {
+    tasks:[
+      { subject: "عربي", content: "قراءة محاضرة 6-7", hours: 2 },
+      { subject: "كيمياء", content: "مراجعة المحاضرتين 14 و 15", hours: 2 }
+    ],
+    exams:[]
+  };
+
+  // 29/09/2025
+  DATA["2025-09-29"] = {
+    tasks:[
+      { subject: "عربي", content: "قراءة محاضرة 1-2", hours: 2 },
+      { subject: "إنكليزي", content: "قراءة المحاضرتين 13 و 14", hours: 2 }
+    ],
+    exams:[]
+  };
+
+  // 30/09/2025
+  DATA["2025-09-30"] = {
+    tasks:[
+      { subject: "أحياء", content: "قراءة محاضرة 14-15", hours: 2 },
+      { subject: "فيزياء", content: "مراجعة الحركة", hours: 1 },
+      { subject: "كيمياء", content: "قراءة محاضرة 16-17", hours: 2 }
+    ],
+    exams:[]
+  };
+
+  // إضافة id لكل مهمة وامتحان + done لكل مهمة
+  Object.keys(DATA).forEach(date=>{
     const day = DATA[date];
-    if (Array.isArray(day.tasks)) {
-      day.tasks.forEach((t, i) => {
-        t.id = `t-${date}-${i}`;
-        if (t.done === undefined) t.done = false;
+    if(Array.isArray(day.tasks)){
+      day.tasks.forEach((t,i)=>{
+        t.id = t.id || `t-${date}-${i}`;
+        if(t.done === undefined) t.done = false;
       });
+    } else {
+      day.tasks = [];
     }
-    if (Array.isArray(day.exams)) {
-      day.exams.forEach((e, i) => {
-        e.id = `e-${date}-${i}`;
-        if (!Array.isArray(e.questions)) e.questions = [];
-        e.questions.forEach((q, qi) => q.id = `${e.id}-q${qi}`);
+    if(Array.isArray(day.exams)){
+      day.exams.forEach((e,i)=>{
+        e.id = e.id || `e-${date}-${i}`;
+        if(Array.isArray(e.questions)){
+          e.questions.forEach((q,qi)=> q.id = q.id || `${e.id}-q${qi}`);
+        } else e.questions = [];
       });
+    } else {
+      day.exams = [];
     }
   });
 
