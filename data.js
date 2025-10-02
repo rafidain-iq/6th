@@ -311,8 +311,7 @@ window.getInitialData = function () {
     exams: [
       { subject: "شامل", title: "امتحانات شاملة + إسلامية", questions: [], done: false }
     ]
-  };
-  
+  }; 
 
 // إضافة id لكل مهمة وامتحان + done لكل مهمة  
 Object.keys(DATA).forEach(date=>{  
