@@ -1,48 +1,39 @@
-// script.js - النسخة النهائية (تحميل بيانات بإصدار، تصحيح ذكي يومي/تراكمي، تقارير، أرشيف، درجات)
-
 // ------------------------- إعداد تحميل البيانات مع نسخة -------------------------
-const DATA_VERSION = "2025-10-01-v1"; // بدّل التاريخ أو رقم الإصدار
+const DATA_VERSION = "2025-10-03-v1"; // تأكد تغيّر التاريخ عند التحديث
 let DATA = {};
 
 function saveData(){
   localStorage.setItem("study-data", JSON.stringify(DATA));
 }
 
+// تحميل البيانات من data.js مباشرة مع تحديث الكاش
 (function loadData(){
+  // مسح النسخة المخزنة لو الإصدار تغير
   const storedVersion = localStorage.getItem("study-data_version");
   const storedData = localStorage.getItem("study-data");
 
-  if(storedVersion !== DATA_VERSION){
-    // لو النسخة مختلفة أو غير موجودة — استخدم data.js (window.getInitialData) وحدث localStorage
-    if(typeof window.getInitialData === "function"){
-      DATA = window.getInitialData();
-      localStorage.setItem("study-data_version", DATA_VERSION);
-      saveData();
-    } else {
-      // fallback: إذا ما فيه data.js محمل بعد
-      DATA = storedData ? JSON.parse(storedData) : {};
-    }
-  } else if(storedData){
-    try {
-      DATA = JSON.parse(storedData);
-    } catch(e){
-      // فشل في parse -> أحمله من data.js
-      if(typeof window.getInitialData === "function"){
-        DATA = window.getInitialData();
-        localStorage.setItem("study-data_version", DATA_VERSION);
-        saveData();
-      } else {
-        DATA = {};
-      }
-    }
-  } else {
-    // لأول مرة أو localStorage فارغ
+  // ✅ إذا النسخة اختلفت أو ماكو بيانات
+  if(storedVersion !== DATA_VERSION || !storedData){
     if(typeof window.getInitialData === "function"){
       DATA = window.getInitialData();
       localStorage.setItem("study-data_version", DATA_VERSION);
       saveData();
     } else {
       DATA = {};
+    }
+  } else {
+    // ✅ إذا النسخة نفسها، لكن نريد نتأكد نقرأ من data.js دائمًا
+    if(typeof window.getInitialData === "function"){
+      // نقرأ من data.js (أكتوبر الجديد)
+      DATA = window.getInitialData();
+      localStorage.setItem("study-data_version", DATA_VERSION);
+      saveData();
+    } else {
+      try {
+        DATA = JSON.parse(storedData);
+      } catch(e){
+        DATA = {};
+      }
     }
   }
 
