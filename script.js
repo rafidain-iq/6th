@@ -8,36 +8,25 @@ function saveData(){
 
 // تحميل البيانات من data.js مباشرة مع تحديث الكاش
 (function loadData(){
-  // مسح النسخة المخزنة لو الإصدار تغير
   const storedVersion = localStorage.getItem("study-data_version");
   const storedData = localStorage.getItem("study-data");
 
-  // ✅ إذا النسخة اختلفت أو ماكو بيانات
-  if(storedVersion !== DATA_VERSION || !storedData){
-    if(typeof window.getInitialData === "function"){
-      DATA = window.getInitialData();
-      localStorage.setItem("study-data_version", DATA_VERSION);
-      saveData();
-    } else {
+  if(typeof window.getInitialData === "function"){
+    // دايمًا ناخذ آخر نسخة من data.js
+    DATA = window.getInitialData();
+    localStorage.setItem("study-data_version", DATA_VERSION);
+    saveData();
+  } else if(storedData){
+    try {
+      DATA = JSON.parse(storedData);
+    } catch(e){
       DATA = {};
     }
   } else {
-    // ✅ إذا النسخة نفسها، لكن نريد نتأكد نقرأ من data.js دائمًا
-    if(typeof window.getInitialData === "function"){
-      // نقرأ من data.js (أكتوبر الجديد)
-      DATA = window.getInitialData();
-      localStorage.setItem("study-data_version", DATA_VERSION);
-      saveData();
-    } else {
-      try {
-        DATA = JSON.parse(storedData);
-      } catch(e){
-        DATA = {};
-      }
-    }
+    DATA = {};
   }
 
-  // ضمان وجود هيكل صحيح لكل يوم
+  // ضمان وجود هيكل صحيح
   Object.keys(DATA).forEach(date=>{
     if(!Array.isArray(DATA[date].tasks)) DATA[date].tasks = [];
     if(!Array.isArray(DATA[date].exams)) DATA[date].exams = [];
@@ -292,7 +281,14 @@ document.getElementById("saveTask").addEventListener("click", ()=>{
   if(subj && cont && !isNaN(hrs) && date){
     if(!DATA[date]) DATA[date] = {tasks:[], exams:[]};
     const id = "t-"+date+"-"+Math.random().toString(36).slice(2,8);
-    DATA[date].tasks.push({id, subject:subj, content:cont, hours:hrs, done:false, createdAt:getTodayISO()});
+    DATA[date].tasks.push({
+  id,
+  subject: subj,
+  content: cont,
+  hours: hrs,
+  done: false,
+  createdAt: new Date().toISOString()
+});
     saveData();
     alert("تمت الإضافة بنجاح ✅");
     renderDashboard(date);
