@@ -1,11 +1,4 @@
 // ------------------------- إعداد تحميل البيانات مع نسخة -------------------------
-const DATA_VERSION = "2025-10-03-v1"; // تأكد تغيّر التاريخ عند التحديث
-let DATA = {};
-
-function saveData(){
-  localStorage.setItem("study-data", JSON.stringify(DATA));
-}
-
 // تحميل البيانات من data.js مباشرة مع تحديث الكاش
 (function loadData(){
   const storedVersion = localStorage.getItem("study-data_version");
@@ -109,13 +102,8 @@ function smartScoreForAnswer(correctAns, userAns, perQuestion){
 }
 
 // ------------------------- واجهة (Dashboard) -------------------------
-function getTodayISO(){
-  const d = new Date();
-  return d.toISOString().split("T")[0];
-}
-
 function renderDashboard(dateIso){
-  const day = DATA[dateIso];
+  const day = DATA[dateIso]; // هنا يعتمد على التاريخ بدقة
   const todayList = document.getElementById("todayList");
   const examsArea = document.getElementById("examsArea");
   const todayDate = document.getElementById("todayDate");
@@ -130,7 +118,6 @@ function renderDashboard(dateIso){
 
   todayDate.textContent = dateIso;
 
-  // عرض المهام (فقط غير المكتملة)
   todayList.innerHTML = day.tasks.map(t => `
     <li>
       <div>
@@ -141,7 +128,6 @@ function renderDashboard(dateIso){
     </li>
   `).join("") || `<li>لا توجد مهام لهذا اليوم</li>`;
 
-  // عرض الامتحانات
   examsArea.innerHTML = (day.exams || []).map(ex => `
     <div class="card exam-question">
       <b>${escapeHtml(ex.subject)}</b> — ${escapeHtml(ex.title)}
@@ -280,25 +266,25 @@ document.getElementById("saveTask").addEventListener("click", ()=>{
   const cont = document.getElementById("new_content").value.trim();
   const hrs = parseFloat(document.getElementById("new_hours").value);
   const date = document.getElementById("new_date").value;
+
   if(subj && cont && !isNaN(hrs) && date){
-    if(!DATA[date]) DATA[date] = {tasks:[], exams:[]};
+    if(!DATA[date]) DATA[date] = {tasks:[], exams:[]}; // ✅ إنشاء اليوم إذا غير موجود
     const id = "t-"+date+"-"+Math.random().toString(36).slice(2,8);
     DATA[date].tasks.push({
-  id,
-  subject: subj,
-  content: cont,
-  hours: hrs,
-  done: false,
-  createdAt: new Date().toISOString()
-});
+      id,
+      subject: subj,
+      content: cont,
+      hours: hrs,
+      done: false,
+      createdAt: new Date().toISOString()
+    });
     saveData();
     alert("تمت الإضافة بنجاح ✅");
-    renderDashboard(date);
+    renderDashboard(date); // عرض اليوم مباشرة
   } else {
     alert("يرجى تعبئة جميع الحقول بشكل صحيح.");
   }
 });
-
 // ------------------------- تصدير + إعادة ضبط -------------------------
 document.getElementById("exportBtn").addEventListener("click", ()=>{
   const blob = new Blob([ "window.getInitialData = ()=>(" + JSON.stringify(DATA,null,2) + ")" ], {type:"application/javascript"});
