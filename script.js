@@ -303,7 +303,7 @@ document.getElementById("saveTask").addEventListener("click", ()=>{
 
 // ------------------------- تصدير + إعادة ضبط -------------------------
 document.getElementById("exportBtn").addEventListener("click", ()=>{
-  const blob = new Blob([ "window.getInitialData = ()=>" + JSON.stringify(DATA,null,2) ], {type:"application/javascript"});
+  const blob = new Blob([ "window.getInitialData = ()=>(" + JSON.stringify(DATA,null,2) + ")" ], {type:"application/javascript"});
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
