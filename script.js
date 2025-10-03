@@ -9,25 +9,27 @@ function saveData(){
 // تحميل البيانات من data.js مباشرة مع تحديث الكاش
 (function loadData(){
   const storedVersion = localStorage.getItem("study-data_version");
-  const storedData = localStorage.getItem("study-data");
 
-  if(typeof window.getInitialData === "function"){
-    // دايمًا ناخذ آخر نسخة من data.js
-    DATA = window.getInitialData();
-    localStorage.setItem("study-data_version", DATA_VERSION);
-    saveData();
-  } else if(storedData){
-    try {
-      DATA = JSON.parse(storedData);
-    } catch(e){
-      DATA = {};
-    }
-  } else {
-    DATA = {};
+  // إذا النسخة القديمة أو غير موجودة -> مسح البيانات
+  if(storedVersion !== DATA_VERSION){
+    localStorage.removeItem("study-data");
   }
 
-  // ضمان وجود هيكل صحيح
+  // تحميل البيانات من data.js
+  if(typeof window.getInitialData === "function"){
+    DATA = window.getInitialData();
+    localStorage.setItem("study-data_version", DATA_VERSION);
+    localStorage.setItem("study-data", JSON.stringify(DATA));
+  } else {
+    const storedData = localStorage.getItem("study-data");
+    if(storedData){
+      try { DATA = JSON.parse(storedData); } catch(e){ DATA={}; }
+    } else { DATA={}; }
+  }
+
+  // ضمان هيكلية المهام والامتحانات لكل يوم
   Object.keys(DATA).forEach(date=>{
+    if(!DATA[date]) DATA[date] = {tasks:[], exams:[]};
     if(!Array.isArray(DATA[date].tasks)) DATA[date].tasks = [];
     if(!Array.isArray(DATA[date].exams)) DATA[date].exams = [];
   });
