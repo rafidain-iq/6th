@@ -1,33 +1,22 @@
-// ------------------------- إعداد تحميل البيانات مع نسخة -------------------------
-// تحميل البيانات من data.js مباشرة مع تحديث الكاش
-(function loadData(){
-  const storedVersion = localStorage.getItem("study-data_version");
+// ------------------------- تحميل البيانات مباشرة من data.js -------------------------
+let DATA = {};
 
-  // إذا النسخة القديمة أو غير موجودة -> مسح البيانات
-  if(storedVersion !== DATA_VERSION){
-    localStorage.removeItem("study-data");
-  }
-
-  // تحميل البيانات من data.js
+(function loadDataDirectly(){
   if(typeof window.getInitialData === "function"){
     DATA = window.getInitialData();
-    localStorage.setItem("study-data_version", DATA_VERSION);
-    localStorage.setItem("study-data", JSON.stringify(DATA));
   } else {
-    const storedData = localStorage.getItem("study-data");
-    if(storedData){
-      try { DATA = JSON.parse(storedData); } catch(e){ DATA={}; }
-    } else { DATA={}; }
+    DATA = {}; // fallback
   }
 
-  // ضمان هيكلية المهام والامتحانات لكل يوم
+  // ضمان وجود المهام والامتحانات لكل يوم
   Object.keys(DATA).forEach(date=>{
     if(!DATA[date]) DATA[date] = {tasks:[], exams:[]};
     if(!Array.isArray(DATA[date].tasks)) DATA[date].tasks = [];
     if(!Array.isArray(DATA[date].exams)) DATA[date].exams = [];
   });
-})();
 
+  console.log("DATA loaded:", DATA); // للتأكد في الكونسول
+})();
 // ------------------------- أدوات مساعدة للتصحيح "الذكي" -------------------------
 function normalizeText(s){
   if(!s) return "";
@@ -222,37 +211,46 @@ function escapeHtml(str){
 }
 
 // ------------------------- شريط جانبي وناف -> التنقل -------------------------
-const menuBtn = document.getElementById("menuBtn");
-const sidebar = document.getElementById("sidebar");
-const overlay = document.getElementById("overlay");
-if(menuBtn){
-  menuBtn.addEventListener("click", ()=>{
-    sidebar.classList.toggle("open");
-    overlay.classList.toggle("show");
-  });
-}
-if(overlay){
-  overlay.addEventListener("click", ()=>{
-    sidebar.classList.remove("open");
-    overlay.classList.remove("show");
-  });
-}
+document.addEventListener("DOMContentLoaded", ()=>{
 
-document.querySelectorAll(".navlink").forEach(btn=>{
-  btn.addEventListener("click", ()=>{
-    document.querySelectorAll("main > section").forEach(s=>s.classList.add("section-hidden"));
-    const tab = document.getElementById(btn.dataset.tab);
-    if(tab) tab.classList.remove("section-hidden");
-    sidebar.classList.remove("open");
-    overlay.classList.remove("show");
+  // عرض المهام لليوم الحالي
+  renderDashboard(getTodayISO());
 
-    if(btn.dataset.tab === "grades") renderGrades();
-    if(btn.dataset.tab === "reports") renderReports();
-    if(btn.dataset.tab === "stats") renderStats();
-    if(btn.dataset.tab === "archive") renderArchive();
+  // ------------------------- القائمة الجانبية -------------------------
+  const menuBtn = document.getElementById("menuBtn");
+  const sidebar = document.getElementById("sidebar");
+  const overlay = document.getElementById("overlay");
+
+  if(menuBtn){
+    menuBtn.addEventListener("click", ()=>{
+      sidebar.classList.toggle("open");
+      overlay.classList.toggle("show");
+    });
+  }
+
+  if(overlay){
+    overlay.addEventListener("click", ()=>{
+      sidebar.classList.remove("open");
+      overlay.classList.remove("show");
+    });
+  }
+
+  document.querySelectorAll(".navlink").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      document.querySelectorAll("main > section").forEach(s=>s.classList.add("section-hidden"));
+      const tab = document.getElementById(btn.dataset.tab);
+      if(tab) tab.classList.remove("section-hidden");
+      sidebar.classList.remove("open");
+      overlay.classList.remove("show");
+
+      if(btn.dataset.tab === "grades") renderGrades();
+      if(btn.dataset.tab === "reports") renderReports();
+      if(btn.dataset.tab === "stats") renderStats();
+      if(btn.dataset.tab === "archive") renderArchive();
+    });
   });
+
 });
-
 // ------------------------- أزرار التاريخ -------------------------
 document.getElementById("todayBtn").addEventListener("click", ()=> renderDashboard(getTodayISO()));
 document.getElementById("goDate").addEventListener("click", ()=>{
