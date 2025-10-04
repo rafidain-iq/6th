@@ -1,4 +1,4 @@
-// --- script.js متكامل ---
+// --- script.js متكامل + إصلاح القائمة الجانبية وزر الإنجاز ---
 
 // تحميل البيانات الأساسية
 const DATA = window.getInitialData();
@@ -11,17 +11,17 @@ const todayList = document.getElementById("todayList");
 const todayDateEl = document.getElementById("todayDate");
 const examsArea = document.getElementById("examsArea");
 
-// زر القائمة الجانبية
-menuBtn.onclick = () => {
+// --- زر القائمة الجانبية ---
+menuBtn.addEventListener("click", () => {
     sidebar.classList.toggle("active");
     overlay.classList.toggle("active");
-};
-overlay.onclick = () => {
+});
+overlay.addEventListener("click", () => {
     sidebar.classList.remove("active");
     overlay.classList.remove("active");
-};
+});
 
-// قراءة اليوم الحالي
+// --- دوال اليوم الحالي ---
 function getTodayDateStr() {
     const now = new Date();
     const yyyy = now.getFullYear();
@@ -30,9 +30,9 @@ function getTodayDateStr() {
     return `${yyyy}-${mm}-${dd}`;
 }
 
-// --- حفظ واسترجاع المهام والدرجات من LocalStorage ---
+// --- حفظ واسترجاع البيانات ---
 function loadTasks() {
-    return JSON.parse(localStorage.getItem("tasksData")) || {};
+    return JSON.parse(localStorage.getItem("tasksData")) || JSON.parse(JSON.stringify(DATA));
 }
 function saveTasks(tasks) {
     localStorage.setItem("tasksData", JSON.stringify(tasks));
@@ -42,6 +42,19 @@ function loadGrades() {
 }
 function saveGrades(grades) {
     localStorage.setItem("gradesData", JSON.stringify(grades));
+}
+function loadArchive() {
+    return JSON.parse(localStorage.getItem("archiveData")) || [];
+}
+function saveArchive(archive) {
+    localStorage.setItem("archiveData", JSON.stringify(archive));
+}
+
+// --- أرشيف المهام المكتملة ---
+function archiveTask(dateStr, task) {
+    const archive = loadArchive();
+    archive.push({date: dateStr, ...task});
+    saveArchive(archive);
 }
 
 // --- عرض واجبات اليوم ---
@@ -53,24 +66,27 @@ function renderToday(dateStr = null) {
     todayList.innerHTML = "";
     examsArea.innerHTML = "";
 
-    // مهام اليوم
-    const dayTasks = tasksData[dateKey]?.tasks || DATA[dateKey]?.tasks || [];
+    const dayTasks = tasksData[dateKey]?.tasks || [];
     dayTasks.forEach((t, idx) => {
         const li = document.createElement("li");
         li.textContent = `${t.subject}: ${t.content} (${t.hours} ساعة) `;
+
         const btn = document.createElement("button");
-        btn.textContent = "تم الإنجاز";
-        btn.onclick = () => {
-            li.style.textDecoration = "line-through";
+        btn.textContent = "✔";
+        btn.className = "task-done-btn";
+        btn.addEventListener("click", () => {
+            // إزالة من القائمة
+            li.remove();
             t.done = true;
             saveTasks(tasksData);
             archiveTask(dateKey, t);
-        };
+        });
+
         li.appendChild(btn);
         todayList.appendChild(li);
     });
 
-    // امتحانات اليوم
+    // عرض الامتحانات
     const dayExams = DATA[dateKey]?.exams || [];
     dayExams.forEach((ex, i) => {
         const div = document.createElement("div");
@@ -79,17 +95,9 @@ function renderToday(dateStr = null) {
             <b>${ex.subject}</b> - ${ex.title} 
             <button class="btn startExam">بدء الامتحان</button>
         `;
-        const btn = div.querySelector(".startExam");
-        btn.onclick = () => startExam(dateKey, i);
+        div.querySelector(".startExam").addEventListener("click", () => startExam(dateKey, i));
         examsArea.appendChild(div);
     });
-}
-
-// --- أرشيف المهام المكتملة ---
-function archiveTask(dateStr, task) {
-    const archive = JSON.parse(localStorage.getItem("archiveData")) || [];
-    archive.push({date: dateStr, ...task});
-    localStorage.setItem("archiveData", JSON.stringify(archive));
 }
 
 // --- تصحيح ذكي ---
@@ -97,13 +105,13 @@ function smartCompare(userAns, correctAns) {
     if (!userAns || !correctAns) return false;
     userAns = userAns.toLowerCase().trim();
     correctAns = correctAns.toLowerCase().trim();
-    // السماح بفارق حرف أو كلمتين
+
     if (userAns === correctAns) return true;
     const uaWords = userAns.split(/\s+/);
     const caWords = correctAns.split(/\s+/);
     const diff = Math.abs(uaWords.length - caWords.length);
     if (diff <= 2 && caWords.every(w => uaWords.includes(w))) return true;
-    // يمكن إضافة مقارنة مرنة أكثر لاحقاً
+
     return false;
 }
 
