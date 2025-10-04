@@ -1,28 +1,14 @@
-// script.js - النسخة المتكاملة
-
+// script.js - منصة الدراسة النهائية
 document.addEventListener("DOMContentLoaded", () => {
-  // --- العناصر الأساسية ---
-  const sidebar = document.getElementById("sidebar");
-  const overlay = document.getElementById("overlay");
-  const menuBtn = document.getElementById("menuBtn");
+  const todayDateInput = document.getElementById("viewDate");
   const todayBtn = document.getElementById("todayBtn");
-  const goDate = document.getElementById("goDate");
-  const viewDate = document.getElementById("viewDate");
-
+  const goDateBtn = document.getElementById("goDate");
   const todayList = document.getElementById("todayList");
   const examsArea = document.getElementById("examsArea");
-  const todayDateLabel = document.getElementById("todayDate");
-
-  const addSection = document.getElementById("add");
-  const newSubject = document.getElementById("new_subject");
-  const newContent = document.getElementById("new_content");
-  const newHours = document.getElementById("new_hours");
-  const newDate = document.getElementById("new_date");
+  const todayDateDisplay = document.getElementById("todayDate");
   const saveTaskBtn = document.getElementById("saveTask");
 
-  const gradesSection = document.getElementById("grades");
-  const gradesContent = document.getElementById("gradesContent");
-
+  const overlay = document.getElementById("overlay");
   const examModal = document.getElementById("examModal");
   const closeExamBtn = document.getElementById("closeExam");
   const examTitleShow = document.getElementById("examTitleShow");
@@ -30,218 +16,248 @@ document.addEventListener("DOMContentLoaded", () => {
   const submitExamBtn = document.getElementById("submitExamBtn");
   const examResult = document.getElementById("examResult");
 
-  let DATA = window.getInitialData(); // تحميل البيانات الأساسية
-  let LOCAL_STORAGE_KEY = "studyPlatformData";
-
-  // --- تحميل البيانات من localStorage أو الاحتفاظ بالبيانات الأساسية ---
-  function loadData() {
-    const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (saved) {
-      try {
-        DATA = JSON.parse(saved);
-      } catch (e) {
-        console.warn("خطأ في استرجاع البيانات، سيتم استخدام البيانات الأساسية.");
-      }
-    }
+  let DATA = window.getInitialData();
+  let tasksState = JSON.parse(localStorage.getItem("tasksState")) || {};
+  let gradesState = JSON.parse(localStorage.getItem("gradesState")) || [];
+  
+  // --- Helper Functions ---
+  function formatDate(date) {
+    const d = new Date(date);
+    let month = "" + (d.getMonth() + 1);
+    let day = "" + d.getDate();
+    const year = d.getFullYear();
+    if (month.length < 2) month = "0" + month;
+    if (day.length < 2) day = "0" + day;
+    return [year, month, day].join("-");
   }
 
-  function saveData() {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(DATA));
+  function saveTasks() {
+    localStorage.setItem("tasksState", JSON.stringify(tasksState));
   }
 
-  loadData();
-
-  // --- قائمة جانبية ---
-  menuBtn.addEventListener("click", () => {
-    sidebar.classList.toggle("open");
-    overlay.classList.toggle("active");
-  });
-
-  overlay.addEventListener("click", () => {
-    sidebar.classList.remove("open");
-    overlay.classList.remove("active");
-  });
-
-  document.querySelectorAll(".navlink").forEach(btn => {
-    btn.addEventListener("click", () => {
-      document.querySelectorAll("main .card").forEach(s => s.classList.add("section-hidden"));
-      const tab = btn.dataset.tab;
-      document.getElementById(tab).classList.remove("section-hidden");
-      sidebar.classList.remove("open");
-      overlay.classList.remove("active");
-      if (tab === "dashboard") renderToday();
-      if (tab === "grades") renderGrades();
-    });
-  });
-
-  // --- الحصول على تاريخ اليوم الحالي بصيغة YYYY-MM-DD ---
-  function getToday() {
-    const now = new Date();
-    const yyyy = now.getFullYear();
-    const mm = String(now.getMonth() + 1).padStart(2, "0");
-    const dd = String(now.getDate()).padStart(2, "0");
-    return `${yyyy}-${mm}-${dd}`;
+  function saveGrades() {
+    localStorage.setItem("gradesState", JSON.stringify(gradesState));
   }
 
-  // --- عرض واجبات اليوم والامتحانات ---
-  function renderToday(selectedDate) {
-    const date = selectedDate || getToday();
-    todayDateLabel.textContent = date;
+  function getTodayKey() {
+    return formatDate(new Date(todayDateInput.value || new Date()));
+  }
+
+  // --- Display Functions ---
+  function renderTasks(dateKey) {
     todayList.innerHTML = "";
-    examsArea.innerHTML = "";
+    todayDateDisplay.textContent = dateKey;
+    if (!DATA[dateKey] || !DATA[dateKey].tasks) return;
 
-    if (!DATA[date]) return;
-
-    const tasks = DATA[date].tasks || [];
-    const exams = DATA[date].exams || [];
-
-    tasks.forEach(task => {
-      const li = document.createElement("li");
-      li.textContent = `${task.subject}: ${task.content} (${task.hours} ساعات)`;
-      todayList.appendChild(li);
-    });
-
-    exams.forEach(exam => {
-      const btn = document.createElement("button");
-      btn.className = "btn small";
-      btn.textContent = exam.title || exam.subject;
-      btn.addEventListener("click", () => openExam(exam, date));
-      examsArea.appendChild(btn);
+    DATA[dateKey].tasks.forEach((t) => {
+      const doneKey = `${dateKey}-${t.subject}-${t.content}`;
+      const isDone = tasksState[doneKey] || t.done;
+      if (!isDone) {
+        const li = document.createElement("li");
+        li.textContent = `${t.subject} : ${t.content} (${t.hours} ساعة)`;
+        const btn = document.createElement("button");
+        btn.textContent = "✓ تم";
+        btn.className = "btn small ghost";
+        btn.style.marginRight = "8px";
+        btn.addEventListener("click", () => {
+          tasksState[doneKey] = true;
+          saveTasks();
+          li.remove();
+          renderArchive(); // move to archive
+        });
+        li.prepend(btn);
+        todayList.appendChild(li);
+      }
     });
   }
 
-  todayBtn.addEventListener("click", () => renderToday());
-  goDate.addEventListener("click", () => renderToday(viewDate.value));
+  function renderExams(dateKey) {
+    examsArea.innerHTML = "";
+    if (!DATA[dateKey] || !DATA[dateKey].exams) return;
 
-  // --- إضافة واجب جديد ---
-  saveTaskBtn.addEventListener("click", () => {
-    const subject = newSubject.value.trim();
-    const content = newContent.value.trim();
-    const hours = parseFloat(newHours.value);
-    const date = newDate.value;
+    DATA[dateKey].exams.forEach((exam, idx) => {
+      const div = document.createElement("div");
+      div.style.marginBottom = "8px";
+      div.innerHTML = `<strong>${exam.subject}</strong> - ${exam.title} `;
+      const startBtn = document.createElement("button");
+      startBtn.textContent = "بدء الامتحان";
+      startBtn.className = "btn small";
+      startBtn.addEventListener("click", () => openExamModal(exam));
+      div.appendChild(startBtn);
+      examsArea.appendChild(div);
+    });
+  }
 
-    if (!subject || !content || !date) return alert("يرجى تعبئة جميع الحقول");
+  function renderArchive() {
+    const archiveContent = document.getElementById("archiveContent");
+    archiveContent.innerHTML = "";
+    Object.keys(DATA).forEach((dateKey) => {
+      if (!DATA[dateKey].tasks) return;
+      DATA[dateKey].tasks.forEach((t) => {
+        const doneKey = `${dateKey}-${t.subject}-${t.content}`;
+        const isDone = tasksState[doneKey] || t.done;
+        if (isDone) {
+          const div = document.createElement("div");
+          div.textContent = `${dateKey} - ${t.subject} : ${t.content} (${t.hours} ساعة)`;
+          archiveContent.appendChild(div);
+        }
+      });
+    });
+  }
 
-    if (!DATA[date]) DATA[date] = { tasks: [], exams: [] };
+  // --- Exam Modal ---
+  let currentExam = null;
+  function openExamModal(exam) {
+    currentExam = exam;
+    examTitleShow.textContent = `${exam.subject} - ${exam.title}`;
+    examQuestions.innerHTML = "";
+    examResult.innerHTML = "";
+    exam.questions.forEach((q, i) => {
+      const qDiv = document.createElement("div");
+      qDiv.style.marginBottom = "6px";
+      const label = document.createElement("label");
+      label.textContent = `${i + 1}. ${q.text}`;
+      const input = document.createElement("input");
+      input.type = "text";
+      input.style.width = "100%";
+      input.dataset.correct = q.answer;
+      qDiv.appendChild(label);
+      qDiv.appendChild(input);
+      examQuestions.appendChild(qDiv);
+    });
+    examModal.classList.remove("section-hidden");
+    overlay.style.display = "block";
+  }
 
-    DATA[date].tasks.push({ subject, content, hours, done: false, id: `t-${date}-${Date.now()}` });
-    saveData();
-    renderToday(date);
-
-    // إعادة ضبط النموذج
-    newSubject.value = "";
-    newContent.value = "";
-    newHours.value = 1;
-    newDate.value = "";
+  closeExamBtn.addEventListener("click", () => {
+    examModal.classList.add("section-hidden");
+    overlay.style.display = "none";
   });
 
-  // --- إضافة الدرجات بنفس آلية الواجبات ---
-  function addGrade(subject, grade, date) {
-    if (!subject || !grade || !date) return;
-    if (!DATA[date]) DATA[date] = { tasks: [], exams: [] };
-    if (!DATA[date].grades) DATA[date].grades = [];
-    DATA[date].grades.push({ subject, grade, id: `g-${date}-${Date.now()}` });
-    saveData();
+  function normalizeText(str) {
+    return str.toLowerCase().replace(/\s+/g, " ").trim();
   }
 
-  function renderGrades() {
-    gradesContent.innerHTML = "";
-    const allGrades = [];
-    Object.keys(DATA).sort().forEach(date => {
-      const dayGrades = DATA[date].grades || [];
-      dayGrades.forEach(g => allGrades.push({ date, ...g }));
-    });
+  function smartGrading(input, correct) {
+    const inp = normalizeText(input);
+    const corr = normalizeText(correct);
+    if (inp === corr) return true;
 
-    if (allGrades.length === 0) {
+    // Allow minor differences (1-2 words)
+    const inpWords = inp.split(" ");
+    const corrWords = corr.split(" ");
+    const diff = Math.abs(inpWords.length - corrWords.length);
+    if (diff <= 2 && corrWords.every(w => inpWords.includes(w))) return true;
+
+    // Check if key concepts exist
+    const keywords = corrWords.filter(w => w.length > 2);
+    const match = keywords.every(k => inp.includes(k));
+    return match;
+  }
+
+  submitExamBtn.addEventListener("click", () => {
+    let totalScore = 0;
+    const inputs = examQuestions.querySelectorAll("input");
+    inputs.forEach((input) => {
+      const correct = input.dataset.correct;
+      if (smartGrading(input.value, correct)) totalScore += 10; // each question 10 points
+    });
+    examResult.textContent = `تم التصحيح: الدرجة ${totalScore}/${inputs.length * 10}`;
+    // Add to grades
+    gradesState.push({
+      subject: currentExam.subject,
+      title: currentExam.title,
+      score: totalScore,
+      date: getTodayKey()
+    });
+    saveGrades();
+    renderGrades();
+  });
+
+  // --- Render Grades ---
+  function renderGrades() {
+    const gradesContent = document.getElementById("gradesContent");
+    gradesContent.innerHTML = "";
+    if (!gradesState.length) {
       gradesContent.textContent = "لا توجد بيانات درجات حالياً.";
       return;
     }
-
-    allGrades.forEach(g => {
+    gradesState.forEach((g) => {
       const div = document.createElement("div");
-      div.textContent = `${g.date} - ${g.subject}: ${g.grade}`;
+      div.textContent = `${g.date} - ${g.subject} - ${g.title} : ${g.score} درجة`;
       gradesContent.appendChild(div);
     });
   }
 
-  // --- فتح الامتحان ---
-  function openExam(exam, date) {
-    examModal.classList.remove("section-hidden");
-    examTitleShow.textContent = exam.title || exam.subject;
-    examQuestions.innerHTML = "";
+  // --- Charts ---
+  function renderStats() {
+    const statsContent = document.getElementById("statsContent");
+    statsContent.innerHTML = "<canvas id='statsChart' width='400' height='200'></canvas>";
+    const ctx = document.getElementById("statsChart").getContext("2d");
 
-    if (!exam.questions) return;
+    const materialHours = {};
+    Object.keys(DATA).forEach((dateKey) => {
+      if (!DATA[dateKey].tasks) return;
+      DATA[dateKey].tasks.forEach((t) => {
+        const doneKey = `${dateKey}-${t.subject}-${t.content}`;
+        const isDone = tasksState[doneKey] || t.done;
+        if (isDone) {
+          if (!materialHours[t.subject]) materialHours[t.subject] = 0;
+          materialHours[t.subject] += t.hours;
+        }
+      });
+    });
 
-    exam.questions.forEach(q => {
-      const div = document.createElement("div");
-      div.className = "exam-question";
-      div.innerHTML = `
-        <p>${q.text}</p>
-        <input type="text" class="exam-answer" data-id="${q.id}">
-      `;
-      examQuestions.appendChild(div);
+    new Chart(ctx, {
+      type: "pie",
+      data: {
+        labels: Object.keys(materialHours),
+        datasets: [{
+          data: Object.values(materialHours),
+          backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#8AFF33", "#FF33F0", "#33FFF2"]
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: "bottom" }
+        }
+      }
     });
   }
 
-  closeExamBtn.addEventListener("click", () => examModal.classList.add("section-hidden"));
-
-  // --- تصحيح ذكي للامتحانات ---
-  submitExamBtn.addEventListener("click", () => {
-    let score = 0;
-    const inputs = document.querySelectorAll(".exam-answer");
-
-    inputs.forEach(input => {
-      const id = input.dataset.id;
-      let correctAnswer = null;
-
-      // البحث عن الإجابة الصحيحة
-      Object.keys(DATA).forEach(date => {
-        const day = DATA[date];
-        day.exams.forEach(exam => {
-          exam.questions.forEach(q => {
-            if (q.id === id) correctAnswer = q.answer;
-          });
-        });
-      });
-
-      if (!correctAnswer) return;
-
-      // --- مقارنة الإجابة ---
-      const userAns = input.value.trim().toLowerCase();
-      const corrAns = correctAnswer.trim().toLowerCase();
-
-      // إذا تطابق النص حرفياً أو قريب جداً (1-2 كلمة فرق) أو نفس المفهوم
-      if (userAns === corrAns) score++;
-      else if (levenshtein(userAns, corrAns) <= 5) score++; // تشابه بسيط
-      else if (semanticMatch(userAns, corrAns)) score++; // نفس المفهوم
-    });
-
-    examResult.textContent = `لقد حصلت على ${score} درجة من ${inputs.length}`;
+  // --- Event Listeners ---
+  todayBtn.addEventListener("click", () => {
+    todayDateInput.value = formatDate(new Date());
+    const key = getTodayKey();
+    renderTasks(key);
+    renderExams(key);
   });
 
-  // --- دوال مساعدة للتصحيح الذكي ---
-  function levenshtein(a, b) {
-    const dp = Array(a.length + 1).fill(null).map(() => Array(b.length + 1).fill(0));
-    for (let i = 0; i <= a.length; i++) dp[i][0] = i;
-    for (let j = 0; j <= b.length; j++) dp[0][j] = j;
-    for (let i = 1; i <= a.length; i++) {
-      for (let j = 1; j <= b.length; j++) {
-        if (a[i - 1] === b[j - 1]) dp[i][j] = dp[i - 1][j - 1];
-        else dp[i][j] = 1 + Math.min(dp[i - 1][j - 1], dp[i][j - 1], dp[i - 1][j]);
-      }
-    }
-    return dp[a.length][b.length];
-  }
+  goDateBtn.addEventListener("click", () => {
+    const key = getTodayKey();
+    renderTasks(key);
+    renderExams(key);
+  });
 
-  function semanticMatch(ans1, ans2) {
-    // يمكن تحسين هذه الدالة لاحقاً لمقارنة المعنى
-    // حالياً: إذا كانت تحتوي على نفس الكلمات الأساسية
-    const keywords1 = ans1.split(" ").filter(w => w.length > 2);
-    const keywords2 = ans2.split(" ").filter(w => w.length > 2);
-    const common = keywords1.filter(w => keywords2.includes(w));
-    return common.length >= Math.min(2, keywords2.length);
-  }
+  saveTaskBtn.addEventListener("click", () => {
+    const subject = document.getElementById("new_subject").value.trim();
+    const content = document.getElementById("new_content").value.trim();
+    const hours = parseFloat(document.getElementById("new_hours").value);
+    const date = document.getElementById("new_date").value;
+    if (!subject || !content || !date) return alert("يرجى إدخال جميع الحقول.");
+    if (!DATA[date]) DATA[date] = { tasks: [], exams: [] };
+    DATA[date].tasks.push({ subject, content, hours, done: false });
+    renderTasks(getTodayKey());
+    renderStats();
+  });
 
-  // --- التهيئة الأولية عند تحميل الصفحة ---
-  renderToday();
+  // --- Initial Render ---
+  todayDateInput.value = formatDate(new Date());
+  const key = getTodayKey();
+  renderTasks(key);
+  renderExams(key);
+  renderGrades();
+  renderArchive();
+  renderStats();
 });
