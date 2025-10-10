@@ -1,3 +1,6 @@
+// === تحميل بيانات اليوم من data.js ===
+const data = window.getInitialData();
+
 // === المراجع العامة ===
 const menuBtn = document.getElementById("menuBtn");
 const sidebar = document.getElementById("sidebar");
@@ -16,7 +19,7 @@ overlay.addEventListener("click", () => {
   overlay.classList.remove("show");
 });
 
-// === تحميل التاريخ الحالي ===
+// === التاريخ الحالي ===
 function getTodayKey() {
   const now = new Date();
   const y = now.getFullYear();
@@ -25,7 +28,7 @@ function getTodayKey() {
   return `${y}-${m}-${d}`;
 }
 
-// === عرض المهام ===
+// === عرض الواجبات ===
 function renderTodayTasks() {
   const key = getTodayKey();
   const todayData = data[key];
@@ -38,17 +41,30 @@ function renderTodayTasks() {
   }
 
   todayData.tasks.forEach((task, index) => {
+    if (task.done) return; // إخفاء المهام المنجزة
     const li = document.createElement("li");
     li.innerHTML = `
       <div>${task.subject} — ${task.title}</div>
-      <button class="btn small" onclick="markTaskDone(${key}, ${index})">✔️</button>
+      <button class="btn small" onclick="markTaskDone('${key}', ${index})">✔️</button>
     `;
     todayList.appendChild(li);
   });
 }
 
+// === عند إنجاز مهمة ===
 function markTaskDone(day, index) {
   data[day].tasks[index].done = true;
+
+  // نقل إلى الأرشيف
+  let archive = JSON.parse(localStorage.getItem("archive")) || [];
+  archive.push({
+    subject: data[day].tasks[index].subject,
+    title: data[day].tasks[index].title,
+    date: day,
+  });
+  localStorage.setItem("archive", JSON.stringify(archive));
+
+  // تحديث التخزين
   localStorage.setItem("tasksData", JSON.stringify(data));
   renderTodayTasks();
 }
@@ -70,7 +86,7 @@ function renderExams() {
     div.innerHTML = `
       <h4>${exam.subject}</h4>
       <p>${exam.title}</p>
-      <button class="btn" onclick="startExam(${key}, ${i})">بدء الامتحان</button>
+      <button class="btn" onclick="startExam('${key}', ${i})">بدء الامتحان</button>
     `;
     examsArea.appendChild(div);
   });
@@ -101,6 +117,7 @@ function startExam(day, index) {
   });
 
   examModal.classList.remove("section-hidden");
+  examModal.scrollTop = 0;
 }
 
 closeExam.onclick = () => {
@@ -125,7 +142,7 @@ function saveGrade(subject, score) {
   renderGrades();
 }
 
-// === عرض الدرجات ===
+// === عرض الدرجات (جدول) ===
 function renderGrades() {
   let grades = JSON.parse(localStorage.getItem("grades")) || [];
   const container = document.getElementById("gradesContent");
@@ -143,7 +160,7 @@ function renderGrades() {
   container.innerHTML = table;
 }
 
-// === الأرشيف ===
+// === الأرشيف (جدول) ===
 function renderArchive() {
   let archive = JSON.parse(localStorage.getItem("archive")) || [];
   const container = document.getElementById("archiveContent");
@@ -164,15 +181,14 @@ function renderArchive() {
 // === التقارير ===
 function renderReports() {
   const ctx1 = document.getElementById("reportChart");
-  const ctx2 = document.createElement("canvas");
-  ctx2.id = "pieChart";
-  document.getElementById("reportsContent").appendChild(ctx2);
+  document.getElementById("reportsContent").innerHTML = "";
+  document.getElementById("reportsContent").appendChild(ctx1);
 
   const grades = JSON.parse(localStorage.getItem("grades")) || [];
   const subjects = [...new Set(grades.map(g => g.subject))];
   const averages = subjects.map(s => {
     const sub = grades.filter(g => g.subject === s);
-    return sub.reduce((a,b)=>a+b.score,0) / sub.length;
+    return sub.reduce((a, b) => a + b.score, 0) / sub.length;
   });
 
   new Chart(ctx1, {
@@ -180,15 +196,8 @@ function renderReports() {
     data: {
       labels: subjects,
       datasets: [{ label: "المعدل", data: averages }]
-    }
-  });
-
-  new Chart(ctx2, {
-    type: "pie",
-    data: {
-      labels: subjects,
-      datasets: [{ data: averages }]
-    }
+    },
+    options: { responsive: true, plugins: { legend: { display: false } } }
   });
 }
 
@@ -207,7 +216,7 @@ document.querySelectorAll(".navlink").forEach(btn => {
   });
 });
 
-// === التهيئة ===
+// === بدء التشغيل ===
 window.onload = () => {
   renderTodayTasks();
   renderExams();
