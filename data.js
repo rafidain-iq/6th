@@ -314,4 +314,3 @@ adverts and notices" },
 
   return DATA;
 };
-	  
