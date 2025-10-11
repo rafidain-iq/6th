@@ -1,16 +1,19 @@
 /* script.js — نسخة مُصحّحة ومتكاملة */
 
-// --------------------------------- إعداد التحميل + النسخة ---------------------------------
-const DATA_VERSION = "2025-10-01-v1";
-let DATA = {};
+// --- تحميل بيانات من data.js دائماً وتحديث الـ localStorage تلقائياً ---
+let data = window.getInitialData();
 
-function saveData(){
-  try {
-    localStorage.setItem("study-data", JSON.stringify(DATA));
-    localStorage.setItem("study-data_version", DATA_VERSION);
-  } catch(e){
-    console.error("فشل حفظ البيانات في localStorage:", e);
-  }
+// فحص الإصدار أو الاختلاف لتحديث البيانات
+const storedVersion = localStorage.getItem("data_version");
+const currentVersion = "2025-10"; // غيّرها كل ما تعدل على data.js
+
+if (storedVersion !== currentVersion) {
+  localStorage.setItem("data_version", currentVersion);
+  localStorage.setItem("data", JSON.stringify(data));
+} else {
+  // إذا نفس الإصدار، استخدم البيانات من التخزين المحلي
+  const saved = JSON.parse(localStorage.getItem("data"));
+  if (saved) data = saved;
 }
 
 function loadData(){
