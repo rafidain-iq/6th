@@ -37,7 +37,7 @@ if (typeof window.getInitialData === "function") {
 // === عرض المهام ===
 function renderTodayTasks() {
   const key = getTodayKey();
-  const todayData = data[key];
+  const data = window.getInitialData();
   todayDateEl.textContent = `(اليوم ${key})`;
   todayList.innerHTML = "";
 
