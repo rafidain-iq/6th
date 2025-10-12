@@ -84,18 +84,18 @@
 
 </main>
 
-<div id="examWindow" style="display:none;">
-  <div id="examContent"></div>
-  <button id="submitExamBtn">تسليم الامتحان</button>
+<div id="examWindow" class="modal section-hidden">
+  <div class="modal-inner">
+    <h3>الامتحان</h3>
+    <div id="examContent"></div>
+    <button id="submitExamBtn" class="btn exam-submit">تسليم الامتحان</button>
+  </div>
 </div>
 
 <footer class="footer muted small">جميع الحقوق محفوظة - عباس الموسوي</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="data.js"></script>
-<script>
-  const DATA = window.getInitialData(); 
-</script>
 <script src="script.js"></script>
 </body>
 </html>
