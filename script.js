@@ -7,113 +7,121 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- المتغيرات العامة ---
   let today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
-
-  // إذا التاريخ الحالي غير موجود في DATA، استخدم أول يوم موجود
-  if (!DATA[today]) today = Object.keys(DATA)[0];
-
+  if (!DATA[today]) {
+    today = Object.keys(DATA)[0]; // إذا اليوم الحالي غير موجود، نختار أول يوم موجود
+  }
   let archive = [];
   let grades = [];
 
   // --- عناصر الواجهة ---
-  const tasksContainer = document.getElementById("tasksContainer");
-  const examsContainer = document.getElementById("examsContainer");
-  const archiveContainer = document.getElementById("archiveContainer");
-  const gradesContainer = document.getElementById("gradesContainer");
+  const tasksList = document.getElementById("todayList");
+  const examsArea = document.getElementById("examsArea");
+  const archiveContainer = document.getElementById("archiveContent");
+  const gradesContainer = document.getElementById("gradesContent");
 
-  const menuBtn = document.getElementById("menuBtn");
   const sidebar = document.getElementById("sidebar");
-  const overlay = document.getElementById("overlay");
+  const menuBtn = document.getElementById("menuBtn");
+  const viewDateInput = document.getElementById("viewDate");
+  const todayBtn = document.getElementById("todayBtn");
+  const goDateBtn = document.getElementById("goDate");
 
-  // --- التحكم في الشريط الجانبي ---
+  const examWindow = document.getElementById("examWindow");
+  const examContent = document.getElementById("examContent");
+  const submitExamBtn = document.getElementById("submitExamBtn");
+
+  // --- قائمة جانبية ---
   menuBtn.addEventListener("click", () => {
-    sidebar.classList.toggle("active");
-    overlay.style.display = sidebar.classList.contains("active") ? "block" : "none";
+    const visible = sidebar.getAttribute("aria-hidden") === "false";
+    sidebar.setAttribute("aria-hidden", visible ? "true" : "false");
   });
 
-  overlay.addEventListener("click", () => {
-    sidebar.classList.remove("active");
-    overlay.style.display = "none";
+  // --- اختيار التاريخ ---
+  viewDateInput.value = today;
+  todayBtn.addEventListener("click", () => {
+    today = new Date().toISOString().split("T")[0];
+    viewDateInput.value = today;
+    renderTasks();
+    renderExams();
   });
 
-  // --- دالة عرض المهام اليومية ---
+  goDateBtn.addEventListener("click", () => {
+    const selected = viewDateInput.value;
+    if (DATA[selected]) {
+      today = selected;
+      renderTasks();
+      renderExams();
+    } else {
+      alert("لا توجد بيانات لهذا اليوم");
+    }
+  });
+
+  // --- عرض المهام اليومية ---
   function renderTasks() {
-    tasksContainer.innerHTML = "";
-    if (!DATA[today] || !DATA[today].tasks.length) {
-      tasksContainer.innerHTML = "<p>لا توجد مهام اليوم.</p>";
+    tasksList.innerHTML = "";
+    const day = DATA[today];
+    if (!day || !day.tasks.length) {
+      tasksList.innerHTML = "<li>لا توجد مهام اليوم.</li>";
       return;
     }
 
-    DATA[today].tasks.forEach(task => {
-      const taskEl = document.createElement("div");
-      taskEl.className = "task-item";
-      taskEl.innerHTML = `
-        <strong>${task.subject}</strong>: ${task.content} (${task.hours} ساعة)
-        <button class="complete-btn">اكتمال</button>
-      `;
-      tasksContainer.appendChild(taskEl);
-
-      // زر اكتمال
-      taskEl.querySelector(".complete-btn").addEventListener("click", () => {
+    day.tasks.forEach(task => {
+      const li = document.createElement("li");
+      li.textContent = `${task.subject}: ${task.content} (${task.hours} ساعة)`;
+      const btn = document.createElement("button");
+      btn.textContent = "اكتمال";
+      btn.className = "complete-btn";
+      btn.addEventListener("click", () => {
         archive.push({ type: "task", date: today, ...task });
-        taskEl.remove();
+        li.remove();
         updateArchive();
       });
+      li.appendChild(btn);
+      tasksList.appendChild(li);
     });
   }
 
-  // --- دالة عرض الامتحانات اليومية ---
+  // --- عرض الامتحانات اليومية ---
   function renderExams() {
-    examsContainer.innerHTML = "";
-    if (!DATA[today] || !DATA[today].exams.length) {
-      examsContainer.innerHTML = "<p>لا توجد امتحانات اليوم.</p>";
+    examsArea.innerHTML = "";
+    const day = DATA[today];
+    if (!day || !day.exams.length) {
+      examsArea.innerHTML = "<p>لا توجد امتحانات اليوم.</p>";
       return;
     }
 
-    DATA[today].exams.forEach(exam => {
-      const examEl = document.createElement("div");
-      examEl.className = "exam-item";
-      examEl.innerHTML = `
-        <strong>${exam.subject}</strong>: ${exam.title}
-        <button class="start-exam-btn">بدء الامتحان</button>
-      `;
-      examsContainer.appendChild(examEl);
-
-      // زر بدء الامتحان
-      examEl.querySelector(".start-exam-btn").addEventListener("click", () => {
-        openExam(exam);
-      });
+    day.exams.forEach(exam => {
+      const div = document.createElement("div");
+      div.innerHTML = `<strong>${exam.subject}</strong>: ${exam.title} `;
+      const btn = document.createElement("button");
+      btn.textContent = "بدء الامتحان";
+      btn.addEventListener("click", () => openExam(exam));
+      div.appendChild(btn);
+      examsArea.appendChild(div);
     });
   }
 
-  // --- دالة فتح الامتحان ---
+  // --- فتح الامتحان ---
   function openExam(exam) {
-    const examWindow = document.getElementById("examWindow");
-    const examContent = document.getElementById("examContent");
-    examWindow.style.display = "block";
     examContent.innerHTML = "";
+    examWindow.style.display = "block";
 
     exam.questions.forEach((q, idx) => {
-      const qEl = document.createElement("div");
-      qEl.className = "question-item";
-      qEl.innerHTML = `
+      const div = document.createElement("div");
+      div.innerHTML = `
         <p>${idx + 1}. ${q.text}</p>
         <input type="text" class="answer-input" data-qid="${q.id}">
       `;
-      examContent.appendChild(qEl);
+      examContent.appendChild(div);
     });
 
-    // زر تسليم الامتحان
-    document.getElementById("submitExamBtn").onclick = () => {
+    submitExamBtn.onclick = () => {
       let score = 0;
-      const pointsPerQuestion = exam.questions.length ? Math.floor(100 / exam.questions.length) : 0;
-
       exam.questions.forEach(q => {
         const userAnswer = document.querySelector(`[data-qid="${q.id}"]`).value.trim();
         if (checkAnswer(userAnswer, q.answer)) {
-          score += pointsPerQuestion;
+          score += 10; // كل سؤال 10 درجات
         }
       });
-
       grades.push({ date: today, subject: exam.subject, title: exam.title, score });
       archive.push({ type: "exam", date: today, ...exam });
       updateGrades();
@@ -123,20 +131,19 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  // --- دالة تصحيح ذكي ---
+  // --- تصحيح ذكي ---
   function checkAnswer(user, correct) {
     user = user.toLowerCase().replace(/\s+/g, "");
     correct = correct.toLowerCase().replace(/\s+/g, "");
 
-    // 1. نفس النص
     if (user === correct) return true;
 
-    // 2. كلمات مفتاحية (ترتيب مختلف)
-    let userWords = user.split(/[\s,.;]+/).sort();
-    let correctWords = correct.split(/[\s,.;]+/).sort();
+    // كلمات مفتاحية
+    const userWords = user.split(/[\s,.;]+/).sort();
+    const correctWords = correct.split(/[\s,.;]+/).sort();
     if (userWords.join(",") === correctWords.join(",")) return true;
 
-    // 3. أرقام علمية / رياضية
+    // أرقام
     const userNum = parseFloat(user.replace(/[^\d.eE-]/g, ""));
     const correctNum = parseFloat(correct.replace(/[^\d.eE-]/g, ""));
     if (!isNaN(userNum) && !isNaN(correctNum)) {
@@ -150,11 +157,9 @@ document.addEventListener("DOMContentLoaded", () => {
   function updateArchive() {
     archiveContainer.innerHTML = "";
     archive.forEach(item => {
-      const itemEl = document.createElement("div");
-      itemEl.innerHTML = `
-        <strong>${item.type}</strong> | ${item.subject || ""} | ${item.title || item.content} | ${item.date}
-      `;
-      archiveContainer.appendChild(itemEl);
+      const div = document.createElement("div");
+      div.textContent = `${item.type} | ${item.subject || ""} | ${item.title || item.content} | ${item.date}`;
+      archiveContainer.appendChild(div);
     });
   }
 
@@ -162,23 +167,14 @@ document.addEventListener("DOMContentLoaded", () => {
   function updateGrades() {
     gradesContainer.innerHTML = "";
     grades.forEach(g => {
-      const gradeEl = document.createElement("div");
-      gradeEl.innerHTML = `
-        <strong>${g.subject}</strong> | ${g.title} | الدرجة: ${g.score}
-      `;
-      gradesContainer.appendChild(gradeEl);
+      const div = document.createElement("div");
+      div.textContent = `${g.subject} | ${g.title} | الدرجة: ${g.score}`;
+      gradesContainer.appendChild(div);
     });
   }
 
-  // --- دالة التهيئة ---
-  function init() {
-    renderTasks();
-    renderExams();
-    updateArchive();
-    updateGrades();
-  }
-
-  // --- تشغيل السكربت ---
-  init();
+  // --- التهيئة ---
+  renderTasks();
+  renderExams();
 
 });
