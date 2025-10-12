@@ -1,5 +1,5 @@
 // --- المتغيرات العامة ---
-let today = new Date().toISOString().split("T")[0]; 
+let today = "2025-10-01"; // اختبر أي يوم موجود في data.js
 let archive = [];
 let grades = [];
 
