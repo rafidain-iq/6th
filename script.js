@@ -1,15 +1,13 @@
 // script.js
-
 document.addEventListener("DOMContentLoaded", () => {
 
   // --- استدعاء البيانات من data.js ---
   const DATA = window.getInitialData();
 
   // --- المتغيرات العامة ---
-  let today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
-  if (!DATA[today]) {
-    today = Object.keys(DATA)[0]; // إذا اليوم الحالي غير موجود، نختار أول يوم موجود
-  }
+  let today = new Date().toISOString().split("T")[0];
+  if (!DATA[today]) today = Object.keys(DATA)[0];
+
   let archive = [];
   let grades = [];
 
@@ -67,6 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
     day.tasks.forEach(task => {
       const li = document.createElement("li");
       li.textContent = `${task.subject}: ${task.content} (${task.hours} ساعة)`;
+      
       const btn = document.createElement("button");
       btn.textContent = "اكتمال";
       btn.className = "complete-btn";
@@ -75,6 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
         li.remove();
         updateArchive();
       });
+
       li.appendChild(btn);
       tasksList.appendChild(li);
     });
@@ -92,10 +92,12 @@ document.addEventListener("DOMContentLoaded", () => {
     day.exams.forEach(exam => {
       const div = document.createElement("div");
       div.innerHTML = `<strong>${exam.subject}</strong>: ${exam.title} `;
+      
       const btn = document.createElement("button");
       btn.textContent = "بدء الامتحان";
       btn.addEventListener("click", () => openExam(exam));
       div.appendChild(btn);
+
       examsArea.appendChild(div);
     });
   }
@@ -104,6 +106,11 @@ document.addEventListener("DOMContentLoaded", () => {
   function openExam(exam) {
     examContent.innerHTML = "";
     examWindow.style.display = "block";
+
+    if (!exam.questions.length) {
+      examContent.innerHTML = "<p>لا توجد أسئلة لهذا الامتحان.</p>";
+      return;
+    }
 
     exam.questions.forEach((q, idx) => {
       const div = document.createElement("div");
@@ -118,12 +125,12 @@ document.addEventListener("DOMContentLoaded", () => {
       let score = 0;
       exam.questions.forEach(q => {
         const userAnswer = document.querySelector(`[data-qid="${q.id}"]`).value.trim();
-        if (checkAnswer(userAnswer, q.answer)) {
-          score += 10; // كل سؤال 10 درجات
-        }
+        if (checkAnswer(userAnswer, q.answer)) score += 10;
       });
+
       grades.push({ date: today, subject: exam.subject, title: exam.title, score });
       archive.push({ type: "exam", date: today, ...exam });
+
       updateGrades();
       updateArchive();
       examWindow.style.display = "none";
@@ -131,8 +138,10 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  // --- تصحيح ذكي ---
+  // --- تصحيح ذكي للإجابات ---
   function checkAnswer(user, correct) {
+    if (!user || !correct) return false;
+
     user = user.toLowerCase().replace(/\s+/g, "");
     correct = correct.toLowerCase().replace(/\s+/g, "");
 
