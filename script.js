@@ -1,268 +1,156 @@
-// === المراجع العامة ===
-const menuBtn = document.getElementById("menuBtn");
-const sidebar = document.getElementById("sidebar");
-const overlay = document.getElementById("overlay");
-const todayList = document.getElementById("todayList");
-const examsArea = document.getElementById("examsArea");
-const todayDateEl = document.getElementById("todayDate");
+// script.js
 
-// === القائمة الجانبية ===
-menuBtn.addEventListener("click", () => {
-  sidebar.classList.toggle("open");
-  overlay.classList.toggle("show");
-});
-overlay.addEventListener("click", () => {
-  sidebar.classList.remove("open");
-  overlay.classList.remove("show");
-});
+// --- استدعاء البيانات من data.js ---
+const DATA = window.getInitialData();
 
-// === تحميل التاريخ الحالي ===
-function getTodayKey() {
-  const now = new Date();
-  const y = now.getFullYear();
-  const m = String(now.getMonth() + 1).padStart(2, "0");
-  const d = String(now.getDate()).padStart(2, "0");
-  return `${y}-${m}-${d}`;
-}
+// --- المتغيرات العامة ---
+let today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
+let archive = [];
+let grades = [];
 
-// === تحميل بيانات اليوم من data.js ===
-let data = null;
-if (typeof window.getInitialData === "function") {
-  data = window.getInitialData();
-} else {
-  console.error("⚠️ لم يتم العثور على الدالة getInitialData من data.js");
-  data = {};
-}
+// --- عناصر الواجهة ---
+const tasksContainer = document.getElementById("tasksContainer");
+const examsContainer = document.getElementById("examsContainer");
+const archiveContainer = document.getElementById("archiveContainer");
+const gradesContainer = document.getElementById("gradesContainer");
 
-// === عرض المهام ===
-function renderTodayTasks() {
-  const key = getTodayKey();
-  const data = window.getInitialData();
-  todayDateEl.textContent = `(اليوم ${key})`;
-  todayList.innerHTML = "";
-
-  if (!todayData || !todayData.tasks || todayData.tasks.length === 0) {
-    todayList.innerHTML = "<li>لا توجد مهام اليوم.</li>";
+// --- دالة عرض المهام اليومية ---
+function renderTasks() {
+  tasksContainer.innerHTML = "";
+  if (!DATA[today] || !DATA[today].tasks.length) {
+    tasksContainer.innerHTML = "<p>لا توجد مهام اليوم.</p>";
     return;
   }
 
-  todayData.tasks.forEach((task, index) => {
-    const li = document.createElement("li");
-    li.innerHTML = `
-      <div>${task.subject} — ${task.content}</div>
-      <button class="btn small" onclick="markTaskDone('${key}', ${index})">✔️</button>
+  DATA[today].tasks.forEach(task => {
+    const taskEl = document.createElement("div");
+    taskEl.className = "task-item";
+    taskEl.innerHTML = `
+      <strong>${task.subject}</strong>: ${task.content} (${task.hours} ساعة)
+      <button class="complete-btn">اكتمال</button>
     `;
-    todayList.appendChild(li);
+    tasksContainer.appendChild(taskEl);
+
+    // زر اكتمال
+    taskEl.querySelector(".complete-btn").addEventListener("click", () => {
+      archive.push({ type: "task", date: today, ...task });
+      taskEl.remove();
+      updateArchive();
+    });
   });
 }
 
-// === عند إكمال مهمة ===
-function markTaskDone(day, index) {
-  data[day].tasks[index].done = true;
-
-  let archive = JSON.parse(localStorage.getItem("archive")) || [];
-  archive.push({
-    subject: data[day].tasks[index].subject,
-    title: data[day].tasks[index].content,
-    date: new Date().toLocaleDateString("ar-EG"),
-  });
-  localStorage.setItem("archive", JSON.stringify(archive));
-
-  renderTodayTasks();
-  renderArchive();
-}
-
-// === عرض الامتحانات ===
+// --- دالة عرض الامتحانات اليومية ---
 function renderExams() {
-  const key = getTodayKey();
-  const todayData = data[key];
-  examsArea.innerHTML = "";
-
-  if (!todayData || !todayData.exams || todayData.exams.length === 0) {
-    examsArea.innerHTML = "<div>لا توجد امتحانات اليوم.</div>";
+  examsContainer.innerHTML = "";
+  if (!DATA[today] || !DATA[today].exams.length) {
+    examsContainer.innerHTML = "<p>لا توجد امتحانات اليوم.</p>";
     return;
   }
 
-  todayData.exams.forEach((exam, i) => {
-    const div = document.createElement("div");
-    div.className = "card";
-    div.innerHTML = `
-      <h4>${exam.subject}</h4>
-      <p>${exam.title}</p>
-      <button class="btn" onclick="startExam('${key}', ${i})">بدء الامتحان</button>
+  DATA[today].exams.forEach(exam => {
+    const examEl = document.createElement("div");
+    examEl.className = "exam-item";
+    examEl.innerHTML = `
+      <strong>${exam.subject}</strong>: ${exam.title}
+      <button class="start-exam-btn">بدء الامتحان</button>
     `;
-    examsArea.appendChild(div);
+    examsContainer.appendChild(examEl);
+
+    // زر بدء الامتحان
+    examEl.querySelector(".start-exam-btn").addEventListener("click", () => {
+      openExam(exam);
+    });
   });
 }
 
-// === نافذة الامتحان ===
-const examModal = document.getElementById("examModal");
-const examTitleShow = document.getElementById("examTitleShow");
-const examQuestions = document.getElementById("examQuestions");
-const submitExamBtn = document.getElementById("submitExamBtn");
-const examResult = document.getElementById("examResult");
-const closeExam = document.getElementById("closeExam");
+// --- دالة فتح الامتحان ---
+function openExam(exam) {
+  const examWindow = document.getElementById("examWindow");
+  const examContent = document.getElementById("examContent");
+  examWindow.style.display = "block";
+  examContent.innerHTML = "";
 
-let currentExam = null;
-
-function startExam(day, index) {
-  currentExam = data[day].exams[index];
-  examTitleShow.textContent = currentExam.title;
-  examQuestions.innerHTML = "";
-  examResult.innerHTML = "";
-
-  currentExam.questions.forEach((q, i) => {
-    examQuestions.innerHTML += `
-      <div class="card">
-        <b>س${i + 1}:</b> ${q.text}
-        <input id="ans_${i}" class="ansInput" placeholder="اكتب إجابتك هنا">
-      </div>`;
+  exam.questions.forEach((q, idx) => {
+    const qEl = document.createElement("div");
+    qEl.className = "question-item";
+    qEl.innerHTML = `
+      <p>${idx + 1}. ${q.text}</p>
+      <input type="text" class="answer-input" data-qid="${q.id}">
+    `;
+    examContent.appendChild(qEl);
   });
 
-  examModal.classList.remove("section-hidden");
+  // زر تسليم الامتحان
+  document.getElementById("submitExamBtn").onclick = () => {
+    let score = 0;
+    exam.questions.forEach(q => {
+      const userAnswer = document.querySelector(`[data-qid="${q.id}"]`).value.trim();
+      if (checkAnswer(userAnswer, q.answer)) {
+        score += 10; // كل سؤال 10 درجات، يمكن التعديل حسب العدد
+      }
+    });
+    grades.push({ date: today, subject: exam.subject, title: exam.title, score });
+    archive.push({ type: "exam", date: today, ...exam });
+    updateGrades();
+    updateArchive();
+    examWindow.style.display = "none";
+    renderExams();
+  };
 }
 
-closeExam.onclick = () => {
-  examModal.classList.add("section-hidden");
-};
+// --- دالة تصحيح ذكي ---
+function checkAnswer(user, correct) {
+  user = user.toLowerCase().replace(/\s+/g, "");
+  correct = correct.toLowerCase().replace(/\s+/g, "");
 
-submitExamBtn.onclick = () => {
-  let score = 0;
-  let total = currentExam.questions.length * 10;
-  let resultsHTML = "";
+  // 1. نفس النص
+  if (user === correct) return true;
 
-  currentExam.questions.forEach((q, i) => {
-    const ans = document.getElementById(`ans_${i}`).value.trim();
-    const correct = q.answer.trim();
-    const similarity = compareText(ans, correct);
+  // 2. كلمات مفتاحية (ترتيب مختلف)
+  let userWords = user.split(/[\s,.;]+/).sort();
+  let correctWords = correct.split(/[\s,.;]+/).sort();
+  if (userWords.join(",") === correctWords.join(",")) return true;
 
-    if (similarity >= 0.85) score += 10;
-
-    resultsHTML += `
-      <div class="card">
-        <b>س${i + 1}:</b> <br>
-        إجابتك: <span style="color:${similarity >= 0.85 ? 'green' : 'red'}">${ans || 'فارغ'}</span><br>
-        الإجابة النموذجية: <b>${correct}</b>
-      </div>`;
-  });
-
-  const percent = ((score / total) * 100).toFixed(1);
-  examResult.innerHTML = `<h4>نتيجتك: ${score}/${total} (${percent}%)</h4>${resultsHTML}`;
-
-  saveGrade(currentExam.subject, score);
-};
-
-// === مقارنة نصوص بسيطة لتصحيح قريب من الصحيح ===
-function compareText(a, b) {
-  a = a.toLowerCase();
-  b = b.toLowerCase();
-  const len = Math.max(a.length, b.length);
-  if (len === 0) return 1;
-  let same = 0;
-  for (let i = 0; i < Math.min(a.length, b.length); i++) {
-    if (a[i] === b[i]) same++;
-  }
-  return same / len;
-}
-
-// === حفظ الدرجات ===
-function saveGrade(subject, score) {
-  let grades = JSON.parse(localStorage.getItem("grades")) || [];
-  grades.push({
-    subject,
-    score,
-    date: new Date().toLocaleDateString("ar-EG"),
-  });
-  localStorage.setItem("grades", JSON.stringify(grades));
-  renderGrades();
-}
-
-// === عرض الدرجات ===
-function renderGrades() {
-  let grades = JSON.parse(localStorage.getItem("grades")) || [];
-  const container = document.getElementById("gradesContent");
-  if (grades.length === 0) {
-    container.innerHTML = "لا توجد درجات حالياً.";
-    return;
+  // 3. أرقام علمية / رياضية
+  const userNum = parseFloat(user.replace(/[^\d.eE-]/g, ""));
+  const correctNum = parseFloat(correct.replace(/[^\d.eE-]/g, ""));
+  if (!isNaN(userNum) && !isNaN(correctNum)) {
+    if (Math.abs(userNum - correctNum) <= 0.1) return true;
   }
 
-  let table = `<table class="table">
-    <tr><th>المادة</th><th>الدرجة</th><th>التاريخ</th></tr>`;
+  return false;
+}
+
+// --- تحديث الأرشيف ---
+function updateArchive() {
+  archiveContainer.innerHTML = "";
+  archive.forEach(item => {
+    const itemEl = document.createElement("div");
+    itemEl.innerHTML = `
+      <strong>${item.type}</strong> | ${item.subject || ""} | ${item.title || item.content} | ${item.date}
+    `;
+    archiveContainer.appendChild(itemEl);
+  });
+}
+
+// --- تحديث جدول الدرجات ---
+function updateGrades() {
+  gradesContainer.innerHTML = "";
   grades.forEach(g => {
-    const color = g.score < 50 ? "red" : "green";
-    table += `<tr><td>${g.subject}</td><td style="color:${color}">${g.score}</td><td>${g.date}</td></tr>`;
-  });
-  table += `</table>`;
-  container.innerHTML = table;
-}
-
-// === الأرشيف ===
-function renderArchive() {
-  let archive = JSON.parse(localStorage.getItem("archive")) || [];
-  const container = document.getElementById("archiveContent");
-  if (archive.length === 0) {
-    container.innerHTML = "لا توجد مهام مؤرشفة.";
-    return;
-  }
-
-  let table = `<table class="table">
-    <tr><th>المادة</th><th>الوصف</th><th>التاريخ</th></tr>`;
-  archive.forEach(a => {
-    table += `<tr><td>${a.subject}</td><td>${a.title}</td><td>${a.date}</td></tr>`;
-  });
-  table += `</table>`;
-  container.innerHTML = table;
-}
-
-// === التقارير ===
-function renderReports() {
-  const container = document.getElementById("reportsContent");
-  container.innerHTML = `
-    <canvas id="reportChart"></canvas>
-    <canvas id="pieChart" style="margin-top:20px;"></canvas>
-  `;
-
-  const grades = JSON.parse(localStorage.getItem("grades")) || [];
-  const subjects = [...new Set(grades.map(g => g.subject))];
-  const averages = subjects.map(s => {
-    const sub = grades.filter(g => g.subject === s);
-    return sub.reduce((a, b) => a + b.score, 0) / sub.length;
-  });
-
-  new Chart(document.getElementById("reportChart"), {
-    type: "bar",
-    data: {
-      labels: subjects,
-      datasets: [{ label: "المعدل", data: averages }]
-    }
-  });
-
-  new Chart(document.getElementById("pieChart"), {
-    type: "pie",
-    data: {
-      labels: subjects,
-      datasets: [{ data: averages }]
-    }
+    const gradeEl = document.createElement("div");
+    gradeEl.innerHTML = `
+      <strong>${g.subject}</strong> | ${g.title} | الدرجة: ${g.score}
+    `;
+    gradesContainer.appendChild(gradeEl);
   });
 }
 
-// === التنقل بين الأقسام ===
-document.querySelectorAll(".navlink").forEach(btn => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll("main > section").forEach(s => s.classList.add("section-hidden"));
-    document.getElementById(btn.dataset.tab).classList.remove("section-hidden");
-
-    if (btn.dataset.tab === "grades") renderGrades();
-    if (btn.dataset.tab === "archive") renderArchive();
-    if (btn.dataset.tab === "reports") renderReports();
-
-    sidebar.classList.remove("open");
-    overlay.classList.remove("show");
-  });
-});
-
-// === التهيئة ===
-window.onload = () => {
-  renderTodayTasks();
+// --- دالة التهيئة ---
+function init() {
+  renderTasks();
   renderExams();
-};
+}
+
+// --- تشغيل السكربت ---
+init();
