@@ -1,40 +1,68 @@
-// script.js
 document.addEventListener("DOMContentLoaded", () => {
 
-  // --- استدعاء البيانات من data.js ---
   const DATA = window.getInitialData();
 
-  // --- المتغيرات العامة ---
   let today = new Date().toISOString().split("T")[0];
   if (!DATA[today]) today = Object.keys(DATA)[0];
 
   let archive = [];
   let grades = [];
 
-  // --- عناصر الواجهة ---
+  // عناصر الواجهة
   const tasksList = document.getElementById("todayList");
   const examsArea = document.getElementById("examsArea");
   const archiveContainer = document.getElementById("archiveContent");
   const gradesContainer = document.getElementById("gradesContent");
+  const todayDateLabel = document.getElementById("todayDate");
 
   const sidebar = document.getElementById("sidebar");
+  const overlay = document.getElementById("overlay");
   const menuBtn = document.getElementById("menuBtn");
+
   const viewDateInput = document.getElementById("viewDate");
   const todayBtn = document.getElementById("todayBtn");
   const goDateBtn = document.getElementById("goDate");
+
+  const navlinks = document.querySelectorAll(".navlink");
 
   const examWindow = document.getElementById("examWindow");
   const examContent = document.getElementById("examContent");
   const submitExamBtn = document.getElementById("submitExamBtn");
 
-  // --- قائمة جانبية ---
+  // --- وظائف القائمة الجانبية ---
+  function openSidebar() {
+    sidebar.classList.add("open");
+    sidebar.setAttribute("aria-hidden", "false");
+    overlay.classList.add("show");
+  }
+  function closeSidebar() {
+    sidebar.classList.remove("open");
+    sidebar.setAttribute("aria-hidden", "true");
+    overlay.classList.remove("show");
+  }
+
   menuBtn.addEventListener("click", () => {
-    const visible = sidebar.getAttribute("aria-hidden") === "false";
-    sidebar.setAttribute("aria-hidden", visible ? "true" : "false");
+    if (sidebar.classList.contains("open")) closeSidebar();
+    else openSidebar();
+  });
+  overlay.addEventListener("click", closeSidebar);
+
+  // --- التنقل بين الأقسام ---
+  navlinks.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const target = btn.dataset.tab;
+      document.querySelectorAll("main > section").forEach(sec => {
+        sec.classList.add("section-hidden");
+      });
+      document.getElementById(target).classList.remove("section-hidden");
+      closeSidebar();
+    });
   });
 
   // --- اختيار التاريخ ---
   viewDateInput.value = today;
+  todayDateLabel.textContent = today;
+
   todayBtn.addEventListener("click", () => {
     today = new Date().toISOString().split("T")[0];
     viewDateInput.value = today;
@@ -48,16 +76,15 @@ document.addEventListener("DOMContentLoaded", () => {
       today = selected;
       renderTasks();
       renderExams();
-    } else {
-      alert("لا توجد بيانات لهذا اليوم");
-    }
+    } else alert("لا توجد بيانات لهذا اليوم");
   });
 
-  // --- عرض المهام اليومية ---
+  // --- عرض المهام ---
   function renderTasks() {
+    todayDateLabel.textContent = today;
     tasksList.innerHTML = "";
     const day = DATA[today];
-    if (!day || !day.tasks.length) {
+    if (!day || !day.tasks || day.tasks.length === 0) {
       tasksList.innerHTML = "<li>لا توجد مهام اليوم.</li>";
       return;
     }
@@ -65,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
     day.tasks.forEach(task => {
       const li = document.createElement("li");
       li.textContent = `${task.subject}: ${task.content} (${task.hours} ساعة)`;
-      
+
       const btn = document.createElement("button");
       btn.textContent = "اكتمال";
       btn.className = "complete-btn";
@@ -80,11 +107,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // --- عرض الامتحانات اليومية ---
+  // --- عرض الامتحانات ---
   function renderExams() {
     examsArea.innerHTML = "";
     const day = DATA[today];
-    if (!day || !day.exams.length) {
+    if (!day || !day.exams || day.exams.length === 0) {
       examsArea.innerHTML = "<p>لا توجد امتحانات اليوم.</p>";
       return;
     }
@@ -92,12 +119,10 @@ document.addEventListener("DOMContentLoaded", () => {
     day.exams.forEach(exam => {
       const div = document.createElement("div");
       div.innerHTML = `<strong>${exam.subject}</strong>: ${exam.title} `;
-      
       const btn = document.createElement("button");
       btn.textContent = "بدء الامتحان";
       btn.addEventListener("click", () => openExam(exam));
       div.appendChild(btn);
-
       examsArea.appendChild(div);
     });
   }
@@ -105,19 +130,12 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- فتح الامتحان ---
   function openExam(exam) {
     examContent.innerHTML = "";
-    examWindow.style.display = "block";
-
-    if (!exam.questions.length) {
-      examContent.innerHTML = "<p>لا توجد أسئلة لهذا الامتحان.</p>";
-      return;
-    }
+    examWindow.classList.remove("section-hidden");
 
     exam.questions.forEach((q, idx) => {
       const div = document.createElement("div");
-      div.innerHTML = `
-        <p>${idx + 1}. ${q.text}</p>
-        <input type="text" class="answer-input" data-qid="${q.id}">
-      `;
+      div.innerHTML = `<p>${idx + 1}. ${q.text}</p>
+        <input type="text" class="answer-input" data-qid="${q.id}">`;
       examContent.appendChild(div);
     });
 
@@ -127,38 +145,31 @@ document.addEventListener("DOMContentLoaded", () => {
         const userAnswer = document.querySelector(`[data-qid="${q.id}"]`).value.trim();
         if (checkAnswer(userAnswer, q.answer)) score += 10;
       });
-
       grades.push({ date: today, subject: exam.subject, title: exam.title, score });
       archive.push({ type: "exam", date: today, ...exam });
-
       updateGrades();
       updateArchive();
-      examWindow.style.display = "none";
+      examWindow.classList.add("section-hidden");
       renderExams();
     };
   }
 
-  // --- تصحيح ذكي للإجابات ---
+  // --- تصحيح ذكي ---
   function checkAnswer(user, correct) {
     if (!user || !correct) return false;
-
     user = user.toLowerCase().replace(/\s+/g, "");
     correct = correct.toLowerCase().replace(/\s+/g, "");
-
     if (user === correct) return true;
 
-    // كلمات مفتاحية
     const userWords = user.split(/[\s,.;]+/).sort();
     const correctWords = correct.split(/[\s,.;]+/).sort();
     if (userWords.join(",") === correctWords.join(",")) return true;
 
-    // أرقام
     const userNum = parseFloat(user.replace(/[^\d.eE-]/g, ""));
     const correctNum = parseFloat(correct.replace(/[^\d.eE-]/g, ""));
     if (!isNaN(userNum) && !isNaN(correctNum)) {
       if (Math.abs(userNum - correctNum) <= 0.1) return true;
     }
-
     return false;
   }
 
@@ -172,7 +183,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // --- تحديث جدول الدرجات ---
+  // --- تحديث الدرجات ---
   function updateGrades() {
     gradesContainer.innerHTML = "";
     grades.forEach(g => {
@@ -185,5 +196,4 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- التهيئة ---
   renderTasks();
   renderExams();
-
 });
