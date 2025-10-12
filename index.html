@@ -86,17 +86,18 @@
 </main>
 
 <!-- Exam modal -->
-<div id="examModal" class="modal section-hidden" role="dialog" aria-modal="true">
-  <div class="modal-inner card exam-card">
-    <div style="text-align:left"><button id="closeExam" class="btn ghost">إغلاق</button></div>
-    <h3 id="examTitleShow"></h3>
-    <div id="examQuestions"></div>
-    <div style="margin-top:10px"><button id="submitExamBtn" class="btn exam-submit">تسليم الامتحان</button></div>
-    <div id="examResult" style="margin-top:12px"></div>
-  </div>
+<div id="tasksContainer"></div>
+<div id="examsContainer"></div>
+<div id="archiveContainer"></div>
+<div id="gradesContainer"></div>
+
+<div id="examWindow" style="display:none;">
+  <div id="examContent"></div>
+  <button id="submitExamBtn">تسليم الامتحان</button>
+</div>
 </div>
 
-<footer class="footer muted small">نسخة تجريبية — البيانات تحفظ محليًا فقط</footer>
+<footer class="footer muted small">جميع الحقوق محفوظة - عباس الموسوي</footer>
 
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
