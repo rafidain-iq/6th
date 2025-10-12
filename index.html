@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>منصة الدراسة — النسخة النهائية</title>
+<title>منصة أفق - عباس الموسوي</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -31,7 +31,6 @@
     <button class="navlink" data-tab="archive">🗂️ الأرشيف</button>
     <button class="navlink" data-tab="add">➕ إضافة واجب</button>
 
-    <!-- ✅ الزر الجديد لإضافة الدرجات -->
     <button id="addGradeBtn" class="btn">➕ إضافة درجة</button>
 
     <hr>
@@ -64,7 +63,7 @@
   </section>
 
   <section id="reports" class="card section-hidden">
-    <h2>التقارير</h2>
+    <h2>التقارير الشهرية</h2>
     <div id="reportsContent"><canvas id="reportChart" width="300" height="300"></canvas></div>
   </section>
 
@@ -74,7 +73,7 @@
   </section>
 
   <section id="stats" class="card section-hidden">
-    <h2>الإحصائيات</h2>
+    <h2>الإحصائيات الأسبوعية</h2>
     <div id="statsContent"><canvas id="statsChart" width="400" height="200"></canvas></div>
   </section>
 
@@ -85,25 +84,17 @@
 
 </main>
 
-<!-- Exam modal -->
-<div id="tasksContainer"></div>
-<div id="examsContainer"></div>
-<div id="archiveContainer"></div>
-<div id="gradesContainer"></div>
-
 <div id="examWindow" style="display:none;">
   <div id="examContent"></div>
   <button id="submitExamBtn">تسليم الامتحان</button>
 </div>
-</div>
 
 <footer class="footer muted small">جميع الحقوق محفوظة - عباس الموسوي</footer>
 
-<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="data.js"></script>
 <script>
-  const data = window.getInitialData(); // ✅ هذا السطر ضروري
+  const DATA = window.getInitialData(); 
 </script>
 <script src="script.js"></script>
 </body>
