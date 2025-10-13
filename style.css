@@ -1,21 +1,20 @@
-/* === الأساسيات === */
+/* === الأساسيات العامة === */
 body {
   font-family: "Cairo", sans-serif;
   margin: 0;
   padding: 0;
   background: #ffffff; /* خلفية بيضاء */
-  color: #000000; /* نص أسود */
+  color: #222; /* نص داكن */
   direction: rtl;
 }
 
-/* === الرأس === */
 .header {
-  background: #a89a82; /* بيجي */
-  color: #ffffff;
+  background: #a89a82; /* بيج داكن */
+  color: #fff;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 18px;
+  padding: 10px 15px;
 }
 
 .h-left {
@@ -27,7 +26,7 @@ body {
   background: none;
   border: none;
   font-size: 24px;
-  color: #ffffff;
+  color: white;
   cursor: pointer;
   margin-left: 10px;
 }
@@ -45,25 +44,23 @@ body {
 
 button {
   cursor: pointer;
-  font-family: "Cairo", sans-serif;
 }
 
-/* === الأزرار === */
 .btn {
   background: #a89a82;
   border: none;
-  color: #ffffff;
+  color: #fff;
   padding: 8px 12px;
   border-radius: 5px;
   transition: 0.3s;
 }
 
 .btn:hover {
-  background: #8b7e6c;
+  background: #8f836f;
 }
 
 .btn.ghost {
-  background: #ffffff;
+  background: #fff;
   color: #a89a82;
   border: 1px solid #a89a82;
 }
@@ -75,23 +72,26 @@ button {
   right: -260px;
   width: 250px;
   height: 100%;
-  background: #f2f2f2; /* رمادي فاتح */
-  box-shadow: -2px 0 5px rgba(0,0,0,0.15);
+  background: #f9f9f9;
+  box-shadow: -2px 0 5px rgba(0,0,0,0.1);
   transition: 0.3s;
   overflow-y: auto;
   z-index: 1000;
 }
+
 .sidebar.open {
   right: 0;
 }
+
 .sidebar-inner {
   padding: 15px;
 }
+
 .sidebar-title {
   font-weight: bold;
   font-size: 18px;
-  color: #000000;
   margin-bottom: 10px;
+  color: #222;
 }
 
 .navlink, #addGradeBtn {
@@ -101,14 +101,15 @@ button {
   border: none;
   text-align: right;
   font-size: 16px;
-  color: #000000;
   padding: 10px;
   border-bottom: 1px solid #ddd;
   cursor: pointer;
+  color: #333;
+  transition: 0.3s;
 }
 
 .navlink:hover, #addGradeBtn:hover {
-  background: #e6e6e6;
+  background: #f0f0f0;
 }
 
 .overlay {
@@ -121,6 +122,7 @@ button {
   display: none;
   z-index: 500;
 }
+
 .overlay.show {
   display: block;
 }
@@ -132,19 +134,19 @@ button {
 }
 
 .card {
-  background: #ffffff;
+  background: #fff;
   padding: 15px;
   border-radius: 8px;
-  border: 1px solid #ddd;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
   margin-bottom: 15px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  border: 1px solid #eee;
 }
 
 .section-hidden {
   display: none;
 }
 
-/* === الجداول (الدرجات والأرشيف) === */
+/* === الجداول === */
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -167,29 +169,25 @@ button {
 }
 
 .table tr:hover {
-  background: #f2f2f2;
+  background: #f1f1f1;
 }
 
-/* === النوافذ (المودال) === */
-.modal {
+/* === النوافذ (الامتحان) === */
+#examWindow {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  display: flex;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  z-index: 1500;
   justify-content: center;
   align-items: center;
-  background: rgba(0,0,0,0.4);
-  z-index: 1500;
 }
 
-.modal.section-hidden {
-  display: none;
-}
-
-.modal-inner {
-  background: #ffffff;
+#examContent {
+  background: #fff;
   border-radius: 8px;
   padding: 20px;
   width: 90%;
@@ -197,23 +195,25 @@ button {
   overflow-y: auto;
 }
 
-/* === امتحانات === */
-.exam-card h3 {
-  text-align: center;
-  color: #a89a82;
-}
-
-.exam-submit {
-  background: #000000;
-  color: #ffffff;
-}
-
-.exam-submit:hover {
-  background: #333333;
+#submitExamBtn {
+  background: #a89a82;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 12px;
+  margin-top: 10px;
 }
 
 /* === التقارير === */
 canvas {
   max-width: 100%;
   margin-top: 10px;
+}
+
+.footer {
+  background: #f1f1f1;
+  text-align: center;
+  padding: 10px;
+  font-size: 14px;
+  color: #666;
 }
