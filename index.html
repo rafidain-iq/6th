@@ -4,14 +4,89 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>منصة أفق - عباس الموسوي</title>
+
+<!-- === تنسيق الصفحة === -->
 <link rel="stylesheet" href="style.css">
+<style>
+  body {
+    background-color: #ffffff;
+    color: #222;
+  }
+
+  header.header {
+    background-color: #a89a82;
+    color: #fff;
+  }
+
+  .btn {
+    background-color: #a89a82;
+    color: #fff;
+  }
+
+  .btn:hover {
+    background-color: #8f8575;
+  }
+
+  .btn.ghost {
+    background: #fff;
+    color: #a89a82;
+    border: 1px solid #a89a82;
+  }
+
+  .card {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+  }
+
+  .sidebar {
+    background-color: #2f2f2f;
+    color: #fff;
+  }
+
+  .sidebar-title {
+    color: #a89a82;
+  }
+
+  .navlink, #addGradeBtn {
+    background: none;
+    color: #fff;
+    border-bottom: 1px solid #444;
+  }
+
+  .navlink:hover, #addGradeBtn:hover {
+    background: #3b3b3b;
+  }
+
+  footer.footer {
+    background: #a89a82;
+    color: white;
+    text-align: center;
+    padding: 8px;
+  }
+
+  input, select {
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    padding: 5px;
+  }
+
+  .complete-btn {
+    background-color: #a89a82;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+</style>
 </head>
+
 <body>
 
+<!-- === الرأس === -->
 <header class="header">
   <div class="h-left">
     <button id="menuBtn" class="menu-btn" aria-label="فتح القائمة">☰</button>
-    <div class="h-title">منصة الدراسة</div>
+    <div class="h-title">منصة أفق الدراسية</div>
   </div>
   <div class="h-right">
     <div class="small muted">اليوم:</div>
@@ -21,28 +96,26 @@
   </div>
 </header>
 
+<!-- === القائمة الجانبية === -->
 <nav id="sidebar" class="sidebar" aria-hidden="true">
   <div class="sidebar-inner">
-    <div class="sidebar-title">القائمة</div>
+    <div class="sidebar-title">القائمة الرئيسية</div>
     <button class="navlink" data-tab="dashboard">🏠 الرئيسية</button>
     <button class="navlink" data-tab="reports">📑 التقارير</button>
     <button class="navlink" data-tab="grades">📚 الدرجات</button>
     <button class="navlink" data-tab="stats">📈 الإحصائيات</button>
     <button class="navlink" data-tab="archive">🗂️ الأرشيف</button>
     <button class="navlink" data-tab="add">➕ إضافة واجب</button>
-
     <button id="addGradeBtn" class="btn">➕ إضافة درجة</button>
 
     <hr>
     <div class="small muted">البيانات تُحمّل من ملف <code>data.js</code> + التخزين المحلي.</div>
-    <div style="margin-top:10px">
-      <button id="exportBtn" class="btn">تصدير data.js</button>
-      <button id="resetBtn" class="btn ghost">إعادة الحالة الأولية</button>
-    </div>
   </div>
 </nav>
+
 <div id="overlay" class="overlay" tabindex="-1"></div>
 
+<!-- === المحتوى الرئيسي === -->
 <main class="container">
 
   <section id="dashboard" class="card">
@@ -64,7 +137,7 @@
 
   <section id="reports" class="card section-hidden">
     <h2>التقارير الشهرية</h2>
-    <div id="reportsContent"><canvas id="reportChart" width="300" height="300"></canvas></div>
+    <canvas id="reportChart" width="300" height="300"></canvas>
   </section>
 
   <section id="grades" class="card section-hidden">
@@ -74,7 +147,7 @@
 
   <section id="stats" class="card section-hidden">
     <h2>الإحصائيات الأسبوعية</h2>
-    <div id="statsContent"><canvas id="statsChart" width="400" height="200"></canvas></div>
+    <canvas id="statsChart" width="400" height="200"></canvas>
   </section>
 
   <section id="archive" class="card section-hidden">
@@ -84,6 +157,7 @@
 
 </main>
 
+<!-- === نافذة الامتحان === -->
 <div id="examWindow" class="modal section-hidden">
   <div class="modal-inner">
     <h3>الامتحان</h3>
@@ -92,11 +166,12 @@
   </div>
 </div>
 
-  <footer class="footer muted small">جميع الحقوق محفوظة - عباس الموسوي</footer>
+<footer class="footer muted small">© جميع الحقوق محفوظة - عباس الموسوي</footer>
 
-  <!-- ترتيب السكربتات الصحيح -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="data.js"></script>
-  <script src="script.js"></script>
+<!-- === الأكواد === -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="data.js"></script>
+<script src="script.js"></script>
+
 </body>
 </html>
