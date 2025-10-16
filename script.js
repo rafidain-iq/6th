@@ -1,28 +1,24 @@
-// script.js
-
 document.addEventListener("DOMContentLoaded", () => {
+
   // --- استدعاء البيانات من data.js ---
   const DATA = window.getInitialData();
 
   // --- المتغيرات العامة ---
-  let today = new Date().toISOString().split("T")[0];
+  let today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
   if (!DATA[today]) {
-    today = Object.keys(DATA)[0]; // إذا لم يوجد تاريخ اليوم، نختار أول يوم
+    // في حال لم يكن اليوم موجودًا في الداتا
+    const dates = Object.keys(DATA).sort();
+    today = dates[0];
   }
 
-  let archive = [];
-  let grades = [];
-
-  // --- عناصر الواجهة ---
-  const tasksList = document.getElementById("todayList");
-  const examsArea = document.getElementById("examsArea");
-  const archiveContainer = document.getElementById("archiveContent");
-  const gradesContainer = document.getElementById("gradesContent");
-  const todayDateLabel = document.getElementById("todayDate");
-
+  // --- مراجع لعناصر DOM ---
   const sidebar = document.getElementById("sidebar");
-  const menuBtn = document.getElementById("menuBtn");
   const overlay = document.getElementById("overlay");
+  const menuBtn = document.getElementById("menuBtn");
+
+  const todayList = document.getElementById("todayList");
+  const examsArea = document.getElementById("examsArea");
+  const todayDate = document.getElementById("todayDate");
 
   const viewDateInput = document.getElementById("viewDate");
   const todayBtn = document.getElementById("todayBtn");
@@ -32,49 +28,35 @@ document.addEventListener("DOMContentLoaded", () => {
   const examContent = document.getElementById("examContent");
   const submitExamBtn = document.getElementById("submitExamBtn");
 
-  // --- القائمة الجانبية ---
+  const archiveContainer = document.getElementById("archiveContent");
+  const gradesContainer = document.getElementById("gradesContent");
+
+  // --- متغيرات بيانات ---
+  let archive = [];
+  let grades = [];
+
+  // === فتح وإغلاق القائمة الجانبية ===
   menuBtn.addEventListener("click", () => {
     sidebar.classList.toggle("open");
     overlay.classList.toggle("show");
   });
+
   overlay.addEventListener("click", () => {
     sidebar.classList.remove("open");
     overlay.classList.remove("show");
   });
 
-  // --- عرض التاريخ الافتراضي ---
-  viewDateInput.value = today;
-  todayDateLabel.textContent = today;
+  // === عرض تاريخ اليوم ===
+  function updateDateHeader() {
+    todayDate.textContent = `(${today})`;
+  }
 
-  // --- زر "اليوم" ---
-  todayBtn.addEventListener("click", () => {
-    today = new Date().toISOString().split("T")[0];
-    viewDateInput.value = today;
-    todayDateLabel.textContent = today;
-    renderTasks();
-    renderExams();
-  });
-
-  // --- زر "عرض" حسب التاريخ ---
-  goDateBtn.addEventListener("click", () => {
-    const selected = viewDateInput.value;
-    if (DATA[selected]) {
-      today = selected;
-      todayDateLabel.textContent = today;
-      renderTasks();
-      renderExams();
-    } else {
-      alert("لا توجد بيانات لهذا اليوم.");
-    }
-  });
-
-  // --- دالة عرض المهام اليومية ---
+  // === دالة عرض المهام ===
   function renderTasks() {
-    tasksList.innerHTML = "";
+    todayList.innerHTML = "";
     const day = DATA[today];
-
-    if (!day || !day.tasks || day.tasks.length === 0) {
-      tasksList.innerHTML = "<li>لا توجد مهام اليوم.</li>";
+    if (!day || !day.tasks.length) {
+      todayList.innerHTML = "<li>لا توجد مهام اليوم.</li>";
       return;
     }
 
@@ -83,26 +65,23 @@ document.addEventListener("DOMContentLoaded", () => {
       li.className = "task-item";
       li.innerHTML = `
         <strong>${task.subject}</strong>: ${task.content} (${task.hours} ساعة)
-        <button class="complete-btn">اكتمال</button>
+        <button class="complete-btn">✔️</button>
       `;
-
-      const btn = li.querySelector(".complete-btn");
-      btn.addEventListener("click", () => {
+      const completeBtn = li.querySelector(".complete-btn");
+      completeBtn.addEventListener("click", () => {
         archive.push({ type: "task", date: today, ...task });
         li.remove();
         updateArchive();
       });
-
-      tasksList.appendChild(li);
+      todayList.appendChild(li);
     });
   }
 
-  // --- دالة عرض الامتحانات اليومية ---
+  // === دالة عرض الامتحانات ===
   function renderExams() {
     examsArea.innerHTML = "";
     const day = DATA[today];
-
-    if (!day || !day.exams || day.exams.length === 0) {
+    if (!day || !day.exams.length) {
       examsArea.innerHTML = "<p>لا توجد امتحانات اليوم.</p>";
       return;
     }
@@ -114,25 +93,22 @@ document.addEventListener("DOMContentLoaded", () => {
         <strong>${exam.subject}</strong>: ${exam.title}
         <button class="start-exam-btn">بدء الامتحان</button>
       `;
-
-      const btn = div.querySelector(".start-exam-btn");
-      btn.addEventListener("click", () => openExam(exam));
-
+      div.querySelector(".start-exam-btn").addEventListener("click", () => openExam(exam));
       examsArea.appendChild(div);
     });
   }
 
-  // --- فتح الامتحان ---
+  // === دالة فتح الامتحان ===
   function openExam(exam) {
-    examWindow.style.display = "flex";
     examContent.innerHTML = "";
+    examWindow.style.display = "block";
 
     exam.questions.forEach((q, idx) => {
       const div = document.createElement("div");
       div.className = "question-item";
       div.innerHTML = `
         <p>${idx + 1}. ${q.text}</p>
-        <input type="text" class="answer-input" data-qid="${q.id}" placeholder="اكتب الإجابة هنا">
+        <input type="text" class="answer-input" data-qid="${q.id}">
       `;
       examContent.appendChild(div);
     });
@@ -140,12 +116,13 @@ document.addEventListener("DOMContentLoaded", () => {
     submitExamBtn.onclick = () => {
       let score = 0;
       exam.questions.forEach(q => {
-        const userAnswer = document.querySelector(`[data-qid="${q.id}"]`).value.trim();
-        if (checkAnswer(userAnswer, q.answer)) score += 10;
+        const answer = document.querySelector(`[data-qid="${q.id}"]`).value.trim();
+        if (checkAnswer(answer, q.answer)) score += 10;
       });
 
       grades.push({ date: today, subject: exam.subject, title: exam.title, score });
       archive.push({ type: "exam", date: today, ...exam });
+
       updateGrades();
       updateArchive();
       examWindow.style.display = "none";
@@ -153,26 +130,27 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  // --- تصحيح الإجابات ---
+  // === دالة التصحيح الذكي ===
   function checkAnswer(user, correct) {
-    user = user.toLowerCase().replace(/\s+/g, "");
-    correct = correct.toLowerCase().replace(/\s+/g, "");
+    user = user.toLowerCase().trim();
+    correct = correct.toLowerCase().trim();
 
     if (user === correct) return true;
 
-    const userWords = user.split(/[\s,.;]+/).sort();
-    const correctWords = correct.split(/[\s,.;]+/).sort();
-    if (userWords.join(",") === correctWords.join(",")) return true;
+    // تطابق كلمات بشكل مرن
+    const userWords = user.split(/[\s,.;]+/).sort().join(",");
+    const correctWords = correct.split(/[\s,.;]+/).sort().join(",");
+    if (userWords === correctWords) return true;
 
+    // تطابق الأرقام
     const userNum = parseFloat(user.replace(/[^\d.eE-]/g, ""));
     const correctNum = parseFloat(correct.replace(/[^\d.eE-]/g, ""));
-    if (!isNaN(userNum) && !isNaN(correctNum) && Math.abs(userNum - correctNum) <= 0.1)
-      return true;
+    if (!isNaN(userNum) && !isNaN(correctNum) && Math.abs(userNum - correctNum) <= 0.1) return true;
 
     return false;
   }
 
-  // --- تحديث الأرشيف ---
+  // === تحديث الأرشيف ===
   function updateArchive() {
     archiveContainer.innerHTML = "";
     archive.forEach(item => {
@@ -184,7 +162,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // --- تحديث الدرجات ---
+  // === تحديث الدرجات ===
   function updateGrades() {
     gradesContainer.innerHTML = "";
     grades.forEach(g => {
@@ -196,7 +174,30 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // --- تشغيل الصفحة أولاً ---
+  // === عرض التاريخ حسب الاختيار ===
+  viewDateInput.value = today;
+  todayBtn.addEventListener("click", () => {
+    today = new Date().toISOString().split("T")[0];
+    viewDateInput.value = today;
+    updateDateHeader();
+    renderTasks();
+    renderExams();
+  });
+
+  goDateBtn.addEventListener("click", () => {
+    const date = viewDateInput.value;
+    if (DATA[date]) {
+      today = date;
+      updateDateHeader();
+      renderTasks();
+      renderExams();
+    } else {
+      alert("لا توجد بيانات لهذا اليوم.");
+    }
+  });
+
+  // === بدء التشغيل ===
+  updateDateHeader();
   renderTasks();
   renderExams();
 });
