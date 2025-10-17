@@ -227,19 +227,30 @@
         btn.className = "btn small";
         btn.textContent = "✅ اكتمال";
         btn.addEventListener("click", ()=>{
-          // علامه مكتمل
-          t.done = true;
-          t.completedAt = new Date().toISOString();
-          // سجل في الأرشيف المتجر
-          store.archive = store.archive || [];
-          store.archive.push({ type:"task", date: dateKey, subject: t.subject, content: t.content || t.title || "", hours: t.hours || 0, completedAt: t.completedAt });
-          persistStore();
-          renderTasks(dateKey);
-          renderArchive();
-        });
-        li.appendChild(btn);
-        todayList.appendChild(li);
-      });
+  // وضع علامة مكتمل
+  t.done = true;
+  t.completedAt = new Date().toISOString();
+
+  // حفظ في التخزين المحلي (حتى تبقى بعد إعادة التحميل)
+  store.overrides = store.overrides || {};
+  store.overrides[dateKey] = store.overrides[dateKey] || {};
+  store.overrides[dateKey][t.id] = { done: true, completedAt: t.completedAt };
+
+  // إضافة إلى الأرشيف
+  store.archive = store.archive || [];
+  store.archive.push({
+    type: "task",
+    date: dateKey,
+    subject: t.subject,
+    content: t.content || t.title || "",
+    hours: t.hours || 0,
+    completedAt: t.completedAt
+  });
+
+  persistStore(); // حفظ كل شيء
+  renderTasks(dateKey);
+  renderArchive();
+});
     }
 
     // ---- رندرة الامتحانات ----
