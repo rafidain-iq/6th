@@ -6,8 +6,10 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- المتغيرات العامة ---
   let today = new Date().toISOString().split("T")[0];
   if (!DATA[today]) today = Object.keys(DATA)[0];
-  let archive = [];
-  let grades = [];
+
+  // 🔹 تحميل البيانات من التخزين المحلي (إن وُجدت)
+  let archive = JSON.parse(localStorage.getItem("archiveData")) || [];
+  let grades = JSON.parse(localStorage.getItem("gradesData")) || [];
 
   // --- عناصر الواجهة ---
   const tasksList = document.getElementById("todayList");
@@ -16,11 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const gradesContainer = document.getElementById("gradesContent");
 
   const sidebar = document.getElementById("sidebar");
-  const overlay = document.getElementById("overlay");
   const menuBtn = document.getElementById("menuBtn");
-  const navLinks = document.querySelectorAll(".navlink");
-  const sections = document.querySelectorAll("main > section");
-
   const viewDateInput = document.getElementById("viewDate");
   const todayBtn = document.getElementById("todayBtn");
   const goDateBtn = document.getElementById("goDate");
@@ -29,32 +27,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const examContent = document.getElementById("examContent");
   const submitExamBtn = document.getElementById("submitExamBtn");
 
-  const addGradeBtn = document.getElementById("addGradeBtn");
-
   // --- القائمة الجانبية ---
   menuBtn.addEventListener("click", () => {
     sidebar.classList.toggle("open");
-    overlay.classList.toggle("show");
-  });
-
-  overlay.addEventListener("click", () => {
-    sidebar.classList.remove("open");
-    overlay.classList.remove("show");
-  });
-
-  // --- التنقل بين الصفحات ---
-  navLinks.forEach(btn => {
-    btn.addEventListener("click", () => {
-      const tab = btn.dataset.tab;
-      sections.forEach(sec => sec.classList.add("section-hidden"));
-      document.getElementById(tab).classList.remove("section-hidden");
-      sidebar.classList.remove("open");
-      overlay.classList.remove("show");
-
-      // عند فتح التقارير أو الإحصائيات نعيد رسم الرسوم
-      if (tab === "reports") renderReports();
-      if (tab === "stats") renderStats();
-    });
   });
 
   // --- اختيار التاريخ ---
@@ -87,14 +62,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     day.tasks.forEach(task => {
+      if (task.done) return; // ✅ إذا مكتملة، لا نعرضها
+
       const li = document.createElement("li");
       li.textContent = `${task.subject}: ${task.content} (${task.hours} ساعة)`;
       const btn = document.createElement("button");
       btn.textContent = "اكتمال";
       btn.className = "complete-btn";
       btn.addEventListener("click", () => {
+        task.done = true;
         archive.push({ type: "task", date: today, ...task });
-        li.remove();
+        saveData();
+        renderTasks();
         updateArchive();
       });
       li.appendChild(btn);
@@ -125,7 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- فتح الامتحان ---
   function openExam(exam) {
     examContent.innerHTML = "";
-    examWindow.classList.remove("section-hidden");
+    examWindow.style.display = "block";
 
     exam.questions.forEach((q, idx) => {
       const div = document.createElement("div");
@@ -142,11 +121,14 @@ document.addEventListener("DOMContentLoaded", () => {
         const userAnswer = document.querySelector(`[data-qid="${q.id}"]`).value.trim();
         if (checkAnswer(userAnswer, q.answer)) score += 10;
       });
+
       grades.push({ date: today, subject: exam.subject, title: exam.title, score });
       archive.push({ type: "exam", date: today, ...exam });
+
+      saveData();
       updateGrades();
       updateArchive();
-      examWindow.classList.add("section-hidden");
+      examWindow.style.display = "none";
       renderExams();
     };
   }
@@ -155,6 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function checkAnswer(user, correct) {
     user = user.toLowerCase().replace(/\s+/g, "");
     correct = correct.toLowerCase().replace(/\s+/g, "");
+
     if (user === correct) return true;
 
     const userWords = user.split(/[\s,.;]+/).sort();
@@ -170,7 +153,14 @@ document.addEventListener("DOMContentLoaded", () => {
     return false;
   }
 
-  // --- تحديث الأرشيف ---
+  // --- حفظ البيانات في LocalStorage ---
+  function saveData() {
+    localStorage.setItem("archiveData", JSON.stringify(archive));
+    localStorage.setItem("gradesData", JSON.stringify(grades));
+    localStorage.setItem("tasksData", JSON.stringify(DATA));
+  }
+
+  // --- تحديث الأرشيف كجدول ---
   function updateArchive() {
     if (!archive.length) {
       archiveContainer.innerHTML = "<p>لا يوجد أرشيف بعد.</p>";
@@ -189,7 +179,6 @@ document.addEventListener("DOMContentLoaded", () => {
         </thead>
         <tbody>
     `;
-
     archive.forEach(item => {
       html += `
         <tr>
@@ -197,15 +186,13 @@ document.addEventListener("DOMContentLoaded", () => {
           <td>${item.subject || "-"}</td>
           <td>${item.title || item.content}</td>
           <td>${item.date}</td>
-        </tr>
-      `;
+        </tr>`;
     });
-
     html += `</tbody></table>`;
     archiveContainer.innerHTML = html;
   }
 
-  // --- تحديث جدول الدرجات ---
+  // --- تحديث الدرجات كجدول ---
   function updateGrades() {
     if (!grades.length) {
       gradesContainer.innerHTML = "<p>لا توجد درجات حالياً.</p>";
@@ -224,7 +211,6 @@ document.addEventListener("DOMContentLoaded", () => {
         </thead>
         <tbody>
     `;
-
     grades.forEach(g => {
       html += `
         <tr>
@@ -232,79 +218,16 @@ document.addEventListener("DOMContentLoaded", () => {
           <td>${g.subject}</td>
           <td>${g.title}</td>
           <td>${g.score}</td>
-        </tr>
-      `;
+        </tr>`;
     });
-
     html += `</tbody></table>`;
     gradesContainer.innerHTML = html;
   }
-  // --- التقارير الشهرية ---
-  function renderReports() {
-    const ctx = document.getElementById("reportChart").getContext("2d");
-    const subjects = {};
-    Object.values(DATA).forEach(day => {
-      day.tasks.forEach(t => {
-        subjects[t.subject] = (subjects[t.subject] || 0) + t.hours;
-      });
-    });
-    const labels = Object.keys(subjects);
-    const values = Object.values(subjects);
 
-    new Chart(ctx, {
-      type: "bar",
-      data: {
-        labels,
-        datasets: [{
-          label: "عدد الساعات الشهرية",
-          data: values,
-          backgroundColor: "#a89a82"
-        }]
-      },
-      options: {
-        scales: { y: { beginAtZero: true } }
-      }
-    });
-  }
-
-  // --- الإحصائيات الأسبوعية ---
-  function renderStats() {
-    const ctx = document.getElementById("statsChart").getContext("2d");
-    const subjects = {};
-    Object.values(DATA).forEach(day => {
-      day.tasks.forEach(t => {
-        subjects[t.subject] = (subjects[t.subject] || 0) + t.hours;
-      });
-    });
-    const labels = Object.keys(subjects);
-    const values = Object.values(subjects);
-
-    new Chart(ctx, {
-      type: "doughnut",
-      data: {
-        labels,
-        datasets: [{
-          label: "الإحصائيات الأسبوعية",
-          data: values,
-          backgroundColor: ["#000", "#555", "#a89a82", "#ccc"]
-        }]
-      }
-    });
-  }
-
-  // --- زر إضافة درجة ---
-  addGradeBtn.addEventListener("click", () => {
-    const subject = prompt("اسم المادة:");
-    const title = prompt("عنوان الاختبار أو الواجب:");
-    const score = prompt("الدرجة:");
-    if (subject && title && score) {
-      grades.push({ date: today, subject, title, score });
-      updateGrades();
-      alert("تمت إضافة الدرجة بنجاح ✅");
-    }
-  });
-
-  // --- بدء التشغيل ---
+  // --- تشغيل أولي ---
   renderTasks();
   renderExams();
+  updateArchive();
+  updateGrades();
+
 });
