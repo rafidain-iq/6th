@@ -172,28 +172,73 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- تحديث الأرشيف ---
   function updateArchive() {
-    archiveContainer.innerHTML = "";
+    if (!archive.length) {
+      archiveContainer.innerHTML = "<p>لا يوجد أرشيف بعد.</p>";
+      return;
+    }
+
+    let html = `
+      <table class="table">
+        <thead>
+          <tr>
+            <th>النوع</th>
+            <th>المادة</th>
+            <th>العنوان / المحتوى</th>
+            <th>التاريخ</th>
+          </tr>
+        </thead>
+        <tbody>
+    `;
+
     archive.forEach(item => {
-      const div = document.createElement("div");
-      div.textContent = `${item.type} | ${item.subject || ""} | ${item.title || item.content} | ${item.date}`;
-      archiveContainer.appendChild(div);
+      html += `
+        <tr>
+          <td>${item.type === "exam" ? "امتحان" : "واجب"}</td>
+          <td>${item.subject || "-"}</td>
+          <td>${item.title || item.content}</td>
+          <td>${item.date}</td>
+        </tr>
+      `;
     });
+
+    html += `</tbody></table>`;
+    archiveContainer.innerHTML = html;
   }
 
   // --- تحديث جدول الدرجات ---
   function updateGrades() {
-    gradesContainer.innerHTML = "";
     if (!grades.length) {
-      gradesContainer.textContent = "لا توجد درجات حالياً.";
+      gradesContainer.innerHTML = "<p>لا توجد درجات حالياً.</p>";
       return;
     }
-    grades.forEach(g => {
-      const div = document.createElement("div");
-      div.textContent = `${g.subject} | ${g.title} | الدرجة: ${g.score}`;
-      gradesContainer.appendChild(div);
-    });
-  }
 
+    let html = `
+      <table class="table">
+        <thead>
+          <tr>
+            <th>التاريخ</th>
+            <th>المادة</th>
+            <th>العنوان</th>
+            <th>الدرجة</th>
+          </tr>
+        </thead>
+        <tbody>
+    `;
+
+    grades.forEach(g => {
+      html += `
+        <tr>
+          <td>${g.date}</td>
+          <td>${g.subject}</td>
+          <td>${g.title}</td>
+          <td>${g.score}</td>
+        </tr>
+      `;
+    });
+
+    html += `</tbody></table>`;
+    gradesContainer.innerHTML = html;
+  }
   // --- التقارير الشهرية ---
   function renderReports() {
     const ctx = document.getElementById("reportChart").getContext("2d");
