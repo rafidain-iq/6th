@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const DATA = window.getInitialData();
 
   // --- المتغيرات العامة ---
-  let today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
+  let today = new Date().toISOString().split("T")[0];
   if (!DATA[today]) today = Object.keys(DATA)[0];
   let archive = [];
   let grades = [];
@@ -19,7 +19,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const overlay = document.getElementById("overlay");
   const menuBtn = document.getElementById("menuBtn");
   const navLinks = document.querySelectorAll(".navlink");
-
   const sections = document.querySelectorAll("main > section");
 
   const viewDateInput = document.getElementById("viewDate");
@@ -29,6 +28,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const examWindow = document.getElementById("examWindow");
   const examContent = document.getElementById("examContent");
   const submitExamBtn = document.getElementById("submitExamBtn");
+
+  const addGradeBtn = document.getElementById("addGradeBtn");
 
   // --- القائمة الجانبية ---
   menuBtn.addEventListener("click", () => {
@@ -49,6 +50,10 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById(tab).classList.remove("section-hidden");
       sidebar.classList.remove("open");
       overlay.classList.remove("show");
+
+      // عند فتح التقارير أو الإحصائيات نعيد رسم الرسوم
+      if (tab === "reports") renderReports();
+      if (tab === "stats") renderStats();
     });
   });
 
@@ -178,6 +183,10 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- تحديث جدول الدرجات ---
   function updateGrades() {
     gradesContainer.innerHTML = "";
+    if (!grades.length) {
+      gradesContainer.textContent = "لا توجد درجات حالياً.";
+      return;
+    }
     grades.forEach(g => {
       const div = document.createElement("div");
       div.textContent = `${g.subject} | ${g.title} | الدرجة: ${g.score}`;
@@ -185,7 +194,72 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // --- تشغيل مبدئي ---
+  // --- التقارير الشهرية ---
+  function renderReports() {
+    const ctx = document.getElementById("reportChart").getContext("2d");
+    const subjects = {};
+    Object.values(DATA).forEach(day => {
+      day.tasks.forEach(t => {
+        subjects[t.subject] = (subjects[t.subject] || 0) + t.hours;
+      });
+    });
+    const labels = Object.keys(subjects);
+    const values = Object.values(subjects);
+
+    new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels,
+        datasets: [{
+          label: "عدد الساعات الشهرية",
+          data: values,
+          backgroundColor: "#a89a82"
+        }]
+      },
+      options: {
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+  }
+
+  // --- الإحصائيات الأسبوعية ---
+  function renderStats() {
+    const ctx = document.getElementById("statsChart").getContext("2d");
+    const subjects = {};
+    Object.values(DATA).forEach(day => {
+      day.tasks.forEach(t => {
+        subjects[t.subject] = (subjects[t.subject] || 0) + t.hours;
+      });
+    });
+    const labels = Object.keys(subjects);
+    const values = Object.values(subjects);
+
+    new Chart(ctx, {
+      type: "doughnut",
+      data: {
+        labels,
+        datasets: [{
+          label: "الإحصائيات الأسبوعية",
+          data: values,
+          backgroundColor: ["#000", "#555", "#a89a82", "#ccc"]
+        }]
+      }
+    });
+  }
+
+  // --- زر إضافة درجة ---
+  addGradeBtn.addEventListener("click", () => {
+    const subject = prompt("اسم المادة:");
+    const title = prompt("عنوان الاختبار أو الواجب:");
+    const score = prompt("الدرجة:");
+    if (subject && title && score) {
+      grades.push({ date: today, subject, title, score });
+      updateGrades();
+      alert("تمت إضافة الدرجة بنجاح ✅");
+    }
+  });
+
+  // --- بدء التشغيل ---
   renderTasks();
   renderExams();
 });
