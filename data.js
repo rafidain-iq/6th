@@ -1,297 +1,194 @@
-// data.js - شهر 11 / 2025
-window.getInitialData = function () {
+// data.js - جزء 1 من شهر 12 / 2025 (اليوم 1 إلى 15)
+window.getInitialDataPart1 = function () {
   const DATA = {
-    "2025-11-07": {
+    "2025-12-01": {
       tasks: [
-        { subject: "شامل", content: "مراجعة", hours: 2 },
+        { subject: "أحياء", content: "الفصل الخامس - محاضرة 1 & الفصل الخامس - محاضرة 2", hours: 2 },
+        { subject: "إنكليزي", content: "Unit 5 - Lecture 1 & Unit 5 - Lecture 2", hours: 2 }
       ],
-      exams: [
-        { subject: "شامل", title: "امتحان يومي", questions: [] },
-      ]
+      exams: [ { subject: "أحياء", title: "امتحان يومي", questions: [] } ]
     },
-    "2025-11-08": {
-      tasks: [
-        { subject: "إنكليزي", content: "Unit 4 - Lecture 1 & Unit 4 - Lecture 2", hours: 2 },
-        { subject: "أحياء", content: "الفصل الرابع - محاضرة 1 & الفصل الرابع - محاضرة 2", hours: 2 },
-        { subject: "رياضيات", content: "مراجعة", hours: 2 },
-      ],
-      exams: [
-        { subject: "إنكليزي", title: "امتحان يومي", questions: [] },
-        { subject: "أحياء", title: "امتحان يومي", questions: [] },
-        { subject: "رياضيات", title: "امتحان يومي", questions: [] },
-      ]
-    },
-    "2025-11-09": {
-      tasks: [
-        { subject: "إنكليزي", content: "Unit 4 - Lecture 3 & Unit 4 - Lecture 4", hours: 2 },
-        { subject: "عربي", content: "أسلوب النداء 1 & أسلوب النداء 2", hours: 2 },
-        { subject: "إسلامية", content: "الوحدة الثانية - محاضرة 1 & الوحدة الثانية - محاضرة 2", hours: 2 },
-      ],
-      exams: [
-        { subject: "إنكليزي", title: "امتحان يومي", questions: [] },
-        { subject: "عربي", title: "امتحان يومي", questions: [] },
-        { subject: "إسلامية", title: "امتحان يومي", questions: [] },
-      ]
-    },
-    "2025-11-10": {
-      tasks: [
-        { subject: "إنكليزي", content: "Unit 4 - Lecture 5 & Unit 4 - Lecture 6", hours: 2 },
-        { subject: "عربي", content: "المدح والذم 1 & المدح والذم 2", hours: 2 },
-      ],
-      exams: [
-        { subject: "إنكليزي", title: "امتحان يومي", questions: [] },
-        { subject: "عربي", title: "امتحان يومي", questions: [] },
-      ]
-    },
-    "2025-11-11": {
-      tasks: [
-        { subject: "عربي", content: "المدح والذم 3 & التعجب 1", hours: 2 },
-        { subject: "فيزياء", content: "مراجعة", hours: 2 },
-      ],
-      exams: [
-        { subject: "عربي", title: "امتحان يومي", questions: [] },
-        { subject: "فيزياء", title: "امتحان يومي", questions: [] },
-      ]
-    },
-    "2025-11-12": {
-      tasks: [
-        { subject: "أدب عربي", content: "الجواهري & ميخائيل نعيمة", hours: 2 },
-        { subject: "أحياء", content: "الفصل الرابع - محاضرة 3 & الفصل الرابع - محاضرة 4", hours: 2 },
-        { subject: "إسلامية", content: "الوحدة الثانية - محاضرة 3 & الوحدة الثانية - محاضرة 4", hours: 2 },
-      ],
-      exams: [
-        { subject: "أدب عربي", title: "امتحان يومي", questions: [] },
-        { subject: "أحياء", title: "امتحان يومي", questions: [] },
-        { subject: "إسلامية", title: "امتحان يومي", questions: [] },
-      ]
-    },
-    "2025-11-13": {
-      tasks: [
-        { subject: "أحياء", content: "الفصل الرابع - محاضرة 5 & الفصل الخامس - محاضرة 1", hours: 2 },
-        { subject: "أدب عربي", content: "مدرسة الشعر الحر & بدر شاكر السياب", hours: 2 },
-      ],
-      exams: [
-        { subject: "أحياء", title: "امتحان يومي", questions: [] },
-        { subject: "أدب عربي", title: "امتحان يومي", questions: [] },
-      ]
-    },
-    "2025-11-14": {
-      tasks: [
-        { subject: "شامل", content: "مراجعة", hours: 2 },
-      ],
-      exams: [
-        { subject: "شامل", title: "امتحان يومي", questions: [] },
-      ]
-    },
-    "2025-11-15": {
-      tasks: [
-        { subject: "إنكليزي", content: "Unit 5 - Lecture 1 & Unit 5 - Lecture 2", hours: 2 },
-        { subject: "أحياء", content: "الفصل الخامس - محاضرة 2 & الفصل الخامس - محاضرة 3", hours: 2 },
-        { subject: "رياضيات", content: "مراجعة", hours: 2 },
-      ],
-      exams: [
-        { subject: "إنكليزي", title: "امتحان يومي", questions: [] },
-        { subject: "أحياء", title: "امتحان يومي", questions: [] },
-        { subject: "رياضيات", title: "امتحان يومي", questions: [] },
-      ]
-    },
-    "2025-11-16": {
+
+    "2025-12-02": {
       tasks: [
         { subject: "إنكليزي", content: "Unit 5 - Lecture 3 & Unit 5 - Lecture 4", hours: 2 },
-        { subject: "عربي", content: "التعجب 2 & التمني والترجي", hours: 2 },
-        { subject: "إسلامية", content: "الوحدة الثالثة - محاضرة 1 & الوحدة الثالثة - محاضرة 2", hours: 2 },
+        { subject: "إسلامية", content: "الوحدة الثالثة - محاضرة 1 & الوحدة الثالثة - محاضرة 2", hours: 2 }
       ],
-      exams: [
-        { subject: "إنكليزي", title: "امتحان يومي", questions: [] },
-        { subject: "عربي", title: "امتحان يومي", questions: [] },
-        { subject: "إسلامية", title: "امتحان يومي", questions: [] },
-      ]
+      exams: [ { subject: "إنكليزي", title: "امتحان يومي", questions: [] } ]
     },
-    "2025-11-17": {
+
+    "2025-12-03": {
       tasks: [
-        { subject: "إنكليزي", content: "Unit 5 - Lecture 5 & Unit 5 - Lecture 6", hours: 2 },
-        { subject: "عربي", content: "العرض والتحضيض & التحذير والإغراء", hours: 2 },
+        { subject: "عربي", content: "التمني والترجي", hours: 2 },
+        { subject: "أدب عربي", content: "القضية الفلسطينية", hours: 2 }
       ],
-      exams: [
-        { subject: "إنكليزي", title: "امتحان يومي", questions: [] },
-        { subject: "عربي", title: "امتحان يومي", questions: [] },
-      ]
+      exams: [ { subject: "عربي", title: "امتحان يومي", questions: [] } ]
     },
-    "2025-11-18": {
-  tasks: [
-    { subject: "عربي", content: "مراجعة", hours: 2 },
-    { subject: "فيزياء", content: "مراجعة", hours: 2 },
-  ],
-  exams: [
-    {
-      subject: "أحياء",
-      title: "امتحان يومي",
-      questions: [
-        {
-          q: "عدد مستويات التعضي في الحيوانات",
-          a: [
-            "المستوى البروتوبلازمي للتعضي",
-            "المستوى الخلوي للتعضي",
-            "المستوى النسيجي للتعضي",
-            "المستوى الأنسجة المتعضية",
-            "المستوى الجهاز العضوي"
-          ]
-        },
-        {
-          q: "ما هي طرق النمو؟",
-          a: [
-            "النمو بطريقة التكاثر الخلوي أو مضاعفة الخلايا",
-            "النمو الخلالي أو البيني",
-            "النمو الخلالي المفرد"
-          ]
-        },
-        {
-          q: "عرّف النمو",
-          a: "النمو هو الزيادة الحاصلة في حجم ووزن الخلايا..."
-        }
-      ]
-    }
-  ]
-},
-    "2025-11-19": {
+
+    "2025-12-04": {
+      tasks: [ { subject: "عربي", content: "العرض والتحذير", hours: 2 } ],
+      exams: [ { subject: "عربي", title: "امتحان يومي", questions: [] } ]
+    },
+
+    "2025-12-05": {
+      tasks: [ { subject: "شامل", content: "مراجعة", hours: 2 } ],
+      exams: [ { subject: "شامل", title: "امتحان يومي", questions: [] } ]
+    },
+
+    "2025-12-06": {
       tasks: [
-        { subject: "أدب عربي", content: "أدونيس & القضية الفلسطينية", hours: 2 },
-        { subject: "أحياء", content: "الفصل الخامس - محاضرة 4 & الفصل الخامس - محاضرة 5", hours: 2 },
-        { subject: "إسلامية", content: "الوحدة الثالثة - محاضرة 3 & الوحدة الثالثة - محاضرة 4", hours: 2 },
+        { subject: "أدب عربي", content: "فدوى الطوقان - محاضرة 1 & فدوى الطوقان - محاضرة 2", hours: 2 },
+        { subject: "أحياء", content: "الفصل الخامس - محاضرة 3 & الفصل الخامس - محاضرة 4", hours: 2 }
       ],
-      exams: [
-        { subject: "أدب عربي", title: "امتحان يومي", questions: [] },
-        { subject: "أحياء", title: "امتحان يومي", questions: [] },
-        { subject: "إسلامية", title: "امتحان يومي", questions: [] },
-      ]
+      exams: [ { subject: "أدب عربي", title: "امتحان يومي", questions: [] } ]
     },
-    "2025-11-20": {
+
+    "2025-12-07": {
       tasks: [
-        { subject: "أحياء", content: "الفصل الخامس - محاضرة 6 & الفصل الخامس - محاضرة 7", hours: 2 },
-        { subject: "أدب عربي", content: "فدوى عبد الفتاح & محمود درويش", hours: 2 },
+        { subject: "أحياء", content: "الفصل الخامس - محاضرة 5 & الفصل الخامس - محاضرة 6", hours: 2 },
+        { subject: "إنكليزي", content: "Unit 5 - Lecture 5 & Unit 5 - Lecture 6", hours: 2 }
       ],
-      exams: [
-        { subject: "أحياء", title: "امتحان يومي", questions: [] },
-        { subject: "أدب عربي", title: "امتحان يومي", questions: [] },
-      ]
+      exams: [ { subject: "أحياء", title: "امتحان يومي", questions: [] } ]
     },
-    "2025-11-21": {
+
+    "2025-12-08": {
       tasks: [
-        { subject: "شامل", content: "مراجعة", hours: 2 },
+        { subject: "أحياء", content: "الفصل الخامس - محاضرة 7 & الفصل الخامس - محاضرة 8", hours: 2 },
+        { subject: "إنكليزي", content: "Unit 5 - Lecture 7 & Unit 5 - Lecture 8", hours: 2 }
       ],
-      exams: [
-        { subject: "شامل", title: "امتحان يومي", questions: [] },
-      ]
+      exams: [ { subject: "إنكليزي", title: "امتحان يومي", questions: [] } ]
     },
-    "2025-11-22": {
-      tasks: [
-        { subject: "إنكليزي", content: "Unit 5 - Lecture 7 & Unit 5 - Lecture 8", hours: 2 },
-        { subject: "أحياء", content: "الفصل الخامس - محاضرة 8 & الفصل الخامس - محاضرة 9", hours: 2 },
-        { subject: "رياضيات", content: "مراجعة", hours: 2 },
-      ],
-      exams: [
-        { subject: "إنكليزي", title: "امتحان يومي", questions: [] },
-        { subject: "أحياء", title: "امتحان يومي", questions: [] },
-        { subject: "رياضيات", title: "امتحان يومي", questions: [] },
-      ]
-    },
-    "2025-11-23": {
+
+    "2025-12-09": {
       tasks: [
         { subject: "إنكليزي", content: "Unit 5 - Lecture 9 & Unit 5 - Lecture 10", hours: 2 },
-        { subject: "عربي", content: "مراجعة", hours: 2 },
-        { subject: "إسلامية", content: "مراجعة", hours: 2 },
+        { subject: "إسلامية", content: "الوحدة الثالثة - محاضرة 3 & الوحدة الثالثة - محاضرة 4", hours: 2 }
       ],
-      exams: [
-        { subject: "إنكليزي", title: "امتحان يومي", questions: [] },
-        { subject: "عربي", title: "امتحان يومي", questions: [] },
-        { subject: "إسلامية", title: "امتحان يومي", questions: [] },
-      ]
-    },
-    "2025-11-24": {
-      tasks: [
-        { subject: "إنكليزي", content: "Unit 5 - Lecture 11 & Unit 5 - Lecture 12", hours: 2 },
-        { subject: "عربي", content: "مراجعة", hours: 2 },
-      ],
-      exams: [
-        { subject: "إنكليزي", title: "امتحان يومي", questions: [] },
-        { subject: "عربي", title: "امتحان يومي", questions: [] },
-      ]
-    },
-    "2025-11-25": {
-      tasks: [
-        { subject: "عربي", content: "مراجعة", hours: 2 },
-        { subject: "فيزياء", content: "مراجعة", hours: 2 },
-      ],
-      exams: [
-        { subject: "عربي", title: "امتحان يومي", questions: [] },
-        { subject: "فيزياء", title: "امتحان يومي", questions: [] },
-      ]
-    },
-    "2025-11-26": {
-      tasks: [
-        { subject: "أدب عربي", content: "مراجعة", hours: 2 },
-        { subject: "أحياء", content: "الفصل الخامس - محاضرة 10 & الفصل الخامس - محاضرة 11", hours: 2 },
-        { subject: "إسلامية", content: "مراجعة", hours: 2 },
-      ],
-      exams: [
-        { subject: "أدب عربي", title: "امتحان يومي", questions: [] },
-        { subject: "أحياء", title: "امتحان يومي", questions: [] },
-        { subject: "إسلامية", title: "امتحان يومي", questions: [] },
-      ]
-    },
-    "2025-11-27": {
-      tasks: [
-        { subject: "أحياء", content: "الفصل الخامس - محاضرة 12 & الفصل الخامس - محاضرة 13", hours: 2 },
-        { subject: "أدب عربي", content: "مراجعة", hours: 2 },
-      ],
-      exams: [
-        { subject: "أحياء", title: "امتحان يومي", questions: [] },
-        { subject: "أدب عربي", title: "امتحان يومي", questions: [] },
-      ]
-    },
-    "2025-11-28": {
-      tasks: [
-        { subject: "شامل", content: "مراجعة", hours: 2 },
-      ],
-      exams: [
-        { subject: "شامل", title: "امتحان يومي", questions: [] },
-      ]
-    },
-    "2025-11-29": {
-      tasks: [
-        { subject: "إنكليزي", content: "Unit 5 - Lecture 13 & Unit 5 - Lecture 14", hours: 2 },
-        { subject: "أحياء", content: "الفصل الخامس - محاضرة 14 & الفصل الخامس - محاضرة 15", hours: 2 },
-        { subject: "رياضيات", content: "مراجعة", hours: 2 },
-      ],
-      exams: [
-        { subject: "إنكليزي", title: "امتحان يومي", questions: [] },
-        { subject: "أحياء", title: "امتحان يومي", questions: [] },
-        { subject: "رياضيات", title: "امتحان يومي", questions: [] },
-      ]
-    },
-    "2025-11-30": {
-      tasks: [
-        { subject: "إنكليزي", content: "Unit 5 - Lecture 15 & Unit 5 - Lecture 16", hours: 2 },
-        { subject: "عربي", content: "مراجعة", hours: 2 },
-        { subject: "إسلامية", content: "مراجعة", hours: 2 },
-      ],
-      exams: [
-        { subject: "إنكليزي", title: "امتحان يومي", questions: [] },
-        { subject: "عربي", title: "امتحان يومي", questions: [] },
-        { subject: "إسلامية", title: "امتحان يومي", questions: [] },
-      ]
+      exams: [ { subject: "إسلامية", title: "امتحان يومي", questions: [] } ]
     },
 
-  };
+    "2025-12-10": {
+      tasks: [
+        { subject: "عربي", content: "التحذير والإغراء", hours: 2 },
+        { subject: "أدب عربي", content: "محمود درويش - محاضرة 1 & محمود درويش - محاضرة 2", hours: 2 }
+      ],
+      exams: [ { subject: "أدب عربي", title: "امتحان يومي", questions: [] } ]
+    },
 
-  // إضافة معرفات تلقائية
-  Object.keys(DATA).forEach(date => {
-    const day = DATA[date];
-    if (Array.isArray(day.tasks))
-      day.tasks.forEach((t, i) => (t.id = `t-${date}-${i}`));
-    if (Array.isArray(day.exams))
-      day.exams.forEach((e, i) => (e.id = `e-${date}-${i}`));
-  });
+    "2025-12-11": {
+      tasks: [ { subject: "عربي", content: "مراجعة", hours: 2 } ],
+      exams: [ { subject: "عربي", title: "امتحان يومي", questions: [] } ]
+    },
 
-  return DATA;
+    "2025-12-12": {
+      tasks: [ { subject: "شامل", content: "مراجعة", hours: 2 } ],
+      exams: [ { subject: "شامل", title: "امتحان يومي", questions: [] } ]
+    },
+
+    "2025-12-13": {
+      tasks: [
+        { subject: "أدب عربي", content: "مراجعة شاملة ومركزة", hours: 2 },
+        { subject: "أحياء", content: "الفصل الخامس - محاضرة 9 & الفصل الخامس - محاضرة 10", hours: 2 }
+      ],
+      exams: [ { subject: "أحياء", title: "امتحان يومي", questions: [] } ]
+    },
+
+    "2025-12-14": {
+      tasks: [
+        { subject: "أحياء", content: "الفصل الخامس - محاضرة 11 & الفصل الخامس - محاضرة 12", hours: 2 },
+        { subject: "إنكليزي", content: "Unit 6 - Lecture 1 & Unit 6 - Lecture 2", hours: 2 }
+      ],
+      exams: [ { subject: "إنكليزي", title: "امتحان يومي", questions: [] } ]
+    },
+
+    "2025-12-15": {
+      tasks: [
+        { subject: "إنكليزي", content: "Unit 6 - Lecture 3 & Unit 6 - Lecture 4", hours: 2 },
+        { subject: "أدب عربي", content: "الشاعر الخفاجي - محاضرة 1 & الشاعر الخفاجي - محاضرة 2", hours: 2 }
+      ],
+      exams: [ { subject: "أدب عربي", title: "امتحان يومي", questions: [] } ]
+    },
+    "2025-12-16": {
+exams: [ { subject: "أحياء", title: "امتحان يومي", questions: [] } ]
+},
+
+
+"2025-12-21": {
+tasks: [
+{ subject: "أدب عربي", content: "مراجعة شاملة", hours: 2 },
+{ subject: "أحياء", content: "الفصل الخامس - محاضرة 19 & الفصل الخامس - محاضرة 20", hours: 2 }
+],
+exams: [ { subject: "أدب عربي", title: "امتحان يومي", questions: [] } ]
+},
+
+
+"2025-12-22": {
+tasks: [ { subject: "أحياء", content: "الفصل الخامس - محاضرة 21 & الفصل الخامس - محاضرة 22", hours: 2 } ],
+exams: [ { subject: "أحياء", title: "امتحان يومي", questions: [] } ]
+},
+
+
+"2025-12-23": {
+tasks: [ { subject: "أحياء", content: "الفصل الخامس - محاضرة 23 & الفصل الخامس - محاضرة 24", hours: 2 } ],
+exams: [ { subject: "أحياء", title: "امتحان يومي", questions: [] } ]
+},
+
+
+"2025-12-24": {
+tasks: [ { subject: "أحياء", content: "الفصل الخامس - محاضرة 25 & الفصل الخامس - محاضرة 26", hours: 2 } ],
+exams: [ { subject: "أحياء", title: "امتحان يومي", questions: [] } ]
+},
+
+
+"2025-12-25": {
+tasks: [ { subject: "أحياء", content: "الفصل الخامس - محاضرة 27 & الفصل الخامس - محاضرة 28", hours: 2 } ],
+exams: [ { subject: "أحياء", title: "امتحان يومي", questions: [] } ]
+},
+
+
+"2025-12-26": {
+tasks: [ { subject: "أحياء", content: "الفصل الخامس - محاضرة 29 & الفصل الخامس - محاضرة 30", hours: 2 } ],
+exams: [ { subject: "أحياء", title: "امتحان يومي", questions: [] } ]
+},
+
+
+"2025-12-27": {
+tasks: [ { subject: "إنكليزي", content: "Unit 6 - Lecture 12 & Unit 6 - Lecture 13", hours: 2 } ],
+exams: [ { subject: "إنكليزي", title: "امتحان يومي", questions: [] } ]
+},
+
+
+"2025-12-28": {
+tasks: [ { subject: "إنكليزي", content: "Unit 6 - Lecture 14 & Unit 6 - Lecture 15", hours: 2 } ],
+exams: [ { subject: "إنكليزي", title: "امتحان يومي", questions: [] } ]
+},
+
+
+"2025-12-29": {
+tasks: [ { subject: "إنكليزي", content: "Unit 6 - Lecture 16 & Unit 6 - Lecture 17", hours: 2 } ],
+exams: [ { subject: "إنكليزي", title: "امتحان يومي", questions: [] } ]
+},
+
+
+"2025-12-30": {
+tasks: [ { subject: "إنكليزي", content: "Unit 6 - Lecture 18 & Unit 6 - Lecture 19", hours: 2 } ],
+exams: [ { subject: "إنكليزي", title: "امتحان يومي", questions: [] } ]
+},
+
+
+"2025-12-31": {
+tasks: [ { subject: "إنكليزي", content: "Unit 6 - Lecture 20 & Unit 6 - Lecture 21", hours: 2 } ],
+exams: [ { subject: "إنكليزي", title: "امتحان يومي", questions: [] } ]
+}
+};
+
+
+Object.keys(DATA).forEach(date => {
+const day = DATA[date];
+if (Array.isArray(day.tasks)) day.tasks.forEach((t, i) => (t.id = `t-${date}-${i}`));
+if (Array.isArray(day.exams)) day.exams.forEach((e, i) => (e.id = `e-${date}-${i}`));
+});
+
+
+return DATA;
 };
