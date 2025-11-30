@@ -1,5 +1,5 @@
-// data.js - جزء 1 من شهر 12 / 2025 (اليوم 1 إلى 15)
-window.getInitialDataPart1 = function () {
+// data.js - شهر 12 / 2025
+window.getInitialData = function () {
   const DATA = {
     "2025-12-01": {
       tasks: [
@@ -94,7 +94,7 @@ window.getInitialDataPart1 = function () {
       ],
       exams: [ { subject: "أدب عربي", title: "امتحان يومي", questions: [] } ]
     },
-   "2025-12-16": {
+    "2025-12-16": {
       tasks: [
         { subject: "أحياء", content: "الفصل الخامس - محاضرة 13 & الفصل الخامس - محاضرة 14", hours: 2 },
         { subject: "إنكليزي", content: "Unit 6 - Lecture 5 & Unit 6 - Lecture 6", hours: 2 }
@@ -196,7 +196,7 @@ window.getInitialDataPart1 = function () {
     }
   };
 
-  // إضافة معرفات تلقائية
+  // إضافة معرفات تلقائية لكل مهمة وامتحان
   Object.keys(DATA).forEach(date => {
     const day = DATA[date];
     if (Array.isArray(day.tasks)) day.tasks.forEach((t, i) => (t.id = `t-${date}-${i}`));
