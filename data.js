@@ -1,94 +1,203 @@
-// data.js - شهر 12 / 2025 - نسخة مرتبة وفق جدولك الجديد
+// data.js - شهر 2 / 2026 - نسخة جديدة
 window.getInitialData = function () {
   const DATA = {
-    // === أيام التعويض قبل الامتحانات (1-11 ديسمبر) ===
-    "2025-12-01": { tasks: [
-        { subject: "أحياء", content: "الفصل الخامس - محاضرة 1 & 2 & 3", hours: 3 },
-        { subject: "إنكليزي", content: "Unit 5 - Lecture 1 & 2 & 3", hours: 3 }
-      ], exams: [] },
-    "2025-12-02": { tasks: [
-        { subject: "أحياء", content: "الفصل الخامس - محاضرة 4 & 5 & 6", hours: 3 },
-        { subject: "إنكليزي", content: "Unit 5 - Lecture 4 & 5 & 6", hours: 3 }
-      ], exams: [] },
-    "2025-12-03": { tasks: [
-        { subject: "أحياء", content: "الفصل الخامس - محاضرة 7 & 8 & 9", hours: 3 },
-        { subject: "إنكليزي", content: "Unit 5 - Lecture 7 & 8 & 9", hours: 3 }
-      ], exams: [] },
-    "2025-12-04": { tasks: [
-        { subject: "أحياء", content: "الفصل الخامس - محاضرة 10 & 11 & 12", hours: 3 },
-        { subject: "إنكليزي", content: "Unit 5 - Lecture 10 & 11 & 12", hours: 3 }
-      ], exams: [] },
-    // الجمعة استراحة (5-12)
-    "2025-12-05": { tasks: [], exams: [] },
-    "2025-12-06": { tasks: [
-        { subject: "أحياء", content: "الفصل الخامس - محاضرة 13 & 14 & 15", hours: 3 },
-        { subject: "إنكليزي", content: "Unit 5 - Lecture 13 & 14 & 15", hours: 3 }
-      ], exams: [] },
-    "2025-12-07": { tasks: [
-        { subject: "أحياء", content: "الفصل الخامس - محاضرة 16 & 17 & 18", hours: 3 },
-        { subject: "إنكليزي", content: "Unit 5 - Lecture 16 & Unit 6 - Lecture 1 & 2", hours: 3 }
-      ], exams: [] },
-    "2025-12-08": { tasks: [
-        { subject: "أحياء", content: "الفصل الخامس - محاضرة 19 & 20 & 21", hours: 3 },
-        { subject: "إنكليزي", content: "Unit 6 - Lecture 3 & 4 & 5", hours: 3 }
-      ], exams: [] },
-    // الثلاثاء 9-12 تخفيف الضغط: محاضرتين لكل مادة
-    "2025-12-09": { tasks: [
-        { subject: "أحياء", content: "الفصل الخامس - محاضرة 22 & 23", hours: 2 },
-        { subject: "إنكليزي", content: "Unit 6 - Lecture 6 & 7", hours: 2 }
-      ], exams: [] },
-    "2025-12-10": { tasks: [
-        { subject: "أحياء", content: "الفصل الخامس - محاضرة 24 & 25 & 26", hours: 3 },
-        { subject: "إنكليزي", content: "Unit 6 - Lecture 8 & 9 & 10", hours: 3 }
-      ], exams: [] },
-    "2025-12-11": { tasks: [
-        { subject: "أحياء", content: "الفصل الخامس - محاضرة 27 & 28 & 29", hours: 3 },
+    // === فبراير 2026 ===
+    
+    // الأسبوع الأول (1-7 فبراير)
+    "2026-02-01": { // الأحد (ضغط صفر)
+      tasks: [
+        { subject: "أحياء", content: "الفصل السادس - محاضرة 1", hours: 2 },
+        { subject: "عربي", content: "المادة - محاضرة 7", hours: 2 }
+      ], 
+      exams: [] 
+    },
+    "2026-02-02": { // الإثنين (ضغط قليل)
+      tasks: [
+        { subject: "أحياء", content: "الفصل السادس - محاضرة 2", hours: 2 },
+        { subject: "عربي", content: "المادة - محاضرة 8", hours: 2 }
+      ], 
+      exams: [] 
+    },
+    "2026-02-03": { // الثلاثاء (وقت قليل)
+      tasks: [
+        { subject: "أدب عربي", content: "المادة - محاضرة 5", hours: 2 },
+        { subject: "أحياء", content: "الفصل السادس - محاضرة 3", hours: 1 }
+      ], 
+      exams: [] 
+    },
+    "2026-02-04": { // الأربعاء (ضغط صفر)
+      tasks: [
+        { subject: "إنكليزي", content: "Unit 6 - Lecture 1 & 2 & 3", hours: 3 }
+      ], 
+      exams: [] 
+    },
+    "2026-02-05": { // الخميس (ضغط قليل)
+      tasks: [
+        { subject: "إنكليزي", content: "Unit 6 - Lecture 4 & 5", hours: 2 }
+      ], 
+      exams: [] 
+    },
+    "2026-02-06": { // الجمعة (امتحانات يومية + وقت قليل)
+      tasks: [], 
+      exams: [
+        { subject: "اختبار أسبوعي", title: "امتحان تجريبي", questions: [] }
+      ] 
+    },
+    "2026-02-07": { // السبت (ضغط قليل)
+      tasks: [
+        { subject: "إسلامية", content: "المادة - محاضرة 5", hours: 1 },
+        { subject: "عربي", content: "المادة - محاضرة 9", hours: 2 },
+        { subject: "أحياء", content: "الفصل السادس - محاضرة 4", hours: 2 }
+      ], 
+      exams: [] 
+    },
+    
+    // الأسبوع الثاني (8-14 فبراير)
+    "2026-02-08": { // الأحد (ضغط صفر)
+      tasks: [
+        { subject: "أحياء", content: "الفصل السادس - محاضرة 5", hours: 2 },
+        { subject: "عربي", content: "المادة - محاضرة 10", hours: 2 }
+      ], 
+      exams: [] 
+    },
+    "2026-02-09": { // الإثنين (ضغط قليل)
+      tasks: [
+        { subject: "أحياء", content: "الفصل السادس - محاضرة 6", hours: 2 },
+        { subject: "عربي", content: "المادة - محاضرة 11", hours: 2 }
+      ], 
+      exams: [] 
+    },
+    "2026-02-10": { // الثلاثاء (وقت قليل)
+      tasks: [
+        { subject: "أدب عربي", content: "المادة - محاضرة 6", hours: 2 },
+        { subject: "أحياء", content: "الفصل السادس - محاضرة 7", hours: 1 }
+      ], 
+      exams: [] 
+    },
+    "2026-02-11": { // الأربعاء (ضغط صفر)
+      tasks: [
+        { subject: "إنكليزي", content: "Unit 6 - Lecture 6 & 7 & 8", hours: 3 }
+      ], 
+      exams: [] 
+    },
+    "2026-02-12": { // الخميس (ضغط قليل)
+      tasks: [
+        { subject: "إنكليزي", content: "Unit 6 - Lecture 9 & 10", hours: 2 }
+      ], 
+      exams: [] 
+    },
+    "2026-02-13": { // الجمعة (امتحانات يومية + وقت قليل)
+      tasks: [], 
+      exams: [
+        { subject: "اختبار أسبوعي", title: "امتحان تجريبي", questions: [] }
+      ] 
+    },
+    "2026-02-14": { // السبت (ضغط قليل)
+      tasks: [
+        { subject: "إسلامية", content: "المادة - محاضرة 6", hours: 1 },
+        { subject: "عربي", content: "المادة - محاضرة 12", hours: 2 },
+        { subject: "أحياء", content: "الفصل السادس - محاضرة 8", hours: 2 }
+      ], 
+      exams: [] 
+    },
+    
+    // الأسبوع الثالث (15-21 فبراير)
+    "2026-02-15": { // الأحد (ضغط صفر)
+      tasks: [
+        { subject: "أحياء", content: "الفصل السادس - محاضرة 9", hours: 2 },
+        { subject: "عربي", content: "المادة - محاضرة 13", hours: 2 }
+      ], 
+      exams: [] 
+    },
+    "2026-02-16": { // الإثنين (ضغط قليل)
+      tasks: [
+        { subject: "أحياء", content: "الفصل السادس - محاضرة 10", hours: 2 },
+        { subject: "عربي", content: "المادة - محاضرة 14", hours: 2 }
+      ], 
+      exams: [] 
+    },
+    "2026-02-17": { // الثلاثاء (وقت قليل)
+      tasks: [
+        { subject: "أدب عربي", content: "المادة - محاضرة 7", hours: 2 },
+        { subject: "أحياء", content: "الفصل السادس - محاضرة 11", hours: 1 }
+      ], 
+      exams: [] 
+    },
+    "2026-02-18": { // الأربعاء (ضغط صفر)
+      tasks: [
         { subject: "إنكليزي", content: "Unit 6 - Lecture 11 & 12 & 13", hours: 3 }
-      ], exams: [] },
-
-    // === أيام الامتحانات 12-27 ديسمبر ===
-    "2025-12-12": { tasks: [], exams: [] }, // الجمعة استراحة
-    "2025-12-14": { tasks: [
-        { subject: "عربي", content: "مراجعة سريعة", hours: 1 },
-        { subject: "أدب عربي", content: "مراجعة سريعة", hours: 1 },
-        { subject: "إسلامية", content: "مراجعة سريعة", hours: 1 }
-      ], exams: [ { subject: "رياضيات", title: "امتحان", questions: [] } ] },
-    "2025-12-16": { tasks: [
-        { subject: "عربي", content: "مراجعة سريعة", hours: 1 },
-        { subject: "أدب عربي", content: "مراجعة سريعة", hours: 1 },
-        { subject: "إسلامية", content: "مراجعة سريعة", hours: 1 }
-      ], exams: [ { subject: "كيمياء", title: "امتحان", questions: [] } ] },
-    "2025-12-18": { tasks: [
-        { subject: "عربي", content: "مراجعة سريعة", hours: 1 },
-        { subject: "أدب عربي", content: "مراجعة سريعة", hours: 1 }
-      ], exams: [ { subject: "إسلامية", title: "امتحان", questions: [] } ] },
-    "2025-12-21": { tasks: [
-        { subject: "عربي", content: "مراجعة سريعة", hours: 1 },
-        { subject: "أدب عربي", content: "مراجعة سريعة", hours: 1 }
-      ], exams: [ { subject: "فيزياء", title: "امتحان", questions: [] } ] },
-    "2025-12-23": { tasks: [
-        { subject: "عربي", content: "مراجعة سريعة", hours: 1 },
-        { subject: "أدب عربي", content: "مراجعة سريعة", hours: 1 }
-      ], exams: [ { subject: "عربي", title: "امتحان", questions: [] } ] },
-    "2025-12-25": { tasks: [
-        { subject: "أدب عربي", content: "مراجعة سريعة", hours: 1 }
-      ], exams: [ { subject: "إنكليزي", title: "امتحان", questions: [] } ] },
-    "2025-12-26": { tasks: [], exams: [] }, // الجمعة استراحة
-    "2025-12-28": { tasks: [], exams: [ { subject: "أحياء", title: "امتحان", questions: [] } ] },
-
-    // === بعد الامتحانات (28-31 ديسمبر) ===
-    "2025-12-29": { tasks: [
-        { subject: "أحياء", content: "الفصل الخامس - محاضرة 30 & 31 & 32", hours: 3 },
-        { subject: "إنكليزي", content: "Unit 6 - Lecture 14 & 15 & 16", hours: 3 }
-      ], exams: [] },
-    "2025-12-30": { tasks: [
-        { subject: "أحياء", content: "الفصل الخامس - محاضرة 33 & 34 & 35", hours: 3 },
-        { subject: "إنكليزي", content: "Unit 6 - Lecture 17 & 18 & 19", hours: 3 }
-      ], exams: [] },
-    "2025-12-31": { tasks: [
-        { subject: "أحياء", content: "الفصل الخامس - محاضرة 36 & مراجعة شاملة", hours: 3 },
-        { subject: "إنكليزي", content: "Unit 6 - Lecture 20 & 21 & مراجعة شاملة", hours: 3 }
-      ], exams: [] }
+      ], 
+      exams: [] 
+    },
+    "2026-02-19": { // الخميس (ضغط قليل)
+      tasks: [
+        { subject: "إنكليزي", content: "Unit 6 - Lecture 14 & 15", hours: 2 }
+      ], 
+      exams: [] 
+    },
+    "2026-02-20": { // الجمعة (امتحانات يومية + وقت قليل)
+      tasks: [], 
+      exams: [
+        { subject: "اختبار أسبوعي", title: "امتحان تجريبي", questions: [] }
+      ] 
+    },
+    "2026-02-21": { // السبت (ضغط قليل)
+      tasks: [
+        { subject: "إسلامية", content: "المادة - محاضرة 7", hours: 1 },
+        { subject: "أحياء", content: "الفصل السادس - محاضرة 12", hours: 2 },
+        { subject: "أدب عربي", content: "المادة - محاضرة 8", hours: 2 }
+      ], 
+      exams: [] 
+    },
+    
+    // الأسبوع الرابع (22-28 فبراير)
+    "2026-02-22": { // الأحد (ضغط صفر)
+      tasks: [
+        { subject: "أحياء", content: "الفصل السادس - محاضرة 13", hours: 2 },
+        { subject: "أدب عربي", content: "المادة - محاضرة 9", hours: 2 }
+      ], 
+      exams: [] 
+    },
+    "2026-02-23": { // الإثنين (ضغط قليل)
+      tasks: [
+        { subject: "أحياء", content: "الفصل السادس - محاضرة 14", hours: 2 },
+        { subject: "أدب عربي", content: "المادة - محاضرة 10", hours: 2 }
+      ], 
+      exams: [] 
+    },
+    "2026-02-24": { // الثلاثاء (وقت قليل)
+      tasks: [
+        { subject: "أدب عربي", content: "المادة - محاضرة 11", hours: 2 },
+        { subject: "أحياء", content: "الفصل السادس - محاضرة 15", hours: 1 }
+      ], 
+      exams: [] 
+    },
+    "2026-02-25": { // الأربعاء (ضغط صفر)
+      tasks: [
+        { subject: "إنكليزي", content: "Unit 6 - Lecture 16 & 17 & 18", hours: 3 }
+      ], 
+      exams: [] 
+    },
+    "2026-02-26": { // الخميس (ضغط قليل)
+      tasks: [
+        { subject: "إنكليزي", content: "Unit 6 - Lecture 19 & 20", hours: 2 }
+      ], 
+      exams: [] 
+    },
+    "2026-02-27": { // الجمعة (امتحانات يومية + وقت قليل)
+      tasks: [], 
+      exams: [
+        { subject: "اختبار أسبوعي", title: "امتحان تجريبي", questions: [] }
+      ] 
+    },
+    "2026-02-28": { // السبت (ضغط قليل)
+      tasks: [
+        { subject: "إسلامية", content: "المادة - محاضرة 8", hours: 1 },
+        { subject: "أحياء", content: "الفصل السادس - محاضرة 16", hours: 2 },
+        { subject: "أدب عربي", content: "المادة - محاضرة 12", hours: 2 }
+      ], 
+      exams: [] 
+    }
   };
 
   // إضافة معرفات تلقائية
